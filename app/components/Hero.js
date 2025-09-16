@@ -4,16 +4,16 @@ export default function Hero() {
     return (
         <div className="relative bg-gray-900 text-white">
             {/* Background image placeholder - you can replace with actual image */}
-            <div 
+            <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70"
                 style={{
-                    backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%23374151"/></svg>')`
+                    backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%23374151"/></svg>')`,
                 }}
             ></div>
-            
+
             {/* Overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-            
+
             {/* Content */}
             <div className="relative z-10 container mx-auto px-4 py-20 min-h-[500px] flex flex-col justify-center">
                 <div className="text-center mb-12">
@@ -29,15 +29,25 @@ export default function Hero() {
                             {/* Status Filter */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    <svg
+                                        className="w-4 h-4 mr-2"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clipRule="evenodd"
+                                        />
                                     </svg>
                                     Status
                                 </label>
                                 <select className="px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700">
                                     <option value="">Wszystkie</option>
                                     <option value="available">Dostępne</option>
-                                    <option value="reserved">Zarezerwowane</option>
+                                    <option value="reserved">
+                                        Zarezerwowane
+                                    </option>
                                     <option value="sold">Sprzedane</option>
                                 </select>
                             </div>
@@ -45,7 +55,11 @@ export default function Hero() {
                             {/* Type Filter */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg
+                                        className="w-4 h-4 mr-2"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
                                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                                     </svg>
                                     Type
@@ -62,8 +76,16 @@ export default function Hero() {
                             {/* Location Filter */}
                             <div className="flex flex-col">
                                 <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                    <svg
+                                        className="w-4 h-4 mr-2"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                            clipRule="evenodd"
+                                        />
                                     </svg>
                                     Location
                                 </label>

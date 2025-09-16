@@ -1,13 +1,333 @@
 @import "tailwindcss";
 
-body {
-    font-family: Arial, sans-serif;
+/* WordPress Theme Variables */
+:root {
+    --quere-primary-color: #232323;
+    --quere-secondary-color: #7e7e7e;
+    --quere-tertiary-color: #ffffff;
+    --quere-quaternary-color: #f5f5f5;
+    --quere-button-color-idle: #232323;
+    --quere-button-bg-idle: transparent;
+    --quere-button-border-idle: #232323;
+    --quere-button-color-hover: #ffffff;
+    --quere-button-bg-hover: #232323;
+    --quere-button-border-hover: #232323;
+    --quere-content-color: #6b6b6b;
+    --quere-header-font-family: Poppins;
+    --quere-content-font-family: Poppins;
+    --quere-additional-font-family: Playfair Display;
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: var(--quere-content-font-family), Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.875;
+    color: var(--quere-content-color);
+    margin: 0;
+    padding: 0;
+    background-color: var(--quere-tertiary-color);
 }
 
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--quere-header-font-family), sans-serif;
+    font-weight: 600;
+    color: var(--quere-primary-color);
+    margin: 0 0 20px 0;
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 60px;
+}
+
+h2 {
+    font-size: 40px;
+    line-height: 54px;
+}
+
+h3 {
+    font-size: 36px;
+    line-height: 48px;
+}
+
+h4 {
+    font-size: 30px;
+    line-height: 42px;
+}
+
+h5 {
+    font-size: 24px;
+    line-height: 36px;
+}
+
+h6 {
+    font-size: 20px;
+    line-height: 32px;
+}
+
+/* Container */
+.elementor-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Header Styles */
+.wgl-theme-header {
+    background-color: var(--quere-tertiary-color);
+    border-bottom: 1px solid rgba(227, 227, 227, 0.3);
+    position: relative;
+    z-index: 1000;
+}
+
+.wgl-logotype-container img {
+    height: 30px;
+    width: auto;
+}
+
+.primary-nav {
+    display: flex;
+    align-items: center;
+}
+
+.primary-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+}
+
+.primary-nav li {
+    position: relative;
+}
+
+.primary-nav a {
+    color: var(--quere-primary-color);
+    text-decoration: none;
+    font-family: var(--quere-header-font-family), sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 20px 0;
+    transition: color 0.3s ease;
+}
+
+.primary-nav a:hover,
+.primary-nav .current-menu-item a {
+    color: var(--quere-secondary-color);
+}
+
+/* Section Spacing */
+.elementor-section {
+    position: relative;
+}
+
+.elementor-section-boxed {
+    padding: 60px 0;
+}
+
+/* Button Styles */
+.wgl-button,
+button[type="submit"] {
+    display: inline-block;
+    background-color: var(--quere-button-color-idle);
+    color: var(--quere-tertiary-color);
+    padding: 15px 30px;
+    border: 2px solid var(--quere-button-border-idle);
+    border-radius: 5px;
+    font-family: var(--quere-header-font-family), sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wgl-button:hover,
+button[type="submit"]:hover {
+    background-color: var(--quere-button-bg-hover);
+    color: var(--quere-button-color-hover);
+    border-color: var(--quere-button-border-hover);
+}
+
+/* Form Styles */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: var(--quere-content-font-family), sans-serif;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--quere-primary-color);
+}
+
+/* Info Box Styles */
+.wgl-infobox {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.wgl-infobox .media-wrapper {
+    margin-bottom: 20px;
+}
+
+.wgl-infobox .wgl-icon {
+    font-size: 48px;
+    color: var(--quere-primary-color);
+}
+
+.wgl-infobox_title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--quere-primary-color);
+}
+
+.wgl-infobox_content {
+    color: var(--quere-content-color);
+    line-height: 1.6;
+}
+
+/* Gallery Styles */
+.wgl-gallery_items {
+    display: grid;
+    gap: 20px;
+}
+
+.wgl-gallery_item-wrapper img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.wgl-gallery_item-wrapper:hover img {
+    transform: scale(1.05);
+}
+
+/* Background Overlay */
+.elementor-background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .elementor-container {
+        padding: 0 20px;
+    }
+
+    .primary-nav ul {
+        gap: 20px;
+    }
+
+    h1 {
+        font-size: 38px;
+        line-height: 44px;
+    }
+
+    h2 {
+        font-size: 32px;
+        line-height: 40px;
+    }
+
+    h3 {
+        font-size: 28px;
+        line-height: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .primary-nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .elementor-section-boxed {
+        padding: 40px 0;
+    }
+
+    h1 {
+        font-size: 32px;
+        line-height: 38px;
+    }
+
+    h2 {
+        font-size: 28px;
+        line-height: 34px;
+    }
+
+    h3 {
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .wgl-gallery_items {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Flaticon Icons */
+@font-face {
+    font-family: "Flaticon";
+    src: url("/css/fonts/flaticon.eot");
+    src: url("/css/fonts/flaticon.eot#iefix") format("embedded-opentype"),
+        url("/css/fonts/flaticon.woff2") format("woff2"),
+        url("/css/fonts/flaticon.woff") format("woff"),
+        url("/css/fonts/flaticon.ttf") format("truetype"),
+        url("/css/fonts/flaticon.svg#flaticon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="flaticon-"]:before,
+[class*=" flaticon-"]:before,
+[class^="flaticon-"]:after,
+[class*=" flaticon-"]:after {
+    font-family: Flaticon;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: 0.2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1em;
+    margin-left: 0.2em;
+}
+
+/* Compatibility with existing apartment styles */
 .apartment-card {
     @apply border border-gray-300 rounded-lg p-4 mb-4 flex justify-between items-center bg-white shadow-sm hover:shadow-md transition-shadow;
 }

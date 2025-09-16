@@ -1,0 +1,366 @@
+@font-face {
+    font-family: "Flaticon";
+    src: url("./../fonts/flaticon.eot");
+    src: url("./../fonts/flaticon.ttf") format("truetype"),
+    url("./../fonts/flaticon.woff2") format("woff2"),
+    url("./../fonts/flaticon.woff") format("woff"),
+    url("./../fonts/flaticon.eot?#iefix") format("embedded-opentype"),
+    url("./../images/flaticon.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: "Flaticon";
+        src: url("./../images/flaticon.svg") format("svg");
+    }
+}
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+    font-family: Flaticon;
+    font-size: inherit;
+    font-style: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.flaticon-right-arrow:before {
+    content: "\f101";
+}
+.flaticon-categories:before {
+    content: "\f102";
+}
+.flaticon-menu:before {
+    content: "\f103";
+}
+.flaticon-loupe:before {
+    content: "\f104";
+}
+.flaticon-search:before {
+    content: "\f105";
+}
+.flaticon-plan:before {
+    content: "\f106";
+}
+.flaticon-layout:before {
+    content: "\f107";
+}
+.flaticon-project:before {
+    content: "\f108";
+}
+.flaticon-skyline:before {
+    content: "\f109";
+}
+.flaticon-park:before {
+    content: "\f10a";
+}
+.flaticon-park-1:before {
+    content: "\f10b";
+}
+.flaticon-shopping-bag:before {
+    content: "\f10c";
+}
+.flaticon-mall:before {
+    content: "\f10d";
+}
+.flaticon-play-button:before {
+    content: "\f10e";
+}
+.flaticon-right-arrow-1:before {
+    content: "\f10f";
+}
+.flaticon-pin:before {
+    content: "\f110";
+}
+.flaticon-weights:before {
+    content: "\f111";
+}
+.flaticon-swimming-pool:before {
+    content: "\f112";
+}
+.flaticon-palm:before {
+    content: "\f113";
+}
+.flaticon-parking:before {
+    content: "\f114";
+}
+.flaticon-terrace:before {
+    content: "\f115";
+}
+.flaticon-slider:before {
+    content: "\f116";
+}
+.flaticon-area:before {
+    content: "\f117";
+}
+.flaticon-plans:before {
+    content: "\f118";
+}
+.flaticon-bed:before {
+    content: "\f119";
+}
+.flaticon-home:before {
+    content: "\f11a";
+}
+.flaticon-house:before {
+    content: "\f11b";
+}
+.flaticon-double-bed:before {
+    content: "\f11c";
+}
+.flaticon-parking-1:before {
+    content: "\f11d";
+}
+.flaticon-park-2:before {
+    content: "\f11e";
+}
+.flaticon-quote:before {
+    content: "\f11f";
+}
+.flaticon-link:before {
+    content: "\f120";
+}
+.flaticon-heart:before {
+    content: "\f121";
+}
+.flaticon-plus:before {
+    content: "\f122";
+}
+.flaticon-remove:before {
+    content: "\f123";
+}
+.flaticon-pin-mark:before {
+    content: "\f124";
+}
+.flaticon-info:before {
+    content: "\f125";
+}
+.flaticon-close-button:before {
+    content: "\f126";
+}
+.flaticon-danger:before {
+    content: "\f127";
+}
+.flaticon-checked:before {
+    content: "\f128";
+}
+.flaticon-right-arrow-2:before {
+    content: "\f129";
+}
+.flaticon-bag:before {
+    content: "\f12a";
+}
+.flaticon-heart-2:before {
+    content: "\f12b";
+}
+.flaticon-up-and-down:before {
+    content: "\f12c";
+}
+.flaticon-cancel:before {
+    content: "\f12d";
+}
+.flaticon-divan:before {
+    content: "\f12e";
+}
+.flaticon-real-estate:before {
+    content: "\f12f";
+}
+.flaticon-apartment:before {
+    content: "\f130";
+}
+.flaticon-home-address:before {
+    content: "\f131";
+}
+.flaticon-for-sale:before {
+    content: "\f132";
+}
+.flaticon-building:before {
+    content: "\f133";
+}
+.flaticon-home-exchange:before {
+    content: "\f134";
+}
+.flaticon-buy-home:before {
+    content: "\f135";
+}
+.flaticon-chest-of-drawers:before {
+    content: "\f136";
+}
+.flaticon-garage:before {
+    content: "\f137";
+}
+.flaticon-apartment-1:before {
+    content: "\f138";
+}
+.flaticon-chat-box:before {
+    content: "\f139";
+}
+.flaticon-settings:before {
+    content: "\f13a";
+}
+.flaticon-headphones:before {
+    content: "\f13b";
+}
+.flaticon-flash:before {
+    content: "\f13c";
+}
+.flaticon-paper-plane:before {
+    content: "\f13d";
+}
+.flaticon-folders:before {
+    content: "\f13e";
+}
+.flaticon-recycling-paper:before {
+    content: "\f13f";
+}
+.flaticon-notebook:before {
+    content: "\f140";
+}
+.flaticon-apartments:before {
+    content: "\f141";
+}
+.flaticon-placeholder:before {
+    content: "\f142";
+}
+.flaticon-placeholder-1:before {
+    content: "\f143";
+}
+.flaticon-bath:before {
+    content: "\f144";
+}
+.flaticon-home-1:before {
+    content: "\f145";
+}
+.flaticon-settings-1:before {
+    content: "\f146";
+}
+.flaticon-globe:before {
+    content: "\f147";
+}
+.flaticon-grid:before {
+    content: "\f148";
+}
+.flaticon-pin-1:before {
+    content: "\f149";
+}
+.flaticon-menu-1:before {
+    content: "\f14a";
+}
+.flaticon-option:before {
+    content: "\f14b";
+}
+.flaticon-check:before {
+    content: "\f14c";
+}
+.flaticon-lego:before {
+    content: "\f14d";
+}
+.flaticon-paint-brush:before {
+    content: "\f14e";
+}
+.flaticon-heart-3:before {
+    content: "\f14f";
+}
+.flaticon-heart-4:before {
+    content: "\f150";
+}
+.flaticon-compare:before {
+    content: "\f151";
+}
+.flaticon-house-plan:before {
+    content: "\f152";
+}
+.flaticon-building-1:before {
+    content: "\f153";
+}
+.flaticon-real-estate-1:before {
+    content: "\f154";
+}
+.flaticon-hotel:before {
+    content: "\f155";
+}
+.flaticon-for-rent:before {
+    content: "\f156";
+}
+.flaticon-house-1:before {
+    content: "\f157";
+}
+.flaticon-buy-home-1:before {
+    content: "\f158";
+}
+.flaticon-real-estate-2:before {
+    content: "\f159";
+}
+.flaticon-house-for-sale:before {
+    content: "\f15a";
+}
+.flaticon-real-estate-3:before {
+    content: "\f15b";
+}
+.flaticon-real-estate-4:before {
+    content: "\f15c";
+}
+.flaticon-house-key:before {
+    content: "\f15d";
+}
+.flaticon-renovation:before {
+    content: "\f15e";
+}
+.flaticon-home-address-1:before {
+    content: "\f15f";
+}
+.flaticon-contract:before {
+    content: "\f160";
+}
+.flaticon-buy-home-2:before {
+    content: "\f161";
+}
+.flaticon-calculation:before {
+    content: "\f162";
+}
+.flaticon-sold-out:before {
+    content: "\f163";
+}
+.flaticon-auction:before {
+    content: "\f164";
+}
+.flaticon-home-security:before {
+    content: "\f165";
+}
+.flaticon-discount:before {
+    content: "\f166";
+}
+.flaticon-search-house:before {
+    content: "\f167";
+}
+.flaticon-pool:before {
+    content: "\f168";
+}
+.flaticon-garage-1:before {
+    content: "\f169";
+}
+.flaticon-purchase:before {
+    content: "\f16a";
+}
+.flaticon-house-rental:before {
+    content: "\f16b";
+}
+.flaticon-swap:before {
+    content: "\f16c";
+}
+.flaticon-owner:before {
+    content: "\f16d";
+}
+.flaticon-fence:before {
+    content: "\f16e";
+}
+.flaticon-family:before {
+    content: "\f16f";
+}
+.flaticon-house-2:before {
+    content: "\f170";
+}
