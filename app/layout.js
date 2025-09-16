@@ -1,0 +1,18 @@
+import "./globals.css";
+import Navigation from "./components/Navigation";
+
+export const metadata = {
+    title: "Osiedle Olimpijczyków",
+    description: "Mieszkania w Osiedlu Olimpijczyków",
+};
+
+export default function RootLayout({ children }) {
+    return (
+        <html lang="pl">
+            <body>
+                <Navigation />
+                <main>{children}</main>
+            </body>
+        </html>
+    );
+}

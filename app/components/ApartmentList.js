@@ -1,55 +1,214 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 const ApartmentList = ({ etap }) => {
-    const router = useRouter();
+    const searchParams = useSearchParams();
     const [apartments, setApartments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchApartments = async () => {
-            const query = new URLSearchParams(router.query).toString();
-            const response = await fetch(
-                `http://localhost:1337/api/apartments?${query}`
-            );
-            const data = await response.json();
-            setApartments(data);
+            setLoading(true);
+            setError(null);
+
+            try {
+                // Build query parameters for Strapi
+                const params = new URLSearchParams({
+                    populate: "*",
+                    "filters[etap][$eq]": `etap${etap}`,
+                    "filters[available][$eq]": "true",
+                });
+
+                // Add filter parameters from search
+                const rooms = searchParams.get("rooms");
+                const floor = searchParams.get("floor");
+                const area = searchParams.get("area");
+
+                if (rooms) {
+                    params.append("filters[rooms][$eq]", rooms);
+                }
+
+                if (floor) {
+                    if (floor === "0") {
+                        params.append("filters[floor][$eq]", "0");
+                    } else if (floor === "4") {
+                        params.append("filters[floor][$gte]", "4");
+                    } else {
+                        params.append("filters[floor][$eq]", floor);
+                    }
+                }
+
+                if (area) {
+                    if (area === "25-35") {
+                        params.append("filters[area][$gte]", "25");
+                        params.append("filters[area][$lte]", "35");
+                    } else if (area === "35-45") {
+                        params.append("filters[area][$gte]", "35");
+                        params.append("filters[area][$lte]", "45");
+                    } else if (area === "45-55") {
+                        params.append("filters[area][$gte]", "45");
+                        params.append("filters[area][$lte]", "55");
+                    } else if (area === "55-65") {
+                        params.append("filters[area][$gte]", "55");
+                        params.append("filters[area][$lte]", "65");
+                    } else if (area === "65+") {
+                        params.append("filters[area][$gte]", "65");
+                    }
+                }
+
+                const response = await fetch(
+                    `http://localhost:1337/api/apartments?${params.toString()}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Błąd podczas pobierania mieszkań");
+                }
+
+                const result = await response.json();
+                console.log("API Response:", result); // Debug log
+                setApartments(result.data || []);
+            } catch (err) {
+                setError(err.message);
+                console.error("Error fetching apartments:", err);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchApartments();
-    }, [router.query]);
+    }, [etap, searchParams]);
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat("pl-PL", {
+            style: "currency",
+            currency: "PLN",
+            minimumFractionDigits: 0,
+        }).format(price);
+    };
+
+    const formatFloor = (floor) => {
+        return floor === 0 ? "Parter" : `${floor}. piętro`;
+    };
+
+    if (loading) {
+        return (
+            <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-gray-600">Ładowanie mieszkań...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-8">
+                <p className="text-red-600">Błąd: {error}</p>
+                <p className="text-gray-600 mt-2">
+                    Sprawdź czy Strapi CMS jest uruchomione na porcie 1337
+                </p>
+            </div>
+        );
+    }
+
+    if (apartments.length === 0) {
+        return (
+            <div className="text-center py-8">
+                <p className="text-gray-600 text-lg">
+                    Nie znaleziono mieszkań spełniających kryteria wyszukiwania.
+                </p>
+                <p className="text-gray-500 mt-2">
+                    Spróbuj zmienić filtry lub wyczyść wyszukiwanie.
+                </p>
+            </div>
+        );
+    }
 
     return (
-        <div>
-            {apartments.map((apartment) => (
-                <div
-                    key={apartment.id}
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "10px",
-                        padding: "10px",
-                        border: "1px solid #ccc",
-                    }}
-                >
-                    <div>
-                        <p>Liczba pokoi: {apartment.attributes.rooms}</p>
-                        <p>Piętro: {apartment.attributes.floor}</p>
-                        <p>Powierzchnia: {apartment.attributes.area} m²</p>
+        <div className="space-y-4">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">
+                Znaleziono {apartments.length} mieszkań
+            </h3>
+
+            {apartments.map((apartment) => {
+                // Debug log for individual apartment
+                console.log("Individual apartment:", apartment);
+
+                // Safety check
+                if (!apartment || typeof apartment !== "object") {
+                    console.warn("Invalid apartment data:", apartment);
+                    return null;
+                }
+
+                // W Strapi 5.x dane przychodzą bezpośrednio w obiekcie
+                const attrs = apartment;
+
+                return (
+                    <div
+                        key={apartment.id}
+                        className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                    >
+                        <div className="flex justify-between items-center">
+                            <div className="flex-1">
+                                <div className="grid grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span className="font-medium text-gray-700">
+                                            Pokoje:
+                                        </span>
+                                        <p className="text-lg font-semibold text-gray-900">
+                                            {attrs.rooms}{" "}
+                                            {attrs.rooms === 1
+                                                ? "pokój"
+                                                : "pokoje"}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-gray-700">
+                                            Powierzchnia:
+                                        </span>
+                                        <p className="text-lg font-semibold text-gray-900">
+                                            {attrs.area} m²
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-gray-700">
+                                            Piętro:
+                                        </span>
+                                        <p className="text-lg font-semibold text-gray-900">
+                                            {formatFloor(attrs.floor)}
+                                        </p>
+                                    </div>
+                                </div>
+                                {attrs.description && (
+                                    <p className="text-gray-600 mt-2 text-sm">
+                                        {attrs.description}
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col items-end ml-6">
+                                <div className="text-right mb-3">
+                                    <span className="text-sm font-medium text-gray-700">
+                                        Cena:
+                                    </span>
+                                    <p className="text-2xl font-bold text-green-600">
+                                        {formatPrice(attrs.price)}
+                                    </p>
+                                </div>
+                                <Link
+                                    href={`/apartment/${apartment.documentId}`}
+                                    className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"
+                                >
+                                    Zobacz
+                                </Link>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p>Cena: {apartment.attributes.price} PLN</p>
-                        <button
-                            onClick={() =>
-                                router.push(`/apartment/${apartment.id}`)
-                            }
-                        >
-                            Zobacz
-                        </button>
-                    </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };
