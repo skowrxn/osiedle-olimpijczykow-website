@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ApartmentListCompact from "../components/ApartmentListCompact";
 import ApartmentSearch from "../components/ApartmentSearch";
 import PropertySearch from "../components/PropertySearch";
 
-export default function ListaLokali() {
+function ListaLokaliContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [searchFilters, setSearchFilters] = useState({
@@ -212,5 +212,13 @@ export default function ListaLokali() {
                 </div>
             </main>
         </div>
+    );
+}
+
+export default function ListaLokali() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ListaLokaliContent />
+        </Suspense>
     );
 }
