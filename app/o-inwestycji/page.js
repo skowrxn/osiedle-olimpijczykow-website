@@ -354,6 +354,114 @@ export default function OInwestycji() {
                             </p>
                         </div>
                     </section>
+                    <section
+                        className="elementor-section elementor-top-section elementor-section-boxed"
+                        style={{
+                            padding: "80px 0",
+                        }}
+                    >
+                        <div className="elementor-container">
+                            <div className="elementor-column elementor-col-100">
+                                <div className="elementor-widget-wrap elementor-element-populated">
+                                    <h3
+                                        style={{
+                                            fontSize: "36px",
+                                            fontWeight: "600",
+                                            fontFamily: "Poppins, sans-serif",
+                                            textAlign: "center",
+                                            marginBottom: "60px",
+                                            color: "#333",
+                                        }}
+                                    >
+                                        Sprawdź postępy w budowie
+                                    </h3>
+
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            position: "relative",
+                                            maxWidth: "1000px",
+                                            margin: "0 auto",
+                                            padding: "0 20px",
+                                        }}
+                                    >
+                                        {/* Timeline line */}
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: "-20%",
+                                                left: "40px",
+                                                right: "40px",
+                                                height: "2px",
+                                                backgroundColor: "#DAA520",
+                                                zIndex: 1,
+                                            }}
+                                        ></div>
+
+                                        {[
+                                            "Rozpoczęcie prac",
+                                            "Stan surowy otwarty",
+                                            "Stan surowy zamknięty",
+                                            "Stan deweloperski",
+                                            "Zamknięcie prac na budowie",
+                                            "Pozwolenie na użytkowanie",
+                                            "Przekazywanie kluczy",
+                                        ].map((step, index) => (
+                                            <div
+                                                key={index}
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    position: "relative",
+                                                    zIndex: 2,
+                                                    flex: 1,
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        width: "20px",
+                                                        height: "20px",
+                                                        borderRadius: "50%",
+                                                        backgroundColor:
+                                                            index === 0
+                                                                ? "#333"
+                                                                : "#e0e0e0",
+                                                        marginBottom: "15px",
+                                                        border: "3px solid white",
+                                                        boxShadow:
+                                                            "0 2px 8px rgba(0,0,0,0.1)",
+                                                    }}
+                                                ></div>
+                                                <div
+                                                    style={{
+                                                        textAlign: "center",
+                                                        fontSize: "14px",
+                                                        fontFamily:
+                                                            "Poppins, sans-serif",
+                                                        color:
+                                                            index === 0
+                                                                ? "#333"
+                                                                : "#7e7e7e",
+                                                        fontWeight:
+                                                            index === 0
+                                                                ? "600"
+                                                                : "400",
+                                                        maxWidth: "110px",
+                                                        lineHeight: "1.3",
+                                                    }}
+                                                >
+                                                    {step}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                     <section className="flex flex-col mt-12">
                         <div className="mx-auto md:mb-12">
                             <iframe
