@@ -143,9 +143,7 @@ const ApartmentDetail = () => {
     const etapNumber = attributes.etap.replace("etap", "");
 
     const openLightbox = (index) => {
-        const imageUrls = attributes.zdjecia.map(
-            (img) => `${STRAPI_URL}${img.url}`
-        );
+        const imageUrls = attributes.zdjecia.map((img) => `${img.url}`);
         setLightboxImages(imageUrls);
         setCurrentImageIndex(index);
         setLightboxOpen(true);
@@ -216,7 +214,7 @@ const ApartmentDetail = () => {
                                                 style={{
                                                     backgroundColor: "#232323",
                                                     color: "white",
-                                                    padding: "60px 40px",
+                                                    padding: "0px 40px",
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     justifyContent: "center",
@@ -235,6 +233,62 @@ const ApartmentDetail = () => {
                                                     Mieszkanie{" "}
                                                     {attributes.rooms}-pokojowe
                                                 </h1>
+
+                                                <div>
+                                                    <div
+                                                        style={{
+                                                            display:
+                                                                "inline-flex",
+                                                            alignItems:
+                                                                "center",
+                                                            marginBottom:
+                                                                "20px",
+                                                            gap: "8px",
+                                                            padding: "8px 24px",
+                                                            borderRadius:
+                                                                "20px",
+                                                            backgroundColor:
+                                                                attributes.dostepne
+                                                                    ? "rgba(34, 197, 94, 0.1)"
+                                                                    : "rgba(239, 68, 68, 0.1)",
+                                                            border: `1px solid ${
+                                                                attributes.dostepne
+                                                                    ? "rgba(34, 197, 94, 0.2)"
+                                                                    : "rgba(239, 68, 68, 0.2)"
+                                                            }`,
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                width: "8px",
+                                                                height: "8px",
+                                                                borderRadius:
+                                                                    "50%",
+                                                                backgroundColor:
+                                                                    attributes.dostepne
+                                                                        ? "#22c55e"
+                                                                        : "#ef4444",
+                                                            }}
+                                                        ></div>
+                                                        <span
+                                                            style={{
+                                                                fontSize:
+                                                                    "14px",
+                                                                fontWeight:
+                                                                    "600",
+                                                                fontFamily:
+                                                                    "Poppins, sans-serif",
+                                                                color: attributes.dostepne
+                                                                    ? "#15803d"
+                                                                    : "#dc2626",
+                                                            }}
+                                                        >
+                                                            {attributes.dostepne
+                                                                ? "Dostępne"
+                                                                : "Sprzedane"}
+                                                        </span>
+                                                    </div>
+                                                </div>
 
                                                 {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
                                                 {attributes.dostepne &&
@@ -345,56 +399,75 @@ const ApartmentDetail = () => {
 
                                                 <div
                                                     style={{
+                                                        display: "grid",
+                                                        gridTemplateColumns:
+                                                            attributes.elementy_dodatkowe
+                                                                ? "1fr 1fr"
+                                                                : "1fr",
+                                                        gap: "30px",
                                                         marginBottom: "40px",
                                                     }}
                                                 >
-                                                    <div
-                                                        style={{
-                                                            fontSize: "24px",
-                                                            fontWeight: "600",
-                                                            marginBottom: "8px",
-                                                            fontFamily:
-                                                                "Poppins, sans-serif",
-                                                        }}
-                                                    >
-                                                        {formatFloor(
-                                                            attributes.kondygnacja
-                                                        )}
+                                                    <div>
+                                                        <div
+                                                            style={{
+                                                                fontSize:
+                                                                    "24px",
+                                                                fontWeight:
+                                                                    "600",
+                                                                marginBottom:
+                                                                    "8px",
+                                                                fontFamily:
+                                                                    "Poppins, sans-serif",
+                                                            }}
+                                                        >
+                                                            {formatFloor(
+                                                                attributes.kondygnacja
+                                                            )}
+                                                        </div>
+                                                        <p
+                                                            style={{
+                                                                color: "#d1d5db",
+                                                                fontSize:
+                                                                    "14px",
+                                                            }}
+                                                        >
+                                                            lokalizacja
+                                                        </p>
                                                     </div>
-                                                    <p
-                                                        style={{
-                                                            color: "#d1d5db",
-                                                            fontSize: "14px",
-                                                        }}
-                                                    >
-                                                        lokalizacja
-                                                    </p>
-                                                </div>
 
-                                                <div
-                                                    style={{
-                                                        marginBottom: "40px",
-                                                    }}
-                                                >
-                                                    <div
-                                                        style={{
-                                                            fontSize: "24px",
-                                                            fontWeight: "600",
-                                                            marginBottom: "8px",
-                                                            fontFamily:
-                                                                "Poppins, sans-serif",
-                                                        }}
-                                                    >
-                                                        Etap {etapNumber}
-                                                    </div>
-                                                    <p
-                                                        style={{
-                                                            color: "#d1d5db",
-                                                            fontSize: "14px",
-                                                        }}
-                                                    >
-                                                        inwestycji
-                                                    </p>
+                                                    {attributes.elementy_dodatkowe && (
+                                                        <div>
+                                                            <div
+                                                                style={{
+                                                                    fontSize:
+                                                                        "24px",
+                                                                    lineHeight:
+                                                                        "45px",
+                                                                    fontWeight:
+                                                                        "600",
+                                                                    marginBottom:
+                                                                        "8px",
+                                                                    fontFamily:
+                                                                        "Poppins, sans-serif",
+                                                                }}
+                                                            >
+                                                                {
+                                                                    attributes.elementy_dodatkowe
+                                                                }
+                                                            </div>
+                                                            <p
+                                                                style={{
+                                                                    color: "#d1d5db",
+                                                                    fontSize:
+                                                                        "14px",
+                                                                }}
+                                                            >
+                                                                dodatkowe
+                                                                elementy
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 {attributes.opis && (
@@ -431,82 +504,6 @@ const ApartmentDetail = () => {
                                                         </p>
                                                     </div>
                                                 )}
-
-                                                {/* Elementy dodatkowe - jeśli są wypełnione */}
-                                                {attributes.elementy_dodatkowe && (
-                                                    <div
-                                                        style={{
-                                                            marginBottom:
-                                                                "40px",
-                                                        }}
-                                                    >
-                                                        <h3
-                                                            style={{
-                                                                fontSize:
-                                                                    "20px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "15px",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
-                                                            }}
-                                                        >
-                                                            Elementy dodatkowe
-                                                        </h3>
-                                                        <p
-                                                            style={{
-                                                                color: "#d1d5db",
-                                                                lineHeight:
-                                                                    "1.6",
-                                                                fontSize:
-                                                                    "16px",
-                                                            }}
-                                                        >
-                                                            {
-                                                                attributes.elementy_dodatkowe
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                )}
-
-                                                <div>
-                                                    <div
-                                                        style={{
-                                                            display: "flex",
-                                                            alignItems:
-                                                                "center",
-                                                            gap: "12px",
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                width: "12px",
-                                                                height: "12px",
-                                                                borderRadius:
-                                                                    "50%",
-                                                                backgroundColor:
-                                                                    attributes.dostepne
-                                                                        ? "#d1d5db"
-                                                                        : "#ef4444",
-                                                            }}
-                                                        ></div>
-                                                        <span
-                                                            style={{
-                                                                fontSize:
-                                                                    "18px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
-                                                            }}
-                                                        >
-                                                            {attributes.dostepne
-                                                                ? "Dostępne"
-                                                                : "Sprzedane"}
-                                                        </span>
-                                                    </div>
-                                                </div>
                                             </div>
 
                                             {/* Right side - Gallery */}
@@ -576,7 +573,7 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                 >
                                                                     <img
-                                                                        src={`${STRAPI_URL}${image.url}`}
+                                                                        src={`${image.url}`}
                                                                         alt={`Mieszkanie - zdjęcie ${
                                                                             index +
                                                                             1
