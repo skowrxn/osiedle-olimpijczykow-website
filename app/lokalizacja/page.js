@@ -105,10 +105,7 @@ export default function Lokalizacja() {
                             </p>
                         </div>
                     </section>
-                    <section
-                        className="elementor-section elementor-top-section elementor-section-boxed"
-                        style={{ padding: "80px 0" }}
-                    >
+                    <section style={{ padding: "40px 0" }}>
                         <div className="elementor-container">
                             <div className="elementor-column elementor-col-100">
                                 <div className="elementor-widget-wrap elementor-element-populated">
