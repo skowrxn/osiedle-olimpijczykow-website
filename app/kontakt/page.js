@@ -3,7 +3,7 @@
 export default function Kontakt() {
     return (
         <section>
-            <div className="container mx-auto px-4 py-12 flex justify-evenly mt-16 contact-grid">
+            <div className="container mx-auto px-4 py-12 flex justify-evenly mt-6 contact-grid">
                 <div className="max-w-4xl">
                     <h1 className="text-7xl font-medium mb-16 text-gray-800">
                         Skontaktuj się
