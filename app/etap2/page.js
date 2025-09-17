@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-const PropertySearch = React.lazy(() => import("../components/PropertySearch"));
+import React, { Suspense } from "react";
+import PropertySearch from "../components/PropertySearch";
 import ApartmentListCompact from "../components/ApartmentListCompact";
 
 const Etap2Page = () => {
@@ -34,10 +34,14 @@ const Etap2Page = () => {
                                     </div>
 
                                     <div className="mt-12 py-4">
-                                        <PropertySearch
-                                            stayOnPage={true}
-                                            showStage={false}
-                                        ></PropertySearch>
+                                        <Suspense
+                                            fallback={<div>Loading...</div>}
+                                        >
+                                            <PropertySearch
+                                                stayOnPage={true}
+                                                showStage={false}
+                                            ></PropertySearch>
+                                        </Suspense>
                                     </div>
                                     <div className="mt-6 bg-white mb-24">
                                         <ApartmentListCompact
