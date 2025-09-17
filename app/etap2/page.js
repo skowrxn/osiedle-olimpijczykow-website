@@ -29,7 +29,7 @@ const Etap2Page = () => {
                                         <p className="text-xl text-gray-600">
                                             Przeglądaj dostępne mieszkania w
                                             drugim etapie inwestycji Osiedle
-                                            Olimpijczyków
+                                            Olimpijczyków.
                                         </p>
                                     </div>
 
