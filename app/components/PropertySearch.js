@@ -48,7 +48,7 @@ export default function PropertySearch() {
                 padding: "40px 30px",
                 maxWidth: "1200px",
                 margin: "0",
-                borderRadius: "8px",
+                borderRadius: "0px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
             }}
         >
@@ -99,6 +99,7 @@ export default function PropertySearch() {
                                 padding: "16px 15px",
                                 border: "none",
                                 borderBottom: "1px solid #333",
+                                borderRadius: "0px",
                                 backgroundColor: "transparent",
                                 color: "#333",
                                 fontSize: "16px",
@@ -160,6 +161,7 @@ export default function PropertySearch() {
                             onChange={handleFilterChange}
                             style={{
                                 width: "100%",
+                                borderRadius: "0px",
                                 padding: "16px 15px",
                                 border: "none",
                                 borderBottom: "1px solid #333",
@@ -220,6 +222,7 @@ export default function PropertySearch() {
                                 width: "100%",
                                 padding: "16px 15px",
                                 border: "none",
+                                borderRadius: "0px",
                                 borderBottom: "1px solid #333",
                                 backgroundColor: "transparent",
                                 color: "#333",
@@ -251,10 +254,10 @@ export default function PropertySearch() {
                             color: "white",
                             padding: "16px 32px",
                             border: "none",
-                            borderRadius: "6px",
+                            borderRadius: "50px",
                             cursor: "pointer",
                             fontSize: "16px",
-                            fontWeight: "600",
+                            fontWeight: "500",
                             fontFamily: "Poppins, sans-serif",
                             transition: "all 0.3s ease",
                             minWidth: "140px",

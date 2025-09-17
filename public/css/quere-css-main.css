@@ -209,18 +209,6 @@ body:not([data-elementor-device-mode=desktop], [data-elementor-device-mode=lapto
   line-height: 1;
   margin: 0 -2px;
 }
-#wgl-cursor .carousel-tooltip .flaticon {
-  display: inline-block;
-  font-size: 21px;
-  line-height: 1;
-  padding: 0 5px;
-}
-#wgl-cursor .carousel-tooltip .flaticon-down-arrow-1:first-child {
-  transform: rotate(90deg);
-}
-#wgl-cursor .carousel-tooltip .flaticon-down-arrow-1:last-child {
-  transform: rotate(-90deg);
-}
 
 .admin-bar #wgl-cursor-pointer {
   bottom: 0;

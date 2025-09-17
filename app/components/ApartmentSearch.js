@@ -67,7 +67,7 @@ const ApartmentSearch = ({ etap }) => {
                         name="rooms"
                         value={filters.rooms}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="1">1 pokój</option>
@@ -86,7 +86,7 @@ const ApartmentSearch = ({ etap }) => {
                         name="floor"
                         value={filters.floor}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="0">Parter</option>
@@ -105,7 +105,7 @@ const ApartmentSearch = ({ etap }) => {
                         name="area"
                         value={filters.area}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="25-35">25-35 m²</option>
