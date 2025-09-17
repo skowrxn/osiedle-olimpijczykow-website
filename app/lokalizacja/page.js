@@ -60,8 +60,8 @@ export default function Lokalizacja() {
                             </div>
                         </div>
                     </section>
-                    <section className="p-6 flex gap-8 mx-auto max-w-7xl mt-16">
-                        <div className="elementor-container w-1/2">
+                    <section className="p-6 flex flex-col md:flex-row gap-8 mx-auto max-w-7xl mt-16">
+                        <div className="w-80 md:w-1/2">
                             <Image
                                 src="/img/mapka.png"
                                 width="1000"
@@ -216,7 +216,7 @@ export default function Lokalizacja() {
                         </div>
                     </section>
                     <section className="flex flex-col">
-                        <div className="mx-auto">
+                        <div className="mx-auto  md:mb-12">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5086.683515454682!2d18.832443000000016!3d50.439849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471129674a919f67%3A0x3ddb75d40836ae69!2sOlimpijczyk%C3%B3w%2013%2C%2042-612%20Tarnowskie%20G%C3%B3ry%2C%20Polska!5e0!3m2!1spl!2sus!4v1758072504304!5m2!1spl!2sus"
                                 width="1200"
