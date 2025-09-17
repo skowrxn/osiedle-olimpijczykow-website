@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 
 export const metadata = {
     title: "Osiedle Olimpijczyków",
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
             <body className="scroll-smooth">
                 <Navigation />
                 <main>{children}</main>
+                <Footer />
             </body>
         </html>
     );

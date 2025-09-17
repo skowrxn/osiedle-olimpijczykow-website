@@ -239,6 +239,14 @@ select:focus {
     z-index: 1;
 }
 
+/* Map sections spacing */
+.google-map-section {
+    padding-bottom: 60px;
+}
+.google-map-wrapper {
+    margin-bottom: 20px;
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .elementor-container {
