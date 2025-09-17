@@ -268,7 +268,7 @@ export default function OInwestycji() {
                                             </p>
 
                                             <a
-                                                href="/o-inwestycji"
+                                                href="/lista-lokali"
                                                 className="rounded-4xl border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white bg-w color-gray-800"
                                                 style={{
                                                     display: "inline-block",
@@ -279,7 +279,7 @@ export default function OInwestycji() {
                                                     transition: "all 0.3s ease",
                                                 }}
                                             >
-                                                O inwestycji
+                                                Lista lokali
                                             </a>
                                         </div>
                                     </div>
