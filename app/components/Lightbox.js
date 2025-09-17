@@ -1,0 +1,185 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+
+const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
+    const [activeIndex, setActiveIndex] = useState(currentIndex);
+
+    useEffect(() => {
+        setActiveIndex(currentIndex);
+    }, [currentIndex]);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!isOpen) return;
+
+            switch (e.key) {
+                case "Escape":
+                    onClose();
+                    break;
+                case "ArrowLeft":
+                    prevImage();
+                    break;
+                case "ArrowRight":
+                    nextImage();
+                    break;
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen, activeIndex]);
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [isOpen]);
+
+    const nextImage = () => {
+        setActiveIndex((prevIndex) =>
+            prevIndex === images.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    const prevImage = () => {
+        setActiveIndex((prevIndex) =>
+            prevIndex === 0 ? images.length - 1 : prevIndex - 1
+        );
+    };
+
+    if (!isOpen || !images || images.length === 0) return null;
+
+    return (
+        <div
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
+            style={{ zIndex: 9999 }}
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    onClose();
+                }
+            }}
+        >
+            {/* Close button */}
+            <button
+                onClick={onClose}
+                className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition-colors z-50"
+                style={{
+                    background: "rgba(0,0,0,0.5)",
+                    borderRadius: "50%",
+                    width: "50px",
+                    height: "50px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: "none",
+                    cursor: "pointer",
+                }}
+            >
+                ✕
+            </button>
+
+            {/* Navigation arrows */}
+            {images.length > 1 && (
+                <>
+                    <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors"
+                        style={{
+                            background: "rgba(0,0,0,0.5)",
+                            borderRadius: "50%",
+                            width: "60px",
+                            height: "60px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: "none",
+                            cursor: "pointer",
+                        }}
+                    >
+                        ‹
+                    </button>
+                    <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors"
+                        style={{
+                            background: "rgba(0,0,0,0.5)",
+                            borderRadius: "50%",
+                            width: "60px",
+                            height: "60px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            border: "none",
+                            cursor: "pointer",
+                        }}
+                    >
+                        ›
+                    </button>
+                </>
+            )}
+
+            {/* Main image */}
+            <div
+                className="relative flex items-center justify-center w-full h-full"
+                style={{
+                    padding: "20px",
+                    boxSizing: "border-box",
+                }}
+            >
+                <img
+                    src={images[activeIndex]}
+                    alt={`Zdjęcie ${activeIndex + 1}`}
+                    style={{
+                        maxHeight: "calc(100vh - 40px)",
+                        maxWidth: "calc(100vw - 40px)",
+                        width: "auto",
+                        height: "auto",
+                        objectFit: "contain",
+                        display: "block",
+                    }}
+                />
+
+                {/* Image counter */}
+                {images.length > 1 && (
+                    <div
+                        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-sm"
+                        style={{
+                            background: "rgba(0,0,0,0.7)",
+                            padding: "8px 16px",
+                            borderRadius: "20px",
+                            zIndex: 10,
+                        }}
+                    >
+                        {activeIndex + 1} / {images.length}
+                    </div>
+                )}
+            </div>
+
+            {/* Thumbnail navigation for many images */}
+            {images.length > 1 && images.length <= 10 && (
+                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {images.map((image, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setActiveIndex(index)}
+                            className={`w-3 h-3 rounded-full transition-all ${
+                                index === activeIndex
+                                    ? "bg-white"
+                                    : "bg-white bg-opacity-50 hover:bg-opacity-75"
+                            }`}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Lightbox;

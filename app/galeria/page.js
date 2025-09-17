@@ -1,6 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import Lightbox from "../components/Lightbox";
 
 export default function Galeria() {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     // Zdjęcia z folderu realizacja-3
     const realizacja3Images = [
         "wizualizacja_01_rev01.jpg",
@@ -46,6 +53,13 @@ export default function Galeria() {
         "APARTAMENT C3_21_strefa dzienna_08.jpg",
     ];
 
+    const openLightbox = (images, folder, index) => {
+        const imageUrls = images.map((img) => `/img/${folder}/${img}`);
+        setLightboxImages(imageUrls);
+        setCurrentImageIndex(index);
+        setLightboxOpen(true);
+    };
+
     const GallerySection = ({ title, images, folder }) => (
         <section className="mb-16">
             <h2 className="text-3xl font-bold mb-12 text-center text-gray-800">
@@ -55,7 +69,8 @@ export default function Galeria() {
                 {images.map((image, index) => (
                     <div
                         key={index}
-                        className="relative aspect-square overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        className="relative aspect-square overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                        onClick={() => openLightbox(images, folder, index)}
                     >
                         <Image
                             src={`/img/${folder}/${image}`}
@@ -91,6 +106,13 @@ export default function Galeria() {
                     folder="wizualizacje"
                 />
             </div>
+
+            <Lightbox
+                images={lightboxImages}
+                isOpen={lightboxOpen}
+                onClose={() => setLightboxOpen(false)}
+                currentIndex={currentImageIndex}
+            />
         </div>
     );
 }

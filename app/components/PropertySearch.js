@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function PropertySearch() {
+export default function PropertySearch({
+    stayOnPage = false,
+    showStage = false,
+}) {
     const router = useRouter();
     const [searchFilters, setSearchFilters] = useState({
         rooms: "",
         area: "",
         floor: "",
+        stage: "", // Dodano pole etapu
     });
 
     const handleFilterChange = (e) => {
@@ -34,10 +38,24 @@ export default function PropertySearch() {
             params.set("floor", searchFilters.floor);
         }
 
-        const queryString = params.toString();
-        const newUrl = queryString ? `/etap3?${queryString}` : "/etap3";
+        if (searchFilters.stage) {
+            params.set("stage", searchFilters.stage);
+        }
 
-        router.push(newUrl);
+        const queryString = params.toString();
+
+        if (stayOnPage) {
+            // Pozostań na tej samej stronie, tylko zmień URL
+            const currentPath = window.location.pathname;
+            const newUrl = queryString
+                ? `${currentPath}?${queryString}`
+                : currentPath;
+            router.push(newUrl);
+        } else {
+            // Domyślne zachowanie - przekieruj na etap3
+            const newUrl = queryString ? `/etap3?${queryString}` : "/etap3";
+            router.push(newUrl);
+        }
     };
 
     return (
@@ -63,6 +81,63 @@ export default function PropertySearch() {
                         justifyContent: "space-between",
                     }}
                 >
+                    {/* Etap - pokazuje tylko gdy showStage jest true */}
+                    {showStage && (
+                        <div style={{ flex: "1", minWidth: "180px" }}>
+                            <div
+                                style={{
+                                    position: "relative",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "8px",
+                                    marginBottom: "8px",
+                                    color: "#666",
+                                    fontSize: "14px",
+                                    fontWeight: "500",
+                                }}
+                            >
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <path d="M3 21V7l9-4 9 4v14" />
+                                    <path d="M6 21V10l6-3 6 3v11" />
+                                </svg>
+                                Etap
+                            </div>
+                            <select
+                                name="stage"
+                                value={searchFilters.stage}
+                                onChange={handleFilterChange}
+                                style={{
+                                    width: "100%",
+                                    padding: "16px 15px",
+                                    border: "none",
+                                    borderBottom: "1px solid #333",
+                                    borderRadius: "0px",
+                                    backgroundColor: "transparent",
+                                    color: "#333",
+                                    fontSize: "16px",
+                                    appearance: "none",
+                                    backgroundImage:
+                                        'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M6 9L1.5 4.5h9z" fill="%23333"/></svg>\')',
+                                    backgroundRepeat: "no-repeat",
+                                    backgroundPosition: "right 15px center",
+                                    outline: "none",
+                                    fontFamily: "Poppins, sans-serif",
+                                }}
+                            >
+                                <option value="">Wszystkie</option>
+                                <option value="etap2">Etap 2</option>
+                                <option value="etap3">Etap 3</option>
+                            </select>
+                        </div>
+                    )}
+
                     {/* Liczba pokoi */}
                     <div style={{ flex: "1", minWidth: "200px" }}>
                         <div

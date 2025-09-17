@@ -1,10 +1,34 @@
 "use client";
 
 import Head from "next/head";
+import { useState } from "react";
 import PropertySearch from "./components/PropertySearch";
 import BoxWithIcon from "./components/BoxWithIcon";
+import Lightbox from "./components/Lightbox";
+import ContactSection from "./components/ContactSection";
 
 export default function Home() {
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    // Zdjęcia wizualizacji na stronie głównej
+    const visualizationImages = [
+        "/img/wizualizacja-1.jpg",
+        "/img/wizualizacja-2.jpg",
+        "/img/budynek-4.jpg",
+        "/img/2025-08-wizualizacja_01_rev01-1220x1220.jpg",
+        "/img/2025-08-wizualizacja_04_rev01-1220x1220.jpg",
+        "/img/2025-08-apartament-1.5_strefadzienna_01-2-2500x1250.jpg",
+        "/img/wizualizacja-3.jpg",
+        "/img/wizualizacja-4.jpg",
+    ];
+
+    const openLightbox = (index) => {
+        setLightboxImages(visualizationImages);
+        setCurrentImageIndex(index);
+        setLightboxOpen(true);
+    };
     return (
         <>
             <Head>
@@ -145,7 +169,7 @@ export default function Home() {
                                                 description="Urokliwe ogródki, balkony oraz przestronne tarasy na ostatnich piętrach. To idealne miejsce na poranną kawę, odpoczynek po pracy czy spotkania z bliskimi."
                                             >
                                                 <img
-                                                    srcset="https://img.icons8.com/?size=80&amp;id=gQ4rIzkU1Og3&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=gQ4rIzkU1Og3&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=80&amp;id=gQ4rIzkU1Og3&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=gQ4rIzkU1Og3&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Terrace icon"
@@ -159,7 +183,7 @@ export default function Home() {
                                                 description="Czas relaksu oraz rekreacji dostępne od ręki – aquapark, siłownia oraz nowoczesna hala sportowa w odległości kilku minut spacerem."
                                             >
                                                 <img
-                                                    srcset="https://img.icons8.com/?size=80&amp;id=fk2FuaspJu3M&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=fk2FuaspJu3M&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=80&amp;id=fk2FuaspJu3M&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=fk2FuaspJu3M&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Aquapark icon"
@@ -174,11 +198,11 @@ export default function Home() {
                                             >
                                                 <img
                                                     data-image-id="JfBZnogY095Z"
-                                                    srcset="https://img.icons8.com/?size=80&amp;id=JfBZnogY095Z&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=JfBZnogY095Z&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=80&amp;id=JfBZnogY095Z&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=JfBZnogY095Z&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Parking icon"
-                                                    class="loaded"
+                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -189,11 +213,11 @@ export default function Home() {
                                             >
                                                 <img
                                                     data-v-42ed8b2f=""
-                                                    srcset="https://img.icons8.com/?size=50&amp;id=15803&amp;format=png 1x, https://img.icons8.com/?size=100&amp;id=15803&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=50&amp;id=15803&amp;format=png 1x, https://img.icons8.com/?size=100&amp;id=15803&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Leaf icon"
-                                                    class="loaded"
+                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -205,11 +229,11 @@ export default function Home() {
                                                 <img
                                                     data-v-42ed8b2f=""
                                                     data-image-id="HCYlvAbwfEfd"
-                                                    srcset="https://img.icons8.com/?size=80&amp;id=HCYlvAbwfEfd&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=HCYlvAbwfEfd&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=80&amp;id=HCYlvAbwfEfd&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=HCYlvAbwfEfd&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Shopping Bag icon"
-                                                    class="loaded"
+                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -221,11 +245,11 @@ export default function Home() {
                                                 <img
                                                     data-v-42ed8b2f=""
                                                     data-image-id="xBQkk9hOrt1r"
-                                                    srcset="https://img.icons8.com/?size=80&amp;id=xBQkk9hOrt1r&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=xBQkk9hOrt1r&amp;format=png 2x"
+                                                    srcSet="https://img.icons8.com/?size=80&amp;id=xBQkk9hOrt1r&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=xBQkk9hOrt1r&amp;format=png 2x"
                                                     width="80"
                                                     height="80"
                                                     alt="Cctv icon"
-                                                    class="loaded"
+                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
                                         </div>
@@ -291,7 +315,12 @@ export default function Home() {
                                                     style={{
                                                         width: "100%",
                                                         height: "auto",
+                                                        cursor: "pointer",
                                                     }}
+                                                    onClick={() =>
+                                                        openLightbox(0)
+                                                    }
+                                                    className="hover:scale-105 transition-transform duration-300"
                                                 />
                                             </div>
                                             <div style={{ flex: "1" }}>
@@ -368,7 +397,10 @@ export default function Home() {
                                             style={{
                                                 width: "100%",
                                                 height: "auto",
+                                                cursor: "pointer",
                                             }}
+                                            onClick={() => openLightbox(1)}
+                                            className="hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                 </div>
@@ -398,7 +430,10 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(2)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                         <div>
@@ -409,7 +444,10 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(3)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                         <div>
@@ -420,7 +458,10 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(4)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                         <div>
@@ -431,7 +472,10 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(5)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                         <div>
@@ -442,7 +486,10 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(6)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                         <div>
@@ -453,183 +500,28 @@ export default function Home() {
                                                     width: "100%",
                                                     height: "300px",
                                                     objectFit: "cover",
+                                                    cursor: "pointer",
                                                 }}
+                                                onClick={() => openLightbox(7)}
+                                                className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </section>
-                        {/* Contact Section */}
-                        <section
-                            className="elementor-section elementor-top-section"
-                            style={{
-                                padding: "80px 0",
-                                backgroundImage: "url(/img/wizualizacja-4.jpg)",
-                                backgroundPositionY: "center",
-                            }}
-                        >
-                            <div
-                                className="elementor-background-overlay"
-                                style={{
-                                    background: "rgba(0,0,0,0.6)",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    zIndex: 1,
-                                }}
-                            ></div>
-                            <div
-                                className="elementor-container"
-                                style={{ position: "relative", zIndex: 2 }}
-                            >
-                                <div
-                                    style={{
-                                        display: "grid",
-                                        gridTemplateColumns: "1fr 1fr",
-                                        gap: "60px",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <div>
-                                        <h3
-                                            style={{
-                                                fontSize: "46px",
-                                                color: "#ffffff",
-                                                fontWeight: "600",
-                                                marginBottom: "20px",
-                                                fontFamily:
-                                                    "Poppins, sans-serif",
-                                            }}
-                                        >
-                                            Skontaktuj się z nami
-                                        </h3>
-                                        <p
-                                            style={{
-                                                color: "#d7d7d7",
-                                                fontSize: "16px",
-                                                lineHeight: "1.6",
-                                            }}
-                                        >
-                                            Postaramy się odpowiedzieć tak
-                                            szybko jak to możliwe
-                                        </p>
-                                    </div>
 
-                                    <div
-                                        style={{
-                                            backgroundColor: "white",
-                                            padding: "40px",
-                                            boxShadow:
-                                                "0 5px 20px rgba(0,0,0,0.1)",
-                                        }}
-                                    >
-                                        <h3
-                                            style={{
-                                                fontSize: "24px",
-                                                fontWeight: "600",
-                                                marginBottom: "10px",
-                                                fontFamily:
-                                                    "Poppins, sans-serif",
-                                            }}
-                                        >
-                                            Formularz kontaktowy
-                                        </h3>
-                                        <p
-                                            style={{
-                                                color: "#6B6B6B",
-                                                fontSize: "14px",
-                                                marginBottom: "30px",
-                                            }}
-                                        >
-                                            Przetwarzamy dane osobowe zgodnie z
-                                            naszą polityką prywatności
-                                        </p>
-
-                                        <form className="wpcf7-form">
-                                            <div
-                                                style={{ marginBottom: "20px" }}
-                                            >
-                                                <input
-                                                    type="text"
-                                                    name="name"
-                                                    placeholder="Imię"
-                                                    style={{
-                                                        width: "100%",
-                                                        padding: "12px",
-                                                        border: "1px solid #ddd",
-                                                    }}
-                                                    required
-                                                />
-                                            </div>
-                                            <div
-                                                style={{ marginBottom: "20px" }}
-                                            >
-                                                <input
-                                                    type="email"
-                                                    name="email"
-                                                    placeholder="Adres Email"
-                                                    style={{
-                                                        width: "100%",
-                                                        padding: "12px",
-                                                        border: "1px solid #ddd",
-                                                    }}
-                                                    required
-                                                />
-                                            </div>
-                                            <div
-                                                style={{ marginBottom: "20px" }}
-                                            >
-                                                <input
-                                                    type="tel"
-                                                    name="phone"
-                                                    placeholder="Telefon"
-                                                    style={{
-                                                        width: "100%",
-                                                        padding: "12px",
-                                                        border: "1px solid #ddd",
-                                                    }}
-                                                />
-                                            </div>
-                                            <div
-                                                style={{ marginBottom: "20px" }}
-                                            >
-                                                <textarea
-                                                    name="message"
-                                                    placeholder="Wiadomość"
-                                                    rows="4"
-                                                    style={{
-                                                        width: "100%",
-                                                        padding: "12px",
-                                                        border: "1px solid #ddd",
-                                                        resize: "vertical",
-                                                    }}
-                                                ></textarea>
-                                            </div>
-                                            <button
-                                                type="submit"
-                                                style={{
-                                                    backgroundColor: "#232323",
-                                                    color: "white",
-                                                    padding: "12px 30px",
-                                                    border: "none",
-                                                    fontWeight: "600",
-                                                    cursor: "pointer",
-                                                    width: "100%",
-                                                }}
-                                            >
-                                                Wyślij wiadomość
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
+                        <ContactSection />
                     </div>
                 </main>
             </div>
+
+            <Lightbox
+                images={lightboxImages}
+                isOpen={lightboxOpen}
+                onClose={() => setLightboxOpen(false)}
+                currentIndex={currentImageIndex}
+            />
         </>
     );
 }

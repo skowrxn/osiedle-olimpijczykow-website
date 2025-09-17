@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { buildApiUrl } from "../lib/strapi";
 
 const ApartmentList = ({ etap }) => {
     const searchParams = useSearchParams();
@@ -20,7 +21,7 @@ const ApartmentList = ({ etap }) => {
                 const params = new URLSearchParams({
                     populate: "*",
                     "filters[etap][$eq]": `etap${etap}`,
-                    "filters[available][$eq]": "true",
+                    "filters[dostepne][$eq]": "true",
                 });
 
                 // Add filter parameters from search
@@ -29,40 +30,42 @@ const ApartmentList = ({ etap }) => {
                 const area = searchParams.get("area");
 
                 if (rooms) {
-                    params.append("filters[rooms][$eq]", rooms);
+                    params.append("filters[liczba_pokoi][$eq]", rooms);
                 }
 
                 if (floor) {
                     if (floor === "0") {
-                        params.append("filters[floor][$eq]", "0");
+                        params.append("filters[kondygnacja][$eq]", "0");
                     } else if (floor === "4") {
-                        params.append("filters[floor][$gte]", "4");
+                        params.append("filters[kondygnacja][$gte]", "4");
                     } else {
-                        params.append("filters[floor][$eq]", floor);
+                        params.append("filters[kondygnacja][$eq]", floor);
                     }
                 }
 
                 if (area) {
                     if (area === "25-35") {
-                        params.append("filters[area][$gte]", "25");
-                        params.append("filters[area][$lte]", "35");
+                        params.append("filters[powierzchnia][$gte]", "25");
+                        params.append("filters[powierzchnia][$lte]", "35");
                     } else if (area === "35-45") {
-                        params.append("filters[area][$gte]", "35");
-                        params.append("filters[area][$lte]", "45");
+                        params.append("filters[powierzchnia][$gte]", "35");
+                        params.append("filters[powierzchnia][$lte]", "45");
                     } else if (area === "45-55") {
-                        params.append("filters[area][$gte]", "45");
-                        params.append("filters[area][$lte]", "55");
+                        params.append("filters[powierzchnia][$gte]", "45");
+                        params.append("filters[powierzchnia][$lte]", "55");
                     } else if (area === "55-65") {
-                        params.append("filters[area][$gte]", "55");
-                        params.append("filters[area][$lte]", "65");
+                        params.append("filters[powierzchnia][$gte]", "55");
+                        params.append("filters[powierzchnia][$lte]", "65");
                     } else if (area === "65+") {
-                        params.append("filters[area][$gte]", "65");
+                        params.append("filters[powierzchnia][$gte]", "65");
                     }
                 }
 
-                const response = await fetch(
-                    `http://localhost:1337/api/apartments?${params.toString()}`
+                const apiUrl = buildApiUrl(
+                    "apartments",
+                    Object.fromEntries(params)
                 );
+                const response = await fetch(apiUrl);
 
                 if (!response.ok) {
                     throw new Error("Błąd podczas pobierania mieszkań");
@@ -159,8 +162,8 @@ const ApartmentList = ({ etap }) => {
                                             Pokoje:
                                         </span>
                                         <p className="text-lg font-semibold text-gray-900">
-                                            {attrs.rooms}{" "}
-                                            {attrs.rooms === 1
+                                            {attrs.liczba_pokoi}{" "}
+                                            {attrs.liczba_pokoi === 1
                                                 ? "pokój"
                                                 : "pokoje"}
                                         </p>
@@ -170,7 +173,7 @@ const ApartmentList = ({ etap }) => {
                                             Powierzchnia:
                                         </span>
                                         <p className="text-lg font-semibold text-gray-900">
-                                            {attrs.area} m²
+                                            {attrs.powierzchnia} m²
                                         </p>
                                     </div>
                                     <div>
@@ -178,26 +181,29 @@ const ApartmentList = ({ etap }) => {
                                             Piętro:
                                         </span>
                                         <p className="text-lg font-semibold text-gray-900">
-                                            {formatFloor(attrs.floor)}
+                                            {formatFloor(attrs.kondygnacja)}
                                         </p>
                                     </div>
                                 </div>
-                                {attrs.description && (
+                                {attrs.opis && (
                                     <p className="text-gray-600 mt-2 text-sm">
-                                        {attrs.description}
+                                        {attrs.opis}
                                     </p>
                                 )}
                             </div>
 
                             <div className="flex flex-col items-end ml-6">
-                                <div className="text-right mb-3">
-                                    <span className="text-sm font-medium text-gray-700">
-                                        Cena:
-                                    </span>
-                                    <p className="text-2xl font-bold text-green-600">
-                                        {formatPrice(attrs.price)}
-                                    </p>
-                                </div>
+                                {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
+                                {attrs.dostepne && attrs.cena > 0 && (
+                                    <div className="text-right mb-3">
+                                        <span className="text-sm font-medium text-gray-700">
+                                            Cena:
+                                        </span>
+                                        <p className="text-2xl font-bold text-green-600">
+                                            {formatPrice(attrs.cena)}
+                                        </p>
+                                    </div>
+                                )}
                                 <Link
                                     href={`/apartment/${apartment.documentId}`}
                                     className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"

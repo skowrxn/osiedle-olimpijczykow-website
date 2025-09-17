@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { buildApiUrl } from "../lib/strapi";
 
 const ApartmentListCompact = ({
     etap = null,
@@ -38,31 +39,34 @@ const ApartmentListCompact = ({
                 const stage = searchParams.get("stage");
 
                 if (rooms) {
-                    params.append("filters[rooms][$eq]", rooms);
+                    params.append("filters[liczba_pokoi][$eq]", rooms);
                 }
 
                 if (floor) {
                     if (floor === "0") {
-                        params.append("filters[floor][$eq]", "0");
+                        params.append("filters[kondygnacja][$eq]", "0");
                     } else if (floor === "4+") {
-                        params.append("filters[floor][$gte]", "4");
+                        params.append("filters[kondygnacja][$gte]", "4");
                     } else {
-                        params.append("filters[floor][$eq]", floor);
+                        params.append("filters[kondygnacja][$eq]", floor);
                     }
                 }
 
                 if (area) {
-                    if (area === "30-50") {
-                        params.append("filters[area][$gte]", "30");
-                        params.append("filters[area][$lte]", "50");
-                    } else if (area === "50-70") {
-                        params.append("filters[area][$gte]", "50");
-                        params.append("filters[area][$lte]", "70");
-                    } else if (area === "70-90") {
-                        params.append("filters[area][$gte]", "70");
-                        params.append("filters[area][$lte]", "90");
-                    } else if (area === "90+") {
-                        params.append("filters[area][$gte]", "90");
+                    if (area === "25-35") {
+                        params.append("filters[powierzchnia][$gte]", "25");
+                        params.append("filters[powierzchnia][$lte]", "35");
+                    } else if (area === "35-45") {
+                        params.append("filters[powierzchnia][$gte]", "35");
+                        params.append("filters[powierzchnia][$lte]", "45");
+                    } else if (area === "45-55") {
+                        params.append("filters[powierzchnia][$gte]", "45");
+                        params.append("filters[powierzchnia][$lte]", "55");
+                    } else if (area === "55-65") {
+                        params.append("filters[powierzchnia][$gte]", "55");
+                        params.append("filters[powierzchnia][$lte]", "65");
+                    } else if (area === "65+") {
+                        params.append("filters[powierzchnia][$gte]", "65");
                     }
                 }
 
@@ -75,9 +79,13 @@ const ApartmentListCompact = ({
                     params.append("pagination[limit]", limit.toString());
                 }
 
-                const response = await fetch(
-                    `http://localhost:1337/api/apartments?${params.toString()}`
+                const apiUrl = buildApiUrl(
+                    "apartments",
+                    Object.fromEntries(params)
                 );
+                console.log("Fetching from:", apiUrl);
+
+                const response = await fetch(apiUrl);
 
                 if (!response.ok) {
                     throw new Error("Błąd podczas pobierania mieszkań");
@@ -265,24 +273,24 @@ const ApartmentListCompact = ({
                                             width: "12px",
                                             height: "60px",
                                             backgroundColor: getStatusColor(
-                                                attrs.available
+                                                attrs.dostepne
                                             ),
                                             borderRadius: "0",
                                         }}
-                                        title={getStatusText(attrs.available)}
+                                        title={getStatusText(attrs.dostepne)}
                                     ></div>
                                     <div
                                         style={{
                                             fontSize: "12px",
                                             fontWeight: "600",
                                             color: getStatusColor(
-                                                attrs.available
+                                                attrs.dostepne
                                             ),
                                             textTransform: "uppercase",
                                             letterSpacing: "0.5px",
                                         }}
                                     >
-                                        {getStatusText(attrs.available)}
+                                        {getStatusText(attrs.dostepne)}
                                     </div>
                                 </div>
 
@@ -317,7 +325,7 @@ const ApartmentListCompact = ({
                                                 color: "#333",
                                             }}
                                         >
-                                            {attrs.rooms}
+                                            {attrs.liczba_pokoi}
                                         </div>
                                     </div>
 
@@ -344,7 +352,7 @@ const ApartmentListCompact = ({
                                                 color: "#333",
                                             }}
                                         >
-                                            {attrs.area} m²
+                                            {attrs.powierzchnia} m²
                                         </div>
                                     </div>
 
@@ -371,11 +379,11 @@ const ApartmentListCompact = ({
                                                 color: "#333",
                                             }}
                                         >
-                                            {formatFloor(attrs.floor)}
+                                            {formatFloor(attrs.kondygnacja)}
                                         </div>
                                     </div>
 
-                                    {attrs.apartmentNumber && (
+                                    {attrs.numer && (
                                         <div
                                             style={{
                                                 textAlign: "left",
@@ -396,10 +404,10 @@ const ApartmentListCompact = ({
                                                 style={{
                                                     fontSize: "16px",
                                                     fontWeight: "600",
-                                                    color: "#007cba",
+                                                    color: "#333",
                                                 }}
                                             >
-                                                {attrs.apartmentNumber}
+                                                {attrs.numer}
                                             </div>
                                         </div>
                                     )}
@@ -413,27 +421,30 @@ const ApartmentListCompact = ({
                                     gap: "30px",
                                 }}
                             >
-                                <div style={{ textAlign: "right" }}>
-                                    <div
-                                        style={{
-                                            fontSize: "12px",
-                                            color: "#666",
-                                            marginBottom: "0px",
-                                            fontWeight: "500",
-                                        }}
-                                    >
-                                        CENA
+                                {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
+                                {attrs.dostepne && attrs.cena > 0 && (
+                                    <div style={{ textAlign: "right" }}>
+                                        <div
+                                            style={{
+                                                fontSize: "12px",
+                                                color: "#666",
+                                                marginBottom: "0px",
+                                                fontWeight: "500",
+                                            }}
+                                        >
+                                            CENA
+                                        </div>
+                                        <div
+                                            style={{
+                                                fontSize: "22px",
+                                                fontWeight: "600",
+                                                color: "#333",
+                                            }}
+                                        >
+                                            {formatPrice(attrs.cena)} PLN
+                                        </div>
                                     </div>
-                                    <div
-                                        style={{
-                                            fontSize: "22px",
-                                            fontWeight: "600",
-                                            color: "#333",
-                                        }}
-                                    >
-                                        {formatPrice(attrs.price)} PLN
-                                    </div>
-                                </div>
+                                )}
 
                                 <button
                                     style={{

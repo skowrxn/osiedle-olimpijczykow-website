@@ -195,7 +195,10 @@ export default function ListaLokali() {
                                     </div>
                                 </div>
                                 <div className="mt-12 py-4">
-                                    <PropertySearch></PropertySearch>
+                                    <PropertySearch
+                                        stayOnPage={true}
+                                        showStage={true}
+                                    ></PropertySearch>
                                 </div>
                                 <div className="mt-6 bg-white mb-24">
                                     <ApartmentListCompact
