@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 
 const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
     const [activeIndex, setActiveIndex] = useState(currentIndex);
+    const [touchStartX, setTouchStartX] = useState(null);
+    const [touchEndX, setTouchEndX] = useState(null);
 
     useEffect(() => {
         setActiveIndex(currentIndex);
@@ -52,6 +54,28 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
         setActiveIndex((prevIndex) =>
             prevIndex === 0 ? images.length - 1 : prevIndex - 1
         );
+    };
+
+    const onTouchStart = (e) => {
+        setTouchEndX(null);
+        setTouchStartX(e.changedTouches[0].clientX);
+    };
+
+    const onTouchMove = (e) => {
+        setTouchEndX(e.changedTouches[0].clientX);
+    };
+
+    const onTouchEnd = () => {
+        if (!touchStartX || touchEndX === null) return;
+        const distance = touchStartX - touchEndX;
+        const threshold = 50; // px
+        if (distance > threshold) {
+            nextImage();
+        } else if (distance < -threshold) {
+            prevImage();
+        }
+        setTouchStartX(null);
+        setTouchEndX(null);
     };
 
     if (!isOpen || !images || images.length === 0) return null;
@@ -131,7 +155,11 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                 style={{
                     padding: "20px",
                     boxSizing: "border-box",
+                    touchAction: "pan-y",
                 }}
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
             >
                 <img
                     src={images[activeIndex]}

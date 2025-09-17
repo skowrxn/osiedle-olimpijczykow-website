@@ -88,7 +88,7 @@ export default function Navigation() {
                 </button>
             </div>
             {isMobileOpen && (
-                <div className="md:hidden border-t border-gray-200">
+                <div className="md:hidden border-t border-gray-200 mt-1">
                     <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
                         {[
                             { href: "/", label: "Strona Główna" },

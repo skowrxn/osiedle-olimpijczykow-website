@@ -245,6 +245,9 @@ select:focus {
 }
 .google-map-wrapper {
     margin-bottom: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Responsive Design */
@@ -387,6 +390,29 @@ select:focus {
     }
     .lista-lokali-section .results-wrapper,
     .lista-lokali-section .results-search {
+        overflow-x: hidden !important;
+    }
+
+    /* Apartment list item responsive */
+    .apartment-item {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        max-width: 100% !important;
+    }
+    .apartment-item > div:first-child {
+        width: 100% !important;
+    }
+    .apartment-item > div:last-child {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    /* Ensure parent containers don't allow overflow */
+    .results-wrapper,
+    .results-search,
+    .elementor-container,
+    .site-main {
         overflow-x: hidden !important;
     }
 }

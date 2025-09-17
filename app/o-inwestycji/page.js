@@ -309,15 +309,15 @@ export default function OInwestycji() {
                             </div>
                         </div>
                     </section>
-                    <section className="p-6 flex gap-8 mx-auto max-w-7xl mt-16 about-map">
-                        <div className="elementor-container map-image">
+                    <section className="p-6 flex gap-8 mx-auto max-w-7xl mt-16">
+                        <div className="elementor-container w-1/2">
                             <Image
                                 src="/img/mapka.png"
                                 width="1000"
                                 height="500"
                             ></Image>
                         </div>
-                        <div className="map-text" style={{ flex: "1" }}>
+                        <div style={{ flex: "1" }}>
                             <p
                                 style={{
                                     color: "#6B6B6B",
@@ -354,11 +354,11 @@ export default function OInwestycji() {
                             </p>
                         </div>
                     </section>
-                    <section className="flex flex-col mt-12 google-map-section">
-                        <div className="mx-auto google-map-wrapper">
+                    <section className="flex flex-col mt-12">
+                        <div className="mx-auto">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5086.683515454682!2d18.832443000000016!3d50.439849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471129674a919f67%3A0x3ddb75d40836ae69!2sOlimpijczyk%C3%B3w%2013%2C%2042-612%20Tarnowskie%20G%C3%B3ry%2C%20Polska!5e0!3m2!1spl!2sus!4v1758072504304!5m2!1spl!2sus"
-                                width="100%"
+                                width="1200"
                                 height="450"
                                 style={{ border: 0 }}
                                 allowFullScreen=""
