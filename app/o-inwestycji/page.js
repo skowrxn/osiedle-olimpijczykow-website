@@ -9,7 +9,7 @@ export default function OInwestycji() {
             <main id="main" className="site-main">
                 <div className="elementor elementor-4773">
                     <section
-                        className="elementor-section elementor-top-section elementor-section-full_width"
+                        className="elementor-section elementor-top-section elementor-section-full_width sub-hero"
                         style={{
                             backgroundImage: "url(/img/hero-bg.jpg)",
                             backgroundPosition: "center center",
@@ -185,9 +185,13 @@ export default function OInwestycji() {
                             </div>
                         </div>
                     </section>
-                    <section style={{ padding: "20px 20px" }}>
+                    <section
+                        className="about-section"
+                        style={{ padding: "20px 20px" }}
+                    >
                         <div className="elementor-container">
                             <div
+                                className="about-grid"
                                 style={{
                                     display: "grid",
                                     gridTemplateColumns: "2fr 1fr",
@@ -226,6 +230,7 @@ export default function OInwestycji() {
                                     </div>
 
                                     <div
+                                        className="about-content"
                                         style={{
                                             display: "flex",
                                             gap: "40px",
@@ -285,6 +290,7 @@ export default function OInwestycji() {
                                     </div>
                                 </div>
                                 <div
+                                    className="about-right"
                                     style={{
                                         flex: "1",
                                         marginTop: "-50px",
@@ -303,15 +309,15 @@ export default function OInwestycji() {
                             </div>
                         </div>
                     </section>
-                    <section className="p-6 flex gap-8 mx-auto max-w-7xl mt-16">
-                        <div className="elementor-container w-1/2">
+                    <section className="p-6 flex gap-8 mx-auto max-w-7xl mt-16 about-map">
+                        <div className="elementor-container map-image">
                             <Image
                                 src="/img/mapka.png"
                                 width="1000"
                                 height="500"
                             ></Image>
                         </div>
-                        <div style={{ flex: "1" }}>
+                        <div className="map-text" style={{ flex: "1" }}>
                             <p
                                 style={{
                                     color: "#6B6B6B",
@@ -348,11 +354,11 @@ export default function OInwestycji() {
                             </p>
                         </div>
                     </section>
-                    <section className="flex flex-col mt-12">
-                        <div className="mx-auto">
+                    <section className="flex flex-col mt-12 google-map-section">
+                        <div className="mx-auto google-map-wrapper">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5086.683515454682!2d18.832443000000016!3d50.439849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471129674a919f67%3A0x3ddb75d40836ae69!2sOlimpijczyk%C3%B3w%2013%2C%2042-612%20Tarnowskie%20G%C3%B3ry%2C%20Polska!5e0!3m2!1spl!2sus!4v1758072504304!5m2!1spl!2sus"
-                                width="1200"
+                                width="100%"
                                 height="450"
                                 style={{ border: 0 }}
                                 allowFullScreen=""

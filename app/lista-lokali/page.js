@@ -151,6 +151,7 @@ function ListaLokaliContent() {
                 <div>
                     {/* filters */}
                     <section
+                        className="lista-lokali-section"
                         style={{
                             padding: 0,
                         }}
@@ -166,6 +167,7 @@ function ListaLokaliContent() {
                                     ></div>
 
                                     <div
+                                        className="etapy-grid"
                                         style={{
                                             display: "grid",
                                             gridTemplateColumns:
@@ -194,13 +196,13 @@ function ListaLokaliContent() {
                                         />
                                     </div>
                                 </div>
-                                <div className="mt-12 py-4">
+                                <div className="mt-12 py-4 results-search">
                                     <PropertySearch
                                         stayOnPage={true}
                                         showStage={true}
                                     ></PropertySearch>
                                 </div>
-                                <div className="mt-6 bg-white mb-24">
+                                <div className="mt-6 bg-white mb-24 results-wrapper">
                                     <ApartmentListCompact
                                         showSearch={true}
                                         limit={50}

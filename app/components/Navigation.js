@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function Navigation() {
     const pathname = usePathname();
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
         <nav className="bg-white shadow-md px-4 py-6">
@@ -65,7 +66,12 @@ export default function Navigation() {
                     })}
                 </div>
                 {/* Mobile menu button */}
-                <button className="md:hidden">
+                <button
+                    className="md:hidden"
+                    aria-label="Otwórz menu"
+                    aria-expanded={isMobileOpen}
+                    onClick={() => setIsMobileOpen((prev) => !prev)}
+                >
                     <svg
                         className="w-6 h-6"
                         fill="none"
@@ -81,6 +87,29 @@ export default function Navigation() {
                     </svg>
                 </button>
             </div>
+            {isMobileOpen && (
+                <div className="md:hidden border-t border-gray-200">
+                    <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
+                        {[
+                            { href: "/", label: "Strona Główna" },
+                            { href: "/o-inwestycji", label: "O inwestycji" },
+                            { href: "/lokalizacja", label: "Lokalizacja" },
+                            { href: "/lista-lokali", label: "Lista lokali" },
+                            { href: "/galeria", label: "Galeria" },
+                            { href: "/kontakt", label: "Kontakt" },
+                        ].map(({ href, label }) => (
+                            <Link
+                                key={href}
+                                href={href}
+                                className="text-gray-800 text-base font-semibold py-2"
+                                onClick={() => setIsMobileOpen(false)}
+                            >
+                                {label}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }

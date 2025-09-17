@@ -91,7 +91,7 @@ export default function Home() {
                     <div className="elementor elementor-4773">
                         {/* Hero Section */}
                         <section
-                            className="elementor-section elementor-top-section elementor-section-full_width"
+                            className="elementor-section elementor-top-section elementor-section-full_width hero-section"
                             style={{
                                 backgroundImage: "url(/img/hero-bg.jpg)",
                                 backgroundPosition: "center center",
@@ -119,14 +119,14 @@ export default function Home() {
                             >
                                 <div className="elementor-column elementor-col-100">
                                     <div
-                                        className="elementor-widget-wrap elementor-element-populated"
+                                        className="elementor-widget-wrap elementor-element-populated hero-inner"
                                         style={{
                                             textAlign: "left",
                                             color: "white",
                                         }}
                                     >
                                         <h2
-                                            className="elementor-heading-title"
+                                            className="elementor-heading-title hero-title"
                                             style={{
                                                 fontSize: "48px",
                                                 fontWeight: "600",
@@ -258,11 +258,12 @@ export default function Home() {
                             </div>
                         </section>
                         <section
-                            className="elementor-section elementor-top-section"
+                            className="elementor-section elementor-top-section design-section"
                             style={{ padding: "80px 0" }}
                         >
                             <div className="elementor-container">
                                 <div
+                                    className="design-grid"
                                     style={{
                                         display: "grid",
                                         gridTemplateColumns: "2fr 1fr",
@@ -302,6 +303,7 @@ export default function Home() {
                                         </div>
 
                                         <div
+                                            className="design-content"
                                             style={{
                                                 display: "flex",
                                                 gap: "40px",
@@ -386,9 +388,9 @@ export default function Home() {
                                         </div>
                                     </div>
                                     <div
+                                        className="design-right"
                                         style={{
                                             flex: "1",
-                                            marginTop: "-250px",
                                         }}
                                     >
                                         <img
