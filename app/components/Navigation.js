@@ -38,7 +38,7 @@ export default function Navigation() {
                             <Fragment key={href}>
                                 <Link
                                     href={href}
-                                    className="relative text-neutral-800 text-[15px] font-bold leading-normal"
+                                    className="relative text-neutral-800 text-[14px] font-semibold leading-normal"
                                     style={{
                                         transition: "color 0.3s ease",
                                     }}

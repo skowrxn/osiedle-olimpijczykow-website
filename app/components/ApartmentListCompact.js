@@ -240,16 +240,6 @@ const ApartmentListCompact = ({
                                     `/apartment/${apartment.documentId}`
                                 )
                             }
-                            onMouseEnter={(e) => {
-                                e.target.style.borderColor = "#007cba";
-                                e.target.style.boxShadow =
-                                    "0 4px 20px rgba(0,0,0,0.1)";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.borderColor = "#e0e0e0";
-                                e.target.style.boxShadow =
-                                    "0 2px 8px rgba(0,124,186,0.1)";
-                            }}
                         >
                             {" "}
                             <div
@@ -475,6 +465,13 @@ const ApartmentListCompact = ({
                     );
                 })}
             </div>
+
+            <style jsx>{`
+                .apartment-item:hover {
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+                    transform: translateY(-1px);
+                }
+            `}</style>
         </div>
     );
 };

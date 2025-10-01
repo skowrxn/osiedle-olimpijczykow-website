@@ -68,7 +68,7 @@ const ContactSection = () => {
                     <div>
                         <h3
                             style={{
-                                fontSize: "80px",
+                                fontSize: "70px",
                                 lineHeight: "80px",
                                 color: "#ffffff",
                                 fontWeight: "500",

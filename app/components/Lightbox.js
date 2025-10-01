@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
     const [activeIndex, setActiveIndex] = useState(currentIndex);
@@ -20,17 +20,21 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                     onClose();
                     break;
                 case "ArrowLeft":
-                    prevImage();
+                    setActiveIndex((prevIndex) =>
+                        prevIndex === 0 ? images.length - 1 : prevIndex - 1
+                    );
                     break;
                 case "ArrowRight":
-                    nextImage();
+                    setActiveIndex((prevIndex) =>
+                        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+                    );
                     break;
             }
         };
 
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, activeIndex]);
+    }, [isOpen, images.length, onClose]);
 
     useEffect(() => {
         if (isOpen) {
@@ -44,17 +48,17 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
         };
     }, [isOpen]);
 
-    const nextImage = () => {
+    const nextImage = useCallback(() => {
         setActiveIndex((prevIndex) =>
             prevIndex === images.length - 1 ? 0 : prevIndex + 1
         );
-    };
+    }, [images.length]);
 
-    const prevImage = () => {
+    const prevImage = useCallback(() => {
         setActiveIndex((prevIndex) =>
             prevIndex === 0 ? images.length - 1 : prevIndex - 1
         );
-    };
+    }, [images.length]);
 
     const onTouchStart = (e) => {
         setTouchEndX(null);
@@ -116,7 +120,7 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                         onClick={prevImage}
                         className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-neutral-300 transition-colors"
                         style={{
-                            background: "rgba(0,0,0,0.5)",
+                            background: "rgba(0,0,0,0.7)",
                             borderRadius: "50%",
                             width: "60px",
                             height: "60px",
@@ -125,15 +129,18 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                             justifyContent: "center",
                             border: "none",
                             cursor: "pointer",
+                            zIndex: 60,
+                            fontSize: "24px",
                         }}
+                        aria-label="Poprzednie zdjęcie"
                     >
-                        ‹
+                        ❮
                     </button>
                     <button
                         onClick={nextImage}
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-neutral-300 transition-colors"
                         style={{
-                            background: "rgba(0,0,0,0.5)",
+                            background: "rgba(0,0,0,0.7)",
                             borderRadius: "50%",
                             width: "60px",
                             height: "60px",
@@ -142,9 +149,12 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                             justifyContent: "center",
                             border: "none",
                             cursor: "pointer",
+                            zIndex: 60,
+                            fontSize: "24px",
                         }}
+                        aria-label="Następne zdjęcie"
                     >
-                        ›
+                        ❯
                     </button>
                 </>
             )}
@@ -189,23 +199,6 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                     </div>
                 )}
             </div>
-
-            {/* Thumbnail navigation for many images */}
-            {images.length > 1 && images.length <= 10 && (
-                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    {images.map((image, index) => (
-                        <button
-                            key={index}
-                            onClick={() => setActiveIndex(index)}
-                            className={`w-3 h-3 rounded-full transition-all ${
-                                index === activeIndex
-                                    ? "bg-white"
-                                    : "bg-white bg-opacity-50 hover:bg-opacity-75"
-                            }`}
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 };
