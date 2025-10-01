@@ -59,7 +59,7 @@ const ContactSection = () => {
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
+                        gridTemplateColumns: "3fr 2fr",
                         gap: "60px",
                         alignItems: "center",
                     }}
@@ -68,9 +68,10 @@ const ContactSection = () => {
                     <div>
                         <h3
                             style={{
-                                fontSize: "46px",
+                                fontSize: "80px",
+                                lineHeight: "80px",
                                 color: "#ffffff",
-                                fontWeight: "600",
+                                fontWeight: "500",
                                 marginBottom: "20px",
                                 fontFamily: "Poppins, sans-serif",
                             }}
@@ -89,11 +90,9 @@ const ContactSection = () => {
                     </div>
 
                     <div
+                        className="bg-white p-10 max-w-md"
                         style={{
-                            backgroundColor: "white",
-                            padding: "40px",
                             boxShadow: "0 5px 20px rgba(0,0,0,0.1)",
-                            borderRadius: "8px",
                         }}
                     >
                         <h3
@@ -117,125 +116,166 @@ const ContactSection = () => {
                             prywatności
                         </p>
 
-                        <form className="wpcf7-form" onSubmit={handleSubmit}>
-                            <div style={{ marginBottom: "20px" }}>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    placeholder="Imię"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        fontSize: "16px",
-                                        transition: "border-color 0.3s ease",
-                                    }}
-                                    onFocus={(e) =>
-                                        (e.target.style.borderColor = "#232323")
+                        <form
+                            className="wpcf7-form space-y-2"
+                            onSubmit={handleSubmit}
+                        >
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Imię"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                style={{
+                                    width: "100%",
+                                    padding: "8px 0px",
+                                    border: "none",
+                                    borderBottom: "1px solid #232323",
+                                    borderRadius: "0px",
+                                    backgroundColor: "transparent",
+                                    color: "#333",
+                                    fontSize: "16px",
+                                    outline: "none",
+                                    fontFamily: "Poppins, sans-serif",
+                                    transition: "border-color 0.3s ease",
+                                }}
+                                onFocus={(e) => {
+                                    e.target.style.borderBottomColor = "#000";
+                                    e.target.placeholder = "";
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderBottomColor =
+                                        "#232323";
+                                    if (!e.target.value) {
+                                        e.target.placeholder = "Imię";
                                     }
-                                    onBlur={(e) =>
-                                        (e.target.style.borderColor = "#ddd")
+                                }}
+                                required
+                            />
+
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Adres Email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                style={{
+                                    width: "100%",
+                                    padding: "8px 0px",
+                                    border: "none",
+                                    borderBottom: "1px solid #232323",
+                                    borderRadius: "0px",
+                                    backgroundColor: "transparent",
+                                    color: "#333",
+                                    fontSize: "16px",
+                                    outline: "none",
+                                    fontFamily: "Poppins, sans-serif",
+                                    transition: "border-color 0.3s ease",
+                                }}
+                                onFocus={(e) => {
+                                    e.target.style.borderBottomColor = "#000";
+                                    e.target.placeholder = "";
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderBottomColor = "#333";
+                                    if (!e.target.value) {
+                                        e.target.placeholder = "Adres Email";
                                     }
-                                    required
-                                />
-                            </div>
-                            <div style={{ marginBottom: "20px" }}>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Adres Email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        fontSize: "16px",
-                                        transition: "border-color 0.3s ease",
-                                    }}
-                                    onFocus={(e) =>
-                                        (e.target.style.borderColor = "#232323")
+                                }}
+                                required
+                            />
+                            <input
+                                type="tel"
+                                name="phone"
+                                placeholder="Telefon"
+                                value={formData.phone}
+                                onChange={handleInputChange}
+                                style={{
+                                    width: "100%",
+                                    padding: "5px 0px",
+                                    border: "none",
+                                    borderBottom: "1px solid #232323",
+                                    borderRadius: "0px",
+                                    backgroundColor: "transparent",
+                                    color: "#333",
+                                    fontSize: "16px",
+                                    outline: "none",
+                                    fontFamily: "Poppins, sans-serif",
+                                    transition: "border-color 0.3s ease",
+                                }}
+                                onFocus={(e) => {
+                                    e.target.style.borderBottomColor = "#000";
+                                    e.target.placeholder = "";
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderBottomColor = "#333";
+                                    if (!e.target.value) {
+                                        e.target.placeholder = "Telefon";
                                     }
-                                    onBlur={(e) =>
-                                        (e.target.style.borderColor = "#ddd")
+                                }}
+                            />
+                            <textarea
+                                name="message"
+                                placeholder="Wiadomość"
+                                rows="3"
+                                value={formData.message}
+                                onChange={handleInputChange}
+                                style={{
+                                    width: "100%",
+                                    padding: "5px 0px",
+                                    border: "none",
+                                    borderBottom: "1px solid #232323",
+                                    borderRadius: "0px",
+                                    backgroundColor: "transparent",
+                                    color: "#333",
+                                    resize: "vertical",
+                                    fontSize: "16px",
+                                    fontFamily: "Poppins, sans-serif",
+                                    outline: "none",
+                                    transition: "border-color 0.3s ease",
+                                }}
+                                onFocus={(e) => {
+                                    e.target.style.borderBottomColor = "#000";
+                                    e.target.placeholder = "";
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderBottomColor = "#333";
+                                    if (!e.target.value) {
+                                        e.target.placeholder = "Wiadomość";
                                     }
-                                    required
-                                />
-                            </div>
-                            <div style={{ marginBottom: "20px" }}>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    placeholder="Telefon"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        fontSize: "16px",
-                                        transition: "border-color 0.3s ease",
-                                    }}
-                                    onFocus={(e) =>
-                                        (e.target.style.borderColor = "#232323")
-                                    }
-                                    onBlur={(e) =>
-                                        (e.target.style.borderColor = "#ddd")
-                                    }
-                                />
-                            </div>
-                            <div style={{ marginBottom: "20px" }}>
-                                <textarea
-                                    name="message"
-                                    placeholder="Wiadomość"
-                                    rows="4"
-                                    value={formData.message}
-                                    onChange={handleInputChange}
-                                    style={{
-                                        width: "100%",
-                                        padding: "12px",
-                                        border: "1px solid #ddd",
-                                        borderRadius: "4px",
-                                        resize: "vertical",
-                                        fontSize: "16px",
-                                        fontFamily: "inherit",
-                                        transition: "border-color 0.3s ease",
-                                    }}
-                                    onFocus={(e) =>
-                                        (e.target.style.borderColor = "#232323")
-                                    }
-                                    onBlur={(e) =>
-                                        (e.target.style.borderColor = "#ddd")
-                                    }
-                                ></textarea>
-                            </div>
+                                }}
+                            ></textarea>
                             <button
                                 type="submit"
                                 style={{
                                     backgroundColor: "#232323",
                                     color: "white",
-                                    padding: "12px 30px",
+                                    marginTop: "10px",
+                                    padding: "16px 32px",
                                     border: "none",
-                                    borderRadius: "4px",
-                                    fontWeight: "600",
+                                    borderRadius: "50px",
                                     cursor: "pointer",
-                                    width: "100%",
                                     fontSize: "16px",
-                                    transition: "background-color 0.3s ease",
+                                    fontWeight: "600",
+                                    fontFamily: "Poppins, sans-serif",
+                                    transition: "all 0.3s ease",
+                                    width: "100%",
+                                    height: "56px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
                                 }}
-                                onMouseOver={(e) =>
-                                    (e.target.style.backgroundColor = "#3a3a3a")
-                                }
-                                onMouseOut={(e) =>
-                                    (e.target.style.backgroundColor = "#232323")
-                                }
+                                onMouseOver={(e) => {
+                                    e.target.style.backgroundColor = "#3a3a3a";
+                                    e.target.style.transform =
+                                        "translateY(-1px)";
+                                }}
+                                onMouseOut={(e) => {
+                                    e.target.style.backgroundColor = "#232323";
+                                    e.target.style.transform = "translateY(0)";
+                                }}
                             >
-                                Wyślij wiadomość
+                                Wyślij
                             </button>
                         </form>
                     </div>
@@ -248,6 +288,13 @@ const ContactSection = () => {
                         grid-template-columns: 1fr !important;
                         gap: 40px !important;
                     }
+                }
+
+                input::placeholder,
+                textarea::placeholder {
+                    color: #232323;
+                    opacity: 1;
+                    font-size: 14px;
                 }
             `}</style>
         </section>
