@@ -93,7 +93,7 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
             {/* Close button */}
             <button
                 onClick={onClose}
-                className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition-colors z-50"
+                className="absolute top-4 right-4 text-white text-2xl hover:text-neutral-300 transition-colors z-50"
                 style={{
                     background: "rgba(0,0,0,0.5)",
                     borderRadius: "50%",
@@ -114,7 +114,7 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                 <>
                     <button
                         onClick={prevImage}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors"
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-neutral-300 transition-colors"
                         style={{
                             background: "rgba(0,0,0,0.5)",
                             borderRadius: "50%",
@@ -131,7 +131,7 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                     </button>
                     <button
                         onClick={nextImage}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 transition-colors"
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-neutral-300 transition-colors"
                         style={{
                             background: "rgba(0,0,0,0.5)",
                             borderRadius: "50%",

@@ -101,7 +101,7 @@ const ApartmentList = ({ etap }) => {
         return (
             <div className="text-center py-8">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-gray-600">Ładowanie mieszkań...</p>
+                <p className="mt-2 text-neutral-600">Ładowanie mieszkań...</p>
             </div>
         );
     }
@@ -110,7 +110,7 @@ const ApartmentList = ({ etap }) => {
         return (
             <div className="text-center py-8">
                 <p className="text-red-600">Błąd: {error}</p>
-                <p className="text-gray-600 mt-2">
+                <p className="text-neutral-600 mt-2">
                     Sprawdź czy Strapi CMS jest uruchomione na porcie 1337
                 </p>
             </div>
@@ -120,10 +120,10 @@ const ApartmentList = ({ etap }) => {
     if (apartments.length === 0) {
         return (
             <div className="text-center py-8">
-                <p className="text-gray-600 text-lg">
+                <p className="text-neutral-600 text-lg">
                     Nie znaleziono mieszkań spełniających kryteria wyszukiwania.
                 </p>
-                <p className="text-gray-500 mt-2">
+                <p className="text-neutral-500 mt-2">
                     Spróbuj zmienić filtry lub wyczyść wyszukiwanie.
                 </p>
             </div>
@@ -132,7 +132,7 @@ const ApartmentList = ({ etap }) => {
 
     return (
         <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-800 mb-4">
+            <h3 className="text-lg font-medium text-neutral-800 mb-4">
                 Znaleziono {apartments.length} mieszkań
             </h3>
 
@@ -152,16 +152,16 @@ const ApartmentList = ({ etap }) => {
                 return (
                     <div
                         key={apartment.id}
-                        className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
+                        className="border border-neutral-300 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
                     >
                         <div className="flex justify-between items-center">
                             <div className="flex-1">
                                 <div className="grid grid-cols-3 gap-4 text-sm">
                                     <div>
-                                        <span className="font-medium text-gray-700">
+                                        <span className="font-medium text-neutral-700">
                                             Pokoje:
                                         </span>
-                                        <p className="text-lg font-semibold text-gray-900">
+                                        <p className="text-lg font-semibold text-neutral-900">
                                             {attrs.liczba_pokoi}{" "}
                                             {attrs.liczba_pokoi === 1
                                                 ? "pokój"
@@ -169,24 +169,24 @@ const ApartmentList = ({ etap }) => {
                                         </p>
                                     </div>
                                     <div>
-                                        <span className="font-medium text-gray-700">
+                                        <span className="font-medium text-neutral-700">
                                             Powierzchnia:
                                         </span>
-                                        <p className="text-lg font-semibold text-gray-900">
+                                        <p className="text-lg font-semibold text-neutral-900">
                                             {attrs.powierzchnia} m²
                                         </p>
                                     </div>
                                     <div>
-                                        <span className="font-medium text-gray-700">
+                                        <span className="font-medium text-neutral-700">
                                             Piętro:
                                         </span>
-                                        <p className="text-lg font-semibold text-gray-900">
+                                        <p className="text-lg font-semibold text-neutral-900">
                                             {formatFloor(attrs.kondygnacja)}
                                         </p>
                                     </div>
                                 </div>
                                 {attrs.opis && (
-                                    <p className="text-gray-600 mt-2 text-sm">
+                                    <p className="text-neutral-600 mt-2 text-sm">
                                         {attrs.opis}
                                     </p>
                                 )}
@@ -196,7 +196,7 @@ const ApartmentList = ({ etap }) => {
                                 {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
                                 {attrs.dostepne && attrs.cena > 0 && (
                                     <div className="text-right mb-3">
-                                        <span className="text-sm font-medium text-gray-700">
+                                        <span className="text-sm font-medium text-neutral-700">
                                             Cena:
                                         </span>
                                         <p className="text-2xl font-bold text-green-600">

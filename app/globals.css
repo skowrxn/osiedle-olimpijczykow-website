@@ -443,7 +443,7 @@ select:focus {
 }
 
 .filter-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-neutral-700 mb-1;
 }
 
 .filter-select {

@@ -2,7 +2,7 @@ import ApartmentSearch from "./ApartmentSearch";
 
 export default function Hero() {
     return (
-        <div className="relative bg-gray-900 text-white">
+        <div className="relative bg-neutral-900 text-white">
             {/* Background image placeholder - you can replace with actual image */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-70"
@@ -28,7 +28,7 @@ export default function Hero() {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                             {/* Status Filter */}
                             <div className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <label className="text-sm font-medium text-neutral-700 mb-2 flex items-center">
                                     <svg
                                         className="w-4 h-4 mr-2"
                                         fill="currentColor"
@@ -42,7 +42,7 @@ export default function Hero() {
                                     </svg>
                                     Status
                                 </label>
-                                <select className="px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700">
+                                <select className="px-3 py-3 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-neutral-700">
                                     <option value="">Wszystkie</option>
                                     <option value="available">Dostępne</option>
                                     <option value="reserved">
@@ -54,7 +54,7 @@ export default function Hero() {
 
                             {/* Type Filter */}
                             <div className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <label className="text-sm font-medium text-neutral-700 mb-2 flex items-center">
                                     <svg
                                         className="w-4 h-4 mr-2"
                                         fill="currentColor"
@@ -64,7 +64,7 @@ export default function Hero() {
                                     </svg>
                                     Type
                                 </label>
-                                <select className="px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700">
+                                <select className="px-3 py-3 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-neutral-700">
                                     <option value="">Wszystkie</option>
                                     <option value="1">1 pokój</option>
                                     <option value="2">2 pokoje</option>
@@ -75,7 +75,7 @@ export default function Hero() {
 
                             {/* Location Filter */}
                             <div className="flex flex-col">
-                                <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <label className="text-sm font-medium text-neutral-700 mb-2 flex items-center">
                                     <svg
                                         className="w-4 h-4 mr-2"
                                         fill="currentColor"
@@ -89,7 +89,7 @@ export default function Hero() {
                                     </svg>
                                     Location
                                 </label>
-                                <select className="px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-700">
+                                <select className="px-3 py-3 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-neutral-700">
                                     <option value="">Wszystkie</option>
                                     <option value="etap3">Etap 3</option>
                                 </select>
@@ -97,7 +97,7 @@ export default function Hero() {
 
                             {/* Search Button */}
                             <div className="flex flex-col">
-                                <button className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-800 transition-colors font-medium">
+                                <button className="bg-black text-white px-8 py-3 rounded-md hover:bg-neutral-800 transition-colors font-medium">
                                     Search Property
                                 </button>
                             </div>

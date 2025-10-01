@@ -10,7 +10,7 @@ export default function Navigation() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <nav className="bg-white shadow-md px-4 py-6">
+        <nav className="bg-white shadow-md px-4 py-6 border-b-1 border-neutral-200">
             <div className="container mx-auto flex justify-around items-center">
                 {/* Logo */}
                 <Link href="/" className="cursor-pointer">
@@ -38,7 +38,7 @@ export default function Navigation() {
                             <Fragment key={href}>
                                 <Link
                                     href={href}
-                                    className="relative text-gray-800 text-sm font-bold group"
+                                    className="relative text-neutral-800 text-[15px] font-bold leading-normal"
                                     style={{
                                         transition: "color 0.3s ease",
                                     }}
@@ -46,7 +46,7 @@ export default function Navigation() {
                                     {label}
                                     {/* Underline animation */}
                                     <span
-                                        className={`absolute left-0 bottom-0 h-px bg-gray-800 transition-all duration-300 ease-out ${
+                                        className={`absolute left-0 bottom-0 h-px bg-neutral-800 transition-all duration-300 ease-out ${
                                             isActive
                                                 ? "w-full"
                                                 : "w-0 group-hover:w-full"
@@ -57,7 +57,7 @@ export default function Navigation() {
                                     ></span>
                                 </Link>
                                 {idx < arr.length - 1 && (
-                                    <span className="text-gray-800 text-lg select-none">
+                                    <span className="text-neutral-800 text-sm select-none">
                                         |
                                     </span>
                                 )}
@@ -88,7 +88,7 @@ export default function Navigation() {
                 </button>
             </div>
             {isMobileOpen && (
-                <div className="md:hidden border-t border-gray-200 mt-1">
+                <div className="md:hidden border-t border-neutral-200 mt-1">
                     <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
                         {[
                             { href: "/", label: "Strona Główna" },
@@ -101,7 +101,7 @@ export default function Navigation() {
                             <Link
                                 key={href}
                                 href={href}
-                                className="text-gray-800 text-base font-semibold py-2"
+                                className="text-neutral-800 text-base font-semibold py-2"
                                 onClick={() => setIsMobileOpen(false)}
                             >
                                 {label}

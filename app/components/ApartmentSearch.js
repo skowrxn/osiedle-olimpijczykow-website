@@ -53,21 +53,21 @@ const ApartmentSearch = ({ etap }) => {
     };
 
     return (
-        <div className="bg-gray-50 p-6 rounded-lg mb-6">
+        <div className="bg-neutral-50 p-6 rounded-lg mb-6">
             <h2 className="text-xl font-semibold mb-4">
                 Wyszukiwarka mieszkań
             </h2>
 
             <div className="flex flex-wrap gap-4 items-end">
                 <div className="flex flex-col min-w-[150px]">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Liczba pokoi:
                     </label>
                     <select
                         name="rooms"
                         value={filters.rooms}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-neutral-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="1">1 pokój</option>
@@ -79,14 +79,14 @@ const ApartmentSearch = ({ etap }) => {
                 </div>
 
                 <div className="flex flex-col min-w-[150px]">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Piętro:
                     </label>
                     <select
                         name="floor"
                         value={filters.floor}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-neutral-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="0">Parter</option>
@@ -98,14 +98,14 @@ const ApartmentSearch = ({ etap }) => {
                 </div>
 
                 <div className="flex flex-col min-w-[150px]">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                         Powierzchnia:
                     </label>
                     <select
                         name="area"
                         value={filters.area}
                         onChange={handleFilterChange}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 border border-neutral-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Wszystkie</option>
                         <option value="25-35">25-35 m²</option>
@@ -125,7 +125,7 @@ const ApartmentSearch = ({ etap }) => {
                     </button>
                     <button
                         onClick={clearFilters}
-                        className="bg-gray-400 text-white px-6 py-2 rounded-md hover:bg-gray-500 transition-colors"
+                        className="bg-neutral-400 text-white px-6 py-2 rounded-md hover:bg-neutral-500 transition-colors"
                     >
                         Wyczyść
                     </button>

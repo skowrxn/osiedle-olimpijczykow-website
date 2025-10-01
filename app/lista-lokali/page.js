@@ -138,7 +138,7 @@ function ListaLokaliContent() {
                         <span className="text-white text-2xl font-bold mb-2">
                             {title}
                         </span>
-                        <p className="text-gray-200 text-md">{desc}</p>
+                        <p className="text-neutral-200 text-md">{desc}</p>
                     </div>
                 </div>
             </a>

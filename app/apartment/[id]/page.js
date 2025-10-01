@@ -95,7 +95,7 @@ const ApartmentDetail = () => {
         return (
             <div className="text-center py-12">
                 <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                <p className="mt-4 text-gray-600">
+                <p className="mt-4 text-neutral-600">
                     Ładowanie szczegółów mieszkania...
                 </p>
             </div>
@@ -106,7 +106,7 @@ const ApartmentDetail = () => {
         return (
             <div className="text-center py-12">
                 <p className="text-red-600 text-lg">Błąd: {error}</p>
-                <p className="text-gray-600 mt-2">
+                <p className="text-neutral-600 mt-2">
                     Sprawdź czy Strapi CMS jest uruchomione na porcie 1337
                 </p>
                 <Link
@@ -122,7 +122,7 @@ const ApartmentDetail = () => {
     if (!apartment) {
         return (
             <div className="text-center py-12">
-                <p className="text-gray-600 text-lg">
+                <p className="text-neutral-600 text-lg">
                     Mieszkanie nie zostało znalezione.
                 </p>
                 <Link

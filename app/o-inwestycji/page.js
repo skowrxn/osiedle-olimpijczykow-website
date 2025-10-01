@@ -274,7 +274,7 @@ export default function OInwestycji() {
 
                                             <a
                                                 href="/lista-lokali"
-                                                className="rounded-4xl border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white bg-w color-gray-800"
+                                                className="rounded-4xl border-neutral-800 text-neutral-800 hover:bg-neutral-800 hover:text-white bg-w color-neutral-800"
                                                 style={{
                                                     display: "inline-block",
                                                     border: "1px solid",

@@ -24,10 +24,10 @@ const Etap3Page = () => {
                                                 marginBottom: "20px",
                                             }}
                                         >
-                                            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+                                            <h1 className="text-4xl font-bold text-neutral-800 mb-4">
                                                 Mieszkania Etap 3
                                             </h1>
-                                            <p className="text-xl text-gray-600">
+                                            <p className="text-xl text-neutral-600">
                                                 Przeglądaj dostępne mieszkania w
                                                 trzecim etapie inwestycji
                                                 Osiedle Olimpijczyków

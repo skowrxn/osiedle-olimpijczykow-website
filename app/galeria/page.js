@@ -62,7 +62,7 @@ export default function Galeria() {
 
     const GallerySection = ({ title, images, folder }) => (
         <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-12 text-center text-gray-800">
+            <h2 className="text-3xl font-bold mb-12 text-center text-neutral-800">
                 {title}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

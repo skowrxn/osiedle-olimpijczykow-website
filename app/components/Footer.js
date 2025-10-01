@@ -14,7 +14,7 @@ const navLinks = [
 export default function Footer() {
     return (
         <footer
-            className="text-gray-300"
+            className="text-neutral-300"
             style={{ backgroundColor: "var(--quere-button-color-idle)" }}
         >
             <div className="container max-w-7xl mx-auto px-4 py-12">
@@ -27,7 +27,7 @@ export default function Footer() {
                         <p className="text-white text-lg font-semibold mb-4 w-full">
                             Osiedle Olimpijczyków
                         </p>
-                        <p className="text-gray-400 text-[15px] mt-2 text-left">
+                        <p className="text-neutral-400 text-[15px] mt-2 text-left">
                             Nowa inwestycja w sercu Tarnowskich Gór o wysokim
                             standardzie wykonania, nawiązująca do nowoczesnych
                             trendów, łącząc funkcjonalność i prostotę,
@@ -44,7 +44,7 @@ export default function Footer() {
                         <p className="text-white text-lg font-semibold mb-4 w-full">
                             INDELIT Sp. z o.o.
                         </p>
-                        <address className="text-gray-400 text-[15px] not-italic text-left">
+                        <address className="text-neutral-400 text-[15px] not-italic text-left">
                             42-612 Tarnowskie Góry
                             <br />
                             ul. Olimpijczyków 13A
@@ -83,7 +83,7 @@ export default function Footer() {
                                 <Link
                                     key={href}
                                     href={href}
-                                    className="text-gray-400 text-[15px] hover:text-white transition-colors"
+                                    className="text-neutral-400 text-[15px] hover:text-white transition-colors"
                                 >
                                     {label}
                                 </Link>
@@ -99,7 +99,7 @@ export default function Footer() {
                         <p className="text-white text-lg font-semibold mb-4 w-full">
                             Nasi Partnerzy
                         </p>
-                        <div className="text-gray-400 text-[15px] mb-2 text-left">
+                        <div className="text-neutral-400 text-[15px] mb-2 text-left">
                             W Swoim Stylu Anna Swoboda
                             <br />
                             Projektowanie wnętrz domowych
