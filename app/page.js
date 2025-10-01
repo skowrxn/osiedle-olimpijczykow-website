@@ -6,6 +6,7 @@ import PropertySearch from "./components/PropertySearch";
 import BoxWithIcon from "./components/BoxWithIcon";
 import Lightbox from "./components/Lightbox";
 import ContactSection from "./components/ContactSection";
+import Poppins from "next/font/google/";
 
 export default function Home() {
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -79,10 +80,11 @@ export default function Home() {
                     href="https://fonts.gstatic.com"
                     crossOrigin="anonymous"
                 />
+
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
                     rel="stylesheet"
-                />
+                    href="https://fonts.googleapis.com/css?family=Poppins:400,600,500,400,500,600,700%7CPlayfair%20Display:600,400,500,600,700,600italic&display=swap&ver=1755862490"
+                ></link>
             </Head>
 
             <div className="home wp-singular page-template elementor-default elementor-page">
@@ -105,7 +107,7 @@ export default function Home() {
                             <div
                                 className="elementor-background-overlay"
                                 style={{
-                                    background: "rgba(0,0,0,0.6)",
+                                    background: "rgba(0,0,0,0.4)",
                                     position: "absolute",
                                     top: 0,
                                     left: 0,
@@ -371,7 +373,7 @@ export default function Home() {
 
                                                 <a
                                                     href="/o-inwestycji"
-                                                    className="rounded-4xl border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white bg-w color-gray-800"
+                                                    className="rounded-4xl border-neutral-800 text-neutral-800 hover:bg-neutral-800 hover:text-white bg-w color-neutral-800"
                                                     style={{
                                                         display: "inline-block",
                                                         border: "1px solid",
