@@ -63,7 +63,7 @@ export default function PropertySearch({
             className="wgl-properties_search elementor-search"
             style={{
                 backgroundColor: "rgba(255,255,255,0.95)",
-                padding: "40px 30px",
+                padding: "30px 30px",
                 maxWidth: "1200px",
                 margin: "0",
                 borderRadius: "0px",
