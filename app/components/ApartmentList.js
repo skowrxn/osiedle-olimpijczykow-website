@@ -21,7 +21,7 @@ const ApartmentList = ({ etap }) => {
                 const params = new URLSearchParams({
                     populate: "*",
                     "filters[etap][$eq]": `etap${etap}`,
-                    "filters[dostepne][$eq]": "true",
+                    "filters[dostepnosc][$eq]": "DOSTĘPNE",
                 });
 
                 // Add filter parameters from search
@@ -193,17 +193,20 @@ const ApartmentList = ({ etap }) => {
                             </div>
 
                             <div className="flex flex-col items-end ml-6">
-                                {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
-                                {attrs.dostepne && attrs.cena > 0 && (
-                                    <div className="text-right mb-3">
-                                        <span className="text-sm font-medium text-neutral-700">
-                                            Cena:
-                                        </span>
-                                        <p className="text-2xl font-bold text-green-600">
-                                            {formatPrice(attrs.cena)}
-                                        </p>
-                                    </div>
-                                )}
+                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTĘPNE lub w rezerwacji i cena > 0 */}
+                                {(attrs.dostepnosc === "DOSTĘPNE" ||
+                                    attrs.dostepnosc === "DOSTEPNE" ||
+                                    attrs.dostepnosc === "REZERWACJA") &&
+                                    attrs.cena > 0 && (
+                                        <div className="text-right mb-3">
+                                            <span className="text-sm font-medium text-neutral-700">
+                                                Cena:
+                                            </span>
+                                            <p className="text-2xl font-bold text-green-600">
+                                                {formatPrice(attrs.cena)}
+                                            </p>
+                                        </div>
+                                    )}
                                 <Link
                                     href={`/apartment/${apartment.documentId}`}
                                     className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"

@@ -37,6 +37,7 @@ const ApartmentListCompact = ({
                 const floor = searchParams.get("floor");
                 const area = searchParams.get("area");
                 const stage = searchParams.get("stage");
+                const availability = searchParams.get("status");
 
                 if (rooms) {
                     params.append("filters[liczba_pokoi][$eq]", rooms);
@@ -72,6 +73,10 @@ const ApartmentListCompact = ({
 
                 if (stage && !etap) {
                     params.append("filters[etap][$eq]", stage);
+                }
+
+                if (availability) {
+                    params.append("filters[status][$eq]", availability);
                 }
 
                 // Add limit if specified
@@ -114,12 +119,32 @@ const ApartmentListCompact = ({
         return floor === 0 ? "Parter" : `${floor} p.`;
     };
 
-    const getStatusColor = (available) => {
-        return available ? "#28a745" : "#dc3545"; // Zielony dla dostępnych, czerwony dla sprzedanych
+    const getStatusColor = (status) => {
+        switch (status) {
+            case "DOSTĘPNE":
+            case "DOSTEPNE":
+                return "#28a745"; // Zielony
+            case "REZERWACJA":
+                return "#ffc107"; // Żółty
+            case "SPRZEDANE":
+                return "#dc3545"; // Czerwony
+            default:
+                return "#6c757d"; // Szary dla nieznanych statusów
+        }
     };
 
-    const getStatusText = (available) => {
-        return available ? "Dostępne" : "Sprzedane";
+    const getStatusText = (status) => {
+        switch (status) {
+            case "DOSTĘPNE":
+            case "DOSTEPNE":
+                return "Dostępne";
+            case "REZERWACJA":
+                return "Rezerwacja";
+            case "SPRZEDANE":
+                return "Sprzedane";
+            default:
+                return `Nieznany status (${status})`;
+        }
     };
 
     if (loading) {
@@ -218,6 +243,7 @@ const ApartmentListCompact = ({
             >
                 {apartments.map((apartment) => {
                     const attrs = apartment;
+                    console.log("Apartment dostepnosc:", attrs.dostepnosc);
 
                     return (
                         <div
@@ -263,24 +289,24 @@ const ApartmentListCompact = ({
                                             width: "12px",
                                             height: "60px",
                                             backgroundColor: getStatusColor(
-                                                attrs.dostepne
+                                                attrs.dostepnosc
                                             ),
                                             borderRadius: "0",
                                         }}
-                                        title={getStatusText(attrs.dostepne)}
+                                        title={getStatusText(attrs.dostepnosc)}
                                     ></div>
                                     <div
                                         style={{
                                             fontSize: "12px",
                                             fontWeight: "600",
                                             color: getStatusColor(
-                                                attrs.dostepne
+                                                attrs.dostepnosc
                                             ),
                                             textTransform: "uppercase",
                                             letterSpacing: "0.5px",
                                         }}
                                     >
-                                        {getStatusText(attrs.dostepne)}
+                                        {getStatusText(attrs.dostepnosc)}
                                     </div>
                                 </div>
 
@@ -411,30 +437,33 @@ const ApartmentListCompact = ({
                                     gap: "30px",
                                 }}
                             >
-                                {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
-                                {attrs.dostepne && attrs.cena > 0 && (
-                                    <div style={{ textAlign: "right" }}>
-                                        <div
-                                            style={{
-                                                fontSize: "12px",
-                                                color: "#666",
-                                                marginBottom: "0px",
-                                                fontWeight: "500",
-                                            }}
-                                        >
-                                            CENA
+                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTĘPNE lub w rezerwacji i cena > 0 */}
+                                {(attrs.dostepnosc === "DOSTĘPNE" ||
+                                    attrs.dostepnosc === "DOSTEPNE" ||
+                                    attrs.dostepnosc === "REZERWACJA") &&
+                                    attrs.cena > 0 && (
+                                        <div style={{ textAlign: "right" }}>
+                                            <div
+                                                style={{
+                                                    fontSize: "12px",
+                                                    color: "#666",
+                                                    marginBottom: "0px",
+                                                    fontWeight: "500",
+                                                }}
+                                            >
+                                                CENA
+                                            </div>
+                                            <div
+                                                style={{
+                                                    fontSize: "22px",
+                                                    fontWeight: "600",
+                                                    color: "#333",
+                                                }}
+                                            >
+                                                {formatPrice(attrs.cena)} PLN
+                                            </div>
                                         </div>
-                                        <div
-                                            style={{
-                                                fontSize: "22px",
-                                                fontWeight: "600",
-                                                color: "#333",
-                                            }}
-                                        >
-                                            {formatPrice(attrs.cena)} PLN
-                                        </div>
-                                    </div>
-                                )}
+                                    )}
 
                                 <button
                                     style={{

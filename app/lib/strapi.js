@@ -12,7 +12,7 @@ export const FIELD_MAPPING = {
     price: "cena",
     images: "zdjecia",
     description: "opis",
-    available: "dostepne",
+    available: "dostepnosc",
     number: "numer",
     additionalElements: "elementy_dodatkowe",
 };

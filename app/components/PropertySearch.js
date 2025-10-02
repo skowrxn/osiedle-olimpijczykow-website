@@ -13,6 +13,7 @@ export default function PropertySearch({
         area: "",
         floor: "",
         stage: "", // Dodano pole etapu
+        availability: "", // Dodano pole dostępności
     });
 
     const handleFilterChange = (e) => {
@@ -40,6 +41,10 @@ export default function PropertySearch({
 
         if (searchFilters.stage) {
             params.set("stage", searchFilters.stage);
+        }
+
+        if (searchFilters.availability) {
+            params.set("status", searchFilters.availability);
         }
 
         const queryString = params.toString();
@@ -83,7 +88,7 @@ export default function PropertySearch({
                 >
                     {/* Etap - pokazuje tylko gdy showStage jest true */}
                     {showStage && (
-                        <div style={{ flex: "1", minWidth: "180px" }}>
+                        <div style={{ flex: "1", minWidth: "140px", maxWidth: "160px" }}>
                             <div
                                 style={{
                                     position: "relative",
@@ -139,7 +144,7 @@ export default function PropertySearch({
                     )}
 
                     {/* Liczba pokoi */}
-                    <div style={{ flex: "1", minWidth: "200px" }}>
+                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
                         <div
                             style={{
                                 position: "relative",
@@ -197,7 +202,7 @@ export default function PropertySearch({
                     </div>
 
                     {/* Powierzchnia */}
-                    <div style={{ flex: "1", minWidth: "200px" }}>
+                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
                         <div
                             style={{
                                 position: "relative",
@@ -262,7 +267,7 @@ export default function PropertySearch({
                     </div>
 
                     {/* Piętro */}
-                    <div style={{ flex: "1", minWidth: "200px" }}>
+                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
                         <div
                             style={{
                                 position: "relative",
@@ -317,6 +322,63 @@ export default function PropertySearch({
                             <option value="2">2. piętro</option>
                             <option value="3">3. piętro</option>
                             <option value="4">4. piętro i wyżej</option>
+                        </select>
+                    </div>
+
+                    {/* Dostępność */}
+                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
+                        <div
+                            style={{
+                                position: "relative",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                marginBottom: "8px",
+                                color: "#666",
+                                fontSize: "14px",
+                                fontWeight: "500",
+                            }}
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M12 1v6m0 6v6" />
+                                <path d="m21 12-6 0m-6 0-6 0" />
+                            </svg>
+                            Dostępność
+                        </div>
+                        <select
+                            name="availability"
+                            value={searchFilters.availability}
+                            onChange={handleFilterChange}
+                            style={{
+                                width: "100%",
+                                padding: "16px 15px",
+                                border: "none",
+                                borderRadius: "0px",
+                                borderBottom: "1px solid #333",
+                                backgroundColor: "transparent",
+                                color: "#333",
+                                fontSize: "16px",
+                                appearance: "none",
+                                backgroundImage:
+                                    'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M6 9L1.5 4.5h9z" fill="%23333"/></svg>\')',
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "right 15px center",
+                                outline: "none",
+                                fontFamily: "Poppins, sans-serif",
+                            }}
+                        >
+                            <option value="">Wszystkie</option>
+                            <option value="DOSTĘPNE">Dostępne</option>
+                            <option value="REZERWACJA">Rezerwacja</option>
+                            <option value="SPRZEDANE">Sprzedane</option>
                         </select>
                     </div>
 
