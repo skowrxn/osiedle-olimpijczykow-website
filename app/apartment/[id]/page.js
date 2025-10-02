@@ -143,7 +143,9 @@ const ApartmentDetail = () => {
     const etapNumber = attributes.etap.replace("etap", "");
 
     const openLightbox = (index) => {
-        const imageUrls = attributes.zdjecia.map((img) => `${img.url}`);
+        const imageUrls = attributes.zdjecia.map(
+            (img) => `${STRAPI_URL}${img.url}`
+        );
         setLightboxImages(imageUrls);
         setCurrentImageIndex(index);
         setLightboxOpen(true);
@@ -248,12 +250,20 @@ const ApartmentDetail = () => {
                                                             borderRadius:
                                                                 "20px",
                                                             backgroundColor:
-                                                                attributes.dostepne
+                                                                attributes.dostepnosc ===
+                                                                "DOSTEPNE"
                                                                     ? "rgba(34, 197, 94, 0.1)"
+                                                                    : attributes.dostepnosc ===
+                                                                      "REZERWACJA"
+                                                                    ? "rgba(255, 193, 7, 0.1)"
                                                                     : "rgba(239, 68, 68, 0.1)",
                                                             border: `1px solid ${
-                                                                attributes.dostepne
+                                                                attributes.dostepnosc ===
+                                                                "DOSTEPNE"
                                                                     ? "rgba(34, 197, 94, 0.2)"
+                                                                    : attributes.dostepnosc ===
+                                                                      "REZERWACJA"
+                                                                    ? "rgba(255, 193, 7, 0.2)"
                                                                     : "rgba(239, 68, 68, 0.2)"
                                                             }`,
                                                         }}
@@ -265,8 +275,12 @@ const ApartmentDetail = () => {
                                                                 borderRadius:
                                                                     "50%",
                                                                 backgroundColor:
-                                                                    attributes.dostepne
+                                                                    attributes.dostepnosc ===
+                                                                    "DOSTEPNE"
                                                                         ? "#22c55e"
+                                                                        : attributes.dostepnosc ===
+                                                                          "REZERWACJA"
+                                                                        ? "#ffc107"
                                                                         : "#ef4444",
                                                             }}
                                                         ></div>
@@ -278,20 +292,32 @@ const ApartmentDetail = () => {
                                                                     "600",
                                                                 fontFamily:
                                                                     "Poppins, sans-serif",
-                                                                color: attributes.dostepne
-                                                                    ? "#15803d"
-                                                                    : "#dc2626",
+                                                                color:
+                                                                    attributes.dostepnosc ===
+                                                                    "DOSTEPNE"
+                                                                        ? "#15803d"
+                                                                        : attributes.dostepnosc ===
+                                                                          "REZERWACJA"
+                                                                        ? "#ffc107"
+                                                                        : "#dc2626",
                                                             }}
                                                         >
-                                                            {attributes.dostepne
-                                                                ? "Dostępne"
+                                                            {attributes.dostepnosc ===
+                                                            "DOSTEPNE"
+                                                                ? "DOSTEPNE"
+                                                                : attributes.dostepnosc ===
+                                                                  "REZERWACJA"
+                                                                ? "Rezerwacja"
                                                                 : "Sprzedane"}
                                                         </span>
                                                     </div>
                                                 </div>
 
-                                                {/* Cena - wyświetl tylko jeśli mieszkanie dostępne i cena > 0 */}
-                                                {attributes.dostepne &&
+                                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTEPNE lub w rezerwacji i cena > 0 */}
+                                                {(attributes.dostepnosc ===
+                                                    "DOSTEPNE" ||
+                                                    attributes.dostepnosc ===
+                                                        "REZERWACJA") &&
                                                     attributes.cena > 0 && (
                                                         <div
                                                             style={{
@@ -470,6 +496,64 @@ const ApartmentDetail = () => {
                                                     )}
                                                 </div>
 
+                                                {attributes.karta_mieszkania && (
+                                                    <div
+                                                        style={{
+                                                            marginBottom:
+                                                                "40px",
+                                                        }}
+                                                    >
+                                                        <h3
+                                                            style={{
+                                                                fontSize:
+                                                                    "20px",
+                                                                fontWeight:
+                                                                    "600",
+                                                                marginBottom:
+                                                                    "15px",
+                                                                fontFamily:
+                                                                    "Poppins, sans-serif",
+                                                            }}
+                                                        >
+                                                            Karta mieszkania
+                                                        </h3>
+                                                        <div
+                                                            style={{
+                                                                cursor: "pointer",
+                                                                borderRadius: "8px",
+                                                                overflow: "hidden",
+                                                                boxShadow:
+                                                                    "0 4px 12px rgba(0,0,0,0.2)",
+                                                                transition:
+                                                                    "transform 0.3s ease, box-shadow 0.3s ease",
+                                                            }}
+                                                            onClick={() => {
+                                                                setLightboxImages([`${STRAPI_URL}${attributes.karta_mieszkania.url}`]);
+                                                                setCurrentImageIndex(0);
+                                                                setLightboxOpen(true);
+                                                            }}
+                                                            onMouseOver={(e) => {
+                                                                e.currentTarget.style.transform = "scale(1.02)";
+                                                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+                                                            }}
+                                                            onMouseOut={(e) => {
+                                                                e.currentTarget.style.transform = "scale(1)";
+                                                                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={`${STRAPI_URL}${attributes.karta_mieszkania.url}`}
+                                                                alt="Karta mieszkania"
+                                                                style={{
+                                                                    width: "100%",
+                                                                    height: "auto",
+                                                                    display: "block",
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                )}
+
                                                 {attributes.opis && (
                                                     <div
                                                         style={{
@@ -573,7 +657,7 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                 >
                                                                     <img
-                                                                        src={`${image.url}`}
+                                                                        src={`${STRAPI_URL}${image.url}`}
                                                                         alt={`Mieszkanie - zdjęcie ${
                                                                             index +
                                                                             1
