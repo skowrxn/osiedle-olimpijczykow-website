@@ -211,7 +211,7 @@ export default function Home() {
                                             <BoxWithIcon
                                                 iconClass="fi-rr-trees"
                                                 title="Tereny zielone"
-                                                description="Nasze osiedle położone jest w spokojnej okolicy, w otoczeniu domów jednorodzinnych. Bliskość Parku Miejskiego oraz otoczenie terenami zielonymi sprawiają, że to idealne miejsce dla osób ceniących ciszę i harmonię z naturą."
+                                                description="Osiedle w spokojnej okolicy, otoczone domami jednorodzinnymi i terenami zielonymi. Bliskość Parku Miejskiego sprawia, że to idealne miejsce dla osób ceniących ciszę i naturę."
                                             >
                                                 <img
                                                     data-v-42ed8b2f=""
@@ -261,7 +261,7 @@ export default function Home() {
                         </section>
                         <section
                             className="elementor-section elementor-top-section design-section"
-                            style={{ padding: "80px 0" }}
+                            style={{ padding: "40px 0" }}
                         >
                             <div className="elementor-container">
                                 <div

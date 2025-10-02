@@ -26,7 +26,7 @@ const BoxWithIcon = ({ children, title, description }) => (
                 color: "#888",
                 fontSize: "15px",
                 margin: 0,
-                height: "145px",
+                height: "135px",
             }}
         >
             {description}
