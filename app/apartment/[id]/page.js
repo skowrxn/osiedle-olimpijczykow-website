@@ -144,7 +144,7 @@ const ApartmentDetail = () => {
 
     const openLightbox = (index) => {
         const imageUrls = attributes.zdjecia.map(
-            (img) => `${STRAPI_URL}${img.url}`
+            (img) => img.url.startsWith('http') ? img.url : `${STRAPI_URL}${img.url}`
         );
         setLightboxImages(imageUrls);
         setCurrentImageIndex(index);
@@ -528,7 +528,10 @@ const ApartmentDetail = () => {
                                                                     "transform 0.3s ease, box-shadow 0.3s ease",
                                                             }}
                                                             onClick={() => {
-                                                                setLightboxImages([`${STRAPI_URL}${attributes.karta_mieszkania.url}`]);
+                                                                const imageUrl = attributes.karta_mieszkania.url.startsWith('http')
+                                                                    ? attributes.karta_mieszkania.url
+                                                                    : `${STRAPI_URL}${attributes.karta_mieszkania.url}`;
+                                                                setLightboxImages([imageUrl]);
                                                                 setCurrentImageIndex(0);
                                                                 setLightboxOpen(true);
                                                             }}
@@ -542,7 +545,9 @@ const ApartmentDetail = () => {
                                                             }}
                                                         >
                                                             <img
-                                                                src={`${STRAPI_URL}${attributes.karta_mieszkania.url}`}
+                                                                src={attributes.karta_mieszkania.url.startsWith('http')
+                                                                    ? attributes.karta_mieszkania.url
+                                                                    : `${STRAPI_URL}${attributes.karta_mieszkania.url}`}
                                                                 alt="Karta mieszkania"
                                                                 style={{
                                                                     width: "100%",
@@ -657,7 +662,7 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                 >
                                                                     <img
-                                                                        src={`${STRAPI_URL}${image.url}`}
+                                                                        src={image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`}
                                                                         alt={`Mieszkanie - zdjęcie ${
                                                                             index +
                                                                             1

@@ -11,7 +11,7 @@ export default function Navigation() {
 
     return (
         <nav className="bg-white shadow-md px-4 py-6 border-b-1 border-neutral-200">
-            <div className="container mx-auto flex justify-around items-center">
+            <div className="w-[1200px] container mx-auto flex justify-between items-center">
                 {/* Logo */}
                 <Link href="/" className="cursor-pointer">
                     <Image
