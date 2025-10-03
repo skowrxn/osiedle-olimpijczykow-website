@@ -376,7 +376,7 @@ export default function PropertySearch({
                             }}
                         >
                             <option value="">Wszystkie</option>
-                            <option value="DOSTĘPNE">Dostępne</option>
+                            <option value="DOSTEPNE">Dostępne</option>
                             <option value="REZERWACJA">Rezerwacja</option>
                             <option value="SPRZEDANE">Sprzedane</option>
                         </select>

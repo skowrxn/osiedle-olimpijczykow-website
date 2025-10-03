@@ -76,7 +76,7 @@ const ApartmentListCompact = ({
                 }
 
                 if (availability) {
-                    params.append("filters[status][$eq]", availability);
+                    params.append("filters[dostepnosc][$eq]", availability);
                 }
 
                 // Add limit if specified
@@ -121,7 +121,6 @@ const ApartmentListCompact = ({
 
     const getStatusColor = (status) => {
         switch (status) {
-            case "DOSTĘPNE":
             case "DOSTEPNE":
                 return "#28a745"; // Zielony
             case "REZERWACJA":
@@ -135,7 +134,6 @@ const ApartmentListCompact = ({
 
     const getStatusText = (status) => {
         switch (status) {
-            case "DOSTĘPNE":
             case "DOSTEPNE":
                 return "Dostępne";
             case "REZERWACJA":
@@ -437,9 +435,8 @@ const ApartmentListCompact = ({
                                     gap: "30px",
                                 }}
                             >
-                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTĘPNE lub w rezerwacji i cena > 0 */}
-                                {(attrs.dostepnosc === "DOSTĘPNE" ||
-                                    attrs.dostepnosc === "DOSTEPNE" ||
+                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTEPNE lub w rezerwacji i cena > 0 */}
+                                {(attrs.dostepnosc === "DOSTEPNE" ||
                                     attrs.dostepnosc === "REZERWACJA") &&
                                     attrs.cena > 0 && (
                                         <div style={{ textAlign: "right" }}>

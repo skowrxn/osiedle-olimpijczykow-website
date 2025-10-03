@@ -21,7 +21,7 @@ const ApartmentList = ({ etap }) => {
                 const params = new URLSearchParams({
                     populate: "*",
                     "filters[etap][$eq]": `etap${etap}`,
-                    "filters[dostepnosc][$eq]": "DOSTĘPNE",
+                    "filters[dostepnosc][$eq]": "DOSTEPNE",
                 });
 
                 // Add filter parameters from search
@@ -193,9 +193,8 @@ const ApartmentList = ({ etap }) => {
                             </div>
 
                             <div className="flex flex-col items-end ml-6">
-                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTĘPNE lub w rezerwacji i cena > 0 */}
-                                {(attrs.dostepnosc === "DOSTĘPNE" ||
-                                    attrs.dostepnosc === "DOSTEPNE" ||
+                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTEPNE lub w rezerwacji i cena > 0 */}
+                                {(attrs.dostepnosc === "DOSTEPNE" ||
                                     attrs.dostepnosc === "REZERWACJA") &&
                                     attrs.cena > 0 && (
                                         <div className="text-right mb-3">
