@@ -9,6 +9,10 @@ const navLinks = [
     { href: "/galeria", label: "Galeria" },
     { href: "/kontakt", label: "Kontakt" },
     { href: "/prospekt", label: "Prospekt" },
+    {
+        href: "http://www.indelit.com.pl/services-view/osiedle-dominikanskie-etap-iii/",
+        label: "Osiedle Dominikańskie",
+    },
 ];
 
 export default function Footer() {
@@ -42,12 +46,12 @@ export default function Footer() {
                         style={{ width: "240px" }}
                     >
                         <p className="text-white text-lg font-semibold mb-4 w-full">
-                            INDELIT Sp. z o.o.
+                            Indelit Olimpijczyków Sp. z o.o.
                         </p>
                         <address className="text-neutral-400 text-[15px] not-italic text-left">
                             42-612 Tarnowskie Góry
                             <br />
-                            ul. Olimpijczyków 13A
+                            ul. Olimpijczyków 13A/24
                             <br />
                             email:{" "}
                             <a
