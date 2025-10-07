@@ -258,11 +258,11 @@ export default function PropertySearch({
                             }}
                         >
                             <option value="">Wszystkie</option>
-                            <option value="25-35">25-35 m²</option>
                             <option value="35-45">35-45 m²</option>
                             <option value="45-55">45-55 m²</option>
                             <option value="55-65">55-65 m²</option>
-                            <option value="65+">65+ m²</option>
+                            <option value="65-75">65-75 m²</option>
+                            <option value="75+">75+ m²</option>
                         </select>
                     </div>
 
@@ -321,7 +321,6 @@ export default function PropertySearch({
                             <option value="1">1. piętro</option>
                             <option value="2">2. piętro</option>
                             <option value="3">3. piętro</option>
-                            <option value="4">4. piętro i wyżej</option>
                         </select>
                     </div>
 

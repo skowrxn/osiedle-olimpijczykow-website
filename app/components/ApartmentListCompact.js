@@ -44,20 +44,11 @@ const ApartmentListCompact = ({
                 }
 
                 if (floor) {
-                    if (floor === "0") {
-                        params.append("filters[kondygnacja][$eq]", "0");
-                    } else if (floor === "4+") {
-                        params.append("filters[kondygnacja][$gte]", "4");
-                    } else {
-                        params.append("filters[kondygnacja][$eq]", floor);
-                    }
+                    params.append("filters[kondygnacja][$eq]", floor);
                 }
 
                 if (area) {
-                    if (area === "25-35") {
-                        params.append("filters[powierzchnia][$gte]", "25");
-                        params.append("filters[powierzchnia][$lte]", "35");
-                    } else if (area === "35-45") {
+                    if (area === "35-45") {
                         params.append("filters[powierzchnia][$gte]", "35");
                         params.append("filters[powierzchnia][$lte]", "45");
                     } else if (area === "45-55") {
@@ -66,8 +57,11 @@ const ApartmentListCompact = ({
                     } else if (area === "55-65") {
                         params.append("filters[powierzchnia][$gte]", "55");
                         params.append("filters[powierzchnia][$lte]", "65");
-                    } else if (area === "65+") {
+                    } else if (area === "65-75") {
                         params.append("filters[powierzchnia][$gte]", "65");
+                        params.append("filters[powierzchnia][$lte]", "75");
+                    } else if (area === "75+") {
+                        params.append("filters[powierzchnia][$gte]", "75");
                     }
                 }
 
