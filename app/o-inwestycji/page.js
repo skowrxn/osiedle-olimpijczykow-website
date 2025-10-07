@@ -362,19 +362,55 @@ export default function OInwestycji() {
                     >
                         <div className="elementor-container">
                             <div className="elementor-column elementor-col-100">
-                                <div className="elementor-widget-wrap elementor-element-populated">
-                                    <h3
-                                        style={{
-                                            fontSize: "36px",
-                                            fontWeight: "600",
-                                            fontFamily: "Poppins, sans-serif",
-                                            textAlign: "center",
-                                            marginBottom: "60px",
-                                            color: "#333",
-                                        }}
-                                    >
-                                        Sprawdź postępy w budowie
-                                    </h3>
+                                <div className="flex flex-col">
+                                    <div className="mb-15 items-center flex flex-col">
+                                        <h3
+                                            style={{
+                                                fontSize: "36px",
+                                                fontWeight: "600",
+                                                fontFamily:
+                                                    "Poppins, sans-serif",
+                                                textAlign: "center",
+                                                marginBottom: "20px",
+                                                color: "#333",
+                                            }}
+                                        >
+                                            Sprawdź postępy w budowie
+                                        </h3>
+
+                                        <div
+                                            style={{
+                                                display: "inline-flex",
+                                                alignItems: "center",
+                                                gap: "4px",
+                                                padding: "4px 18px",
+                                                borderRadius: "20px",
+                                                backgroundColor:
+                                                    "rgba(108, 117, 125, 0.1)",
+                                                border: "1px solid rgba(108, 117, 125, 0.2)",
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    width: "8px",
+                                                    height: "8px",
+                                                    borderRadius: "50%",
+                                                    backgroundColor: "#6c757d",
+                                                }}
+                                            ></div>
+                                            <span
+                                                style={{
+                                                    fontSize: "14px",
+                                                    fontWeight: "600",
+                                                    fontFamily:
+                                                        "Poppins, sans-serif",
+                                                    color: "#6c757d",
+                                                }}
+                                            >
+                                                ETAP III
+                                            </span>
+                                        </div>
+                                    </div>
 
                                     <div
                                         style={{
