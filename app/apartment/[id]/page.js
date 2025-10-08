@@ -146,9 +146,15 @@ const ApartmentDetail = () => {
     const etapNumber = attributes.etap.replace("etap", "");
 
     const openLightbox = (index) => {
-        const imageUrls = attributes.zdjecia.map((img) =>
-            img.url.startsWith("http") ? img.url : `${STRAPI_URL}${img.url}`
-        );
+        const imageUrls = attributes.zdjecia.map((img) => {
+            const finalUrl = img.url.startsWith("http")
+                ? img.url
+                : `${STRAPI_URL}${img.url}`;
+            console.log("Image URL:", finalUrl);
+            console.log("Original img.url:", img.url);
+            console.log("STRAPI_URL:", STRAPI_URL);
+            return finalUrl;
+        });
         setLightboxImages(imageUrls);
         setCurrentImageIndex(index);
         setLightboxOpen(true);
@@ -1006,13 +1012,23 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                 >
                                                                     <img
-                                                                        src={
-                                                                            image.url.startsWith(
-                                                                                "http"
-                                                                            )
-                                                                                ? image.url
-                                                                                : `${STRAPI_URL}${image.url}`
-                                                                        }
+                                                                        src={(() => {
+                                                                            const finalUrl =
+                                                                                image.url.startsWith(
+                                                                                    "http"
+                                                                                )
+                                                                                    ? image.url
+                                                                                    : `${STRAPI_URL}${image.url}`;
+                                                                            console.log(
+                                                                                "Gallery Image URL:",
+                                                                                finalUrl
+                                                                            );
+                                                                            console.log(
+                                                                                "Original image.url:",
+                                                                                image.url
+                                                                            );
+                                                                            return finalUrl;
+                                                                        })()}
                                                                         alt={`Mieszkanie - zdjęcie ${
                                                                             index +
                                                                             1
