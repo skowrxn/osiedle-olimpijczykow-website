@@ -16,6 +16,9 @@ const ApartmentDetail = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [priceHistoryOpen, setPriceHistoryOpen] = useState(false);
+    const parkingPrice = 15000;
+    const storagePrice = 40000;
 
     useEffect(() => {
         const fetchApartment = async () => {
@@ -143,8 +146,8 @@ const ApartmentDetail = () => {
     const etapNumber = attributes.etap.replace("etap", "");
 
     const openLightbox = (index) => {
-        const imageUrls = attributes.zdjecia.map(
-            (img) => img.url.startsWith('http') ? img.url : `${STRAPI_URL}${img.url}`
+        const imageUrls = attributes.zdjecia.map((img) =>
+            img.url.startsWith("http") ? img.url : `${STRAPI_URL}${img.url}`
         );
         setLightboxImages(imageUrls);
         setCurrentImageIndex(index);
@@ -351,6 +354,203 @@ const ApartmentDetail = () => {
                                                             >
                                                                 Cena mieszkania
                                                             </p>
+
+                                                            {/* Przycisk Historia Cen */}
+                                                            {attributes.historia_cen &&
+                                                                attributes
+                                                                    .historia_cen
+                                                                    .length >
+                                                                    0 && (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setPriceHistoryOpen(
+                                                                                !priceHistoryOpen
+                                                                            )
+                                                                        }
+                                                                        style={{
+                                                                            marginTop:
+                                                                                "15px",
+                                                                            backgroundColor:
+                                                                                "transparent",
+                                                                            border: "1px solid rgba(255,255,255,0.3)",
+                                                                            color: "white",
+                                                                            padding:
+                                                                                "8px 16px",
+                                                                            borderRadius:
+                                                                                "20px",
+                                                                            cursor: "pointer",
+                                                                            fontSize:
+                                                                                "14px",
+                                                                            fontFamily:
+                                                                                "Poppins, sans-serif",
+                                                                            transition:
+                                                                                "all 0.3s ease",
+                                                                            display:
+                                                                                "flex",
+                                                                            alignItems:
+                                                                                "center",
+                                                                            gap: "8px",
+                                                                        }}
+                                                                        onMouseOver={(
+                                                                            e
+                                                                        ) => {
+                                                                            e.target.style.backgroundColor =
+                                                                                "rgba(255,255,255,0.1)";
+                                                                            e.target.style.borderColor =
+                                                                                "rgba(255,255,255,0.5)";
+                                                                        }}
+                                                                        onMouseOut={(
+                                                                            e
+                                                                        ) => {
+                                                                            e.target.style.backgroundColor =
+                                                                                "transparent";
+                                                                            e.target.style.borderColor =
+                                                                                "rgba(255,255,255,0.3)";
+                                                                        }}
+                                                                    >
+                                                                        <svg
+                                                                            width="16"
+                                                                            height="16"
+                                                                            viewBox="0 0 24 24"
+                                                                            fill="none"
+                                                                            stroke="currentColor"
+                                                                            strokeWidth="2"
+                                                                            style={{
+                                                                                transform:
+                                                                                    priceHistoryOpen
+                                                                                        ? "rotate(180deg)"
+                                                                                        : "rotate(0deg)",
+                                                                                transition:
+                                                                                    "transform 0.3s ease",
+                                                                            }}
+                                                                        >
+                                                                            <polyline points="6 9 12 15 18 9" />
+                                                                        </svg>
+                                                                        Historia
+                                                                        cen
+                                                                    </button>
+                                                                )}
+
+                                                            {/* Lista historii cen */}
+                                                            {priceHistoryOpen &&
+                                                                attributes.historia_cen &&
+                                                                attributes
+                                                                    .historia_cen
+                                                                    .length >
+                                                                    0 && (
+                                                                    <div
+                                                                        style={{
+                                                                            marginTop:
+                                                                                "20px",
+                                                                            padding:
+                                                                                "20px",
+                                                                            backgroundColor:
+                                                                                "rgba(255,255,255,0.05)",
+                                                                            borderRadius:
+                                                                                "8px",
+                                                                            border: "1px solid rgba(255,255,255,0.1)",
+                                                                        }}
+                                                                    >
+                                                                        <h4
+                                                                            style={{
+                                                                                fontSize:
+                                                                                    "16px",
+                                                                                fontWeight:
+                                                                                    "600",
+                                                                                marginBottom:
+                                                                                    "15px",
+                                                                                color: "#d1d5db",
+                                                                                fontFamily:
+                                                                                    "Poppins, sans-serif",
+                                                                            }}
+                                                                        >
+                                                                            Historia
+                                                                            zmian
+                                                                            cen
+                                                                        </h4>
+                                                                        <div
+                                                                            style={{
+                                                                                display:
+                                                                                    "flex",
+                                                                                flexDirection:
+                                                                                    "column",
+                                                                                gap: "10px",
+                                                                            }}
+                                                                        >
+                                                                            {attributes.historia_cen
+                                                                                .sort(
+                                                                                    (
+                                                                                        a,
+                                                                                        b
+                                                                                    ) =>
+                                                                                        new Date(
+                                                                                            b.data
+                                                                                        ) -
+                                                                                        new Date(
+                                                                                            a.data
+                                                                                        )
+                                                                                )
+                                                                                .map(
+                                                                                    (
+                                                                                        entry,
+                                                                                        index
+                                                                                    ) => (
+                                                                                        <div
+                                                                                            key={
+                                                                                                index
+                                                                                            }
+                                                                                            style={{
+                                                                                                display:
+                                                                                                    "flex",
+                                                                                                justifyContent:
+                                                                                                    "space-between",
+                                                                                                alignItems:
+                                                                                                    "center",
+                                                                                                padding:
+                                                                                                    "10px 15px",
+                                                                                                backgroundColor:
+                                                                                                    "rgba(255,255,255,0.03)",
+                                                                                                borderRadius:
+                                                                                                    "6px",
+                                                                                            }}
+                                                                                        >
+                                                                                            <span
+                                                                                                style={{
+                                                                                                    fontSize:
+                                                                                                        "14px",
+                                                                                                    color: "#9ca3af",
+                                                                                                }}
+                                                                                            >
+                                                                                                {new Date(
+                                                                                                    entry.data
+                                                                                                ).toLocaleDateString(
+                                                                                                    "pl-PL",
+                                                                                                    {
+                                                                                                        year: "numeric",
+                                                                                                        month: "long",
+                                                                                                        day: "numeric",
+                                                                                                    }
+                                                                                                )}
+                                                                                            </span>
+                                                                                            <span
+                                                                                                style={{
+                                                                                                    fontSize:
+                                                                                                        "18px",
+                                                                                                    fontWeight:
+                                                                                                        "600",
+                                                                                                    color: "white",
+                                                                                                }}
+                                                                                            >
+                                                                                                {formatPrice(
+                                                                                                    entry.cena
+                                                                                                )}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    )
+                                                                                )}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
                                                         </div>
                                                     )}
 
@@ -511,6 +711,7 @@ const ApartmentDetail = () => {
                                                                     "600",
                                                                 marginBottom:
                                                                     "15px",
+                                                                color: "white",
                                                                 fontFamily:
                                                                     "Poppins, sans-serif",
                                                             }}
@@ -520,39 +721,65 @@ const ApartmentDetail = () => {
                                                         <div
                                                             style={{
                                                                 cursor: "pointer",
-                                                                borderRadius: "8px",
-                                                                overflow: "hidden",
+                                                                borderRadius:
+                                                                    "8px",
+                                                                overflow:
+                                                                    "hidden",
                                                                 boxShadow:
                                                                     "0 4px 12px rgba(0,0,0,0.2)",
                                                                 transition:
                                                                     "transform 0.3s ease, box-shadow 0.3s ease",
                                                             }}
                                                             onClick={() => {
-                                                                const imageUrl = attributes.karta_mieszkania.url.startsWith('http')
-                                                                    ? attributes.karta_mieszkania.url
-                                                                    : `${STRAPI_URL}${attributes.karta_mieszkania.url}`;
-                                                                setLightboxImages([imageUrl]);
-                                                                setCurrentImageIndex(0);
-                                                                setLightboxOpen(true);
+                                                                const imageUrl =
+                                                                    attributes.karta_mieszkania.url.startsWith(
+                                                                        "http"
+                                                                    )
+                                                                        ? attributes
+                                                                              .karta_mieszkania
+                                                                              .url
+                                                                        : `${STRAPI_URL}${attributes.karta_mieszkania.url}`;
+                                                                setLightboxImages(
+                                                                    [imageUrl]
+                                                                );
+                                                                setCurrentImageIndex(
+                                                                    0
+                                                                );
+                                                                setLightboxOpen(
+                                                                    true
+                                                                );
                                                             }}
-                                                            onMouseOver={(e) => {
-                                                                e.currentTarget.style.transform = "scale(1.02)";
-                                                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+                                                            onMouseOver={(
+                                                                e
+                                                            ) => {
+                                                                e.currentTarget.style.transform =
+                                                                    "scale(1.02)";
+                                                                e.currentTarget.style.boxShadow =
+                                                                    "0 8px 24px rgba(0,0,0,0.3)";
                                                             }}
                                                             onMouseOut={(e) => {
-                                                                e.currentTarget.style.transform = "scale(1)";
-                                                                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+                                                                e.currentTarget.style.transform =
+                                                                    "scale(1)";
+                                                                e.currentTarget.style.boxShadow =
+                                                                    "0 4px 12px rgba(0,0,0,0.2)";
                                                             }}
                                                         >
                                                             <img
-                                                                src={attributes.karta_mieszkania.url.startsWith('http')
-                                                                    ? attributes.karta_mieszkania.url
-                                                                    : `${STRAPI_URL}${attributes.karta_mieszkania.url}`}
+                                                                src={
+                                                                    attributes.karta_mieszkania.url.startsWith(
+                                                                        "http"
+                                                                    )
+                                                                        ? attributes
+                                                                              .karta_mieszkania
+                                                                              .url
+                                                                        : `${STRAPI_URL}${attributes.karta_mieszkania.url}`
+                                                                }
                                                                 alt="Karta mieszkania"
                                                                 style={{
                                                                     width: "100%",
                                                                     height: "auto",
-                                                                    display: "block",
+                                                                    display:
+                                                                        "block",
                                                                 }}
                                                             />
                                                         </div>
@@ -591,6 +818,123 @@ const ApartmentDetail = () => {
                                                         >
                                                             {attributes.opis}
                                                         </p>
+                                                    </div>
+                                                )}
+
+                                                {/* Elementy Dodatkowe */}
+                                                {(parkingPrice ||
+                                                    storagePrice) && (
+                                                    <div
+                                                        style={{
+                                                            marginBottom:
+                                                                "40px",
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                flexDirection:
+                                                                    "column",
+                                                                gap: "12px",
+                                                            }}
+                                                        >
+                                                            {parkingPrice && (
+                                                                <div
+                                                                    style={{
+                                                                        display:
+                                                                            "flex",
+                                                                        justifyContent:
+                                                                            "space-between",
+                                                                        alignItems:
+                                                                            "center",
+                                                                        padding:
+                                                                            "16px 20px",
+                                                                        backgroundColor:
+                                                                            "rgba(255,255,255,0.05)",
+                                                                        borderRadius:
+                                                                            "8px",
+                                                                        border: "1px solid rgba(255,255,255,0.1)",
+                                                                    }}
+                                                                >
+                                                                    <span
+                                                                        style={{
+                                                                            fontSize:
+                                                                                "16px",
+                                                                            color: "#d1d5db",
+                                                                            fontFamily:
+                                                                                "Poppins, sans-serif",
+                                                                        }}
+                                                                    >
+                                                                        Miejsce
+                                                                        postojowe
+                                                                        w garażu
+                                                                        podziemnym
+                                                                    </span>
+                                                                    <span
+                                                                        style={{
+                                                                            fontSize:
+                                                                                "20px",
+                                                                            fontWeight:
+                                                                                "600",
+                                                                            color: "white",
+                                                                            fontFamily:
+                                                                                "Poppins, sans-serif",
+                                                                        }}
+                                                                    >
+                                                                        {formatPrice(
+                                                                            parkingPrice
+                                                                        )}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                            {storagePrice && (
+                                                                <div
+                                                                    style={{
+                                                                        display:
+                                                                            "flex",
+                                                                        justifyContent:
+                                                                            "space-between",
+                                                                        alignItems:
+                                                                            "center",
+                                                                        padding:
+                                                                            "16px 20px",
+                                                                        backgroundColor:
+                                                                            "rgba(255,255,255,0.05)",
+                                                                        borderRadius:
+                                                                            "8px",
+                                                                        border: "1px solid rgba(255,255,255,0.1)",
+                                                                    }}
+                                                                >
+                                                                    <span
+                                                                        style={{
+                                                                            fontSize:
+                                                                                "16px",
+                                                                            color: "#d1d5db",
+                                                                            fontFamily:
+                                                                                "Poppins, sans-serif",
+                                                                        }}
+                                                                    >
+                                                                        Komórka
+                                                                        lokatorska
+                                                                    </span>
+                                                                    <span
+                                                                        style={{
+                                                                            fontSize:
+                                                                                "20px",
+                                                                            fontWeight:
+                                                                                "600",
+                                                                            color: "white",
+                                                                            fontFamily:
+                                                                                "Poppins, sans-serif",
+                                                                        }}
+                                                                    >
+                                                                        {formatPrice(
+                                                                            storagePrice
+                                                                        )}
+                                                                    </span>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>
@@ -662,7 +1006,13 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                 >
                                                                     <img
-                                                                        src={image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`}
+                                                                        src={
+                                                                            image.url.startsWith(
+                                                                                "http"
+                                                                            )
+                                                                                ? image.url
+                                                                                : `${STRAPI_URL}${image.url}`
+                                                                        }
                                                                         alt={`Mieszkanie - zdjęcie ${
                                                                             index +
                                                                             1

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { buildApiUrl } from "../lib/strapi";
+import Image from "next/image";
+import Lightbox from "./Lightbox";
 
 const ApartmentListCompact = ({
     etap = null,
@@ -15,6 +17,11 @@ const ApartmentListCompact = ({
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const parkingPrice = 15000;
+    const storagePrice = 40000;
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         const fetchApartments = async () => {
@@ -139,6 +146,12 @@ const ApartmentListCompact = ({
         }
     };
 
+    const openGarageLightbox = () => {
+        setLightboxImages(["/img/garaz.jpg"]);
+        setCurrentImageIndex(0);
+        setLightboxOpen(true);
+    };
+
     if (loading) {
         return (
             <div style={{ textAlign: "center", padding: "40px 0" }}>
@@ -183,7 +196,7 @@ const ApartmentListCompact = ({
                     Błąd: {error}
                 </p>
                 <p style={{ color: "#666", fontSize: "14px" }}>
-                    Sprawdź czy Strapi CMS jest uruchomione na porcie 1337
+                    Blad laczenia z CMS
                 </p>
             </div>
         );
@@ -485,6 +498,186 @@ const ApartmentListCompact = ({
                     );
                 })}
             </div>
+
+            {/* Elementy Dodatkowe - na samym dole listy */}
+            {(parkingPrice || storagePrice) && (
+                <div
+                    style={{
+                        marginTop: "40px",
+                        padding: "30px",
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "8px",
+                        border: "1px solid #e0e0e0",
+                    }}
+                >
+                    <h3
+                        style={{
+                            fontSize: "20px",
+                            fontWeight: "600",
+                            marginBottom: "20px",
+                            fontFamily: "Poppins, sans-serif",
+                            color: "#333",
+                        }}
+                    >
+                        Elementy dodatkowe
+                    </h3>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "15px",
+                        }}
+                    >
+                        {parkingPrice && (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    padding: "20px 25px",
+                                    backgroundColor: "white",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e0e0e0",
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: "16px",
+                                        color: "#333",
+                                        fontFamily: "Poppins, sans-serif",
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Miejsce postojowe w garażu podziemnym
+                                </span>
+                                <span
+                                    style={{
+                                        fontSize: "22px",
+                                        fontWeight: "600",
+                                        color: "#232323",
+                                        fontFamily: "Poppins, sans-serif",
+                                    }}
+                                >
+                                    {formatPrice(parkingPrice)} PLN
+                                </span>
+                            </div>
+                        )}
+                        {storagePrice && (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    padding: "20px 25px",
+                                    backgroundColor: "white",
+                                    borderRadius: "8px",
+                                    border: "1px solid #e0e0e0",
+                                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                                }}
+                            >
+                                <span
+                                    style={{
+                                        fontSize: "16px",
+                                        color: "#333",
+                                        fontFamily: "Poppins, sans-serif",
+                                        fontWeight: "500",
+                                    }}
+                                >
+                                    Komórka lokatorska
+                                </span>
+                                <span
+                                    style={{
+                                        fontSize: "22px",
+                                        fontWeight: "600",
+                                        color: "#232323",
+                                        fontFamily: "Poppins, sans-serif",
+                                    }}
+                                >
+                                    {formatPrice(storagePrice)} PLN
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Sekcja z rzutem garażu */}
+            <div
+                style={{
+                    marginTop: "40px",
+                    padding: "30px",
+                    backgroundColor: "#f8f9fa",
+                    borderRadius: "8px",
+                    border: "1px solid #e0e0e0",
+                }}
+            >
+                <h3
+                    style={{
+                        fontSize: "20px",
+                        fontWeight: "600",
+                        marginBottom: "20px",
+                        fontFamily: "Poppins, sans-serif",
+                        color: "#333",
+                    }}
+                >
+                    Rzut garażu
+                </h3>
+                <div
+                    style={{
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        padding: "20px",
+                        border: "1px solid #e0e0e0",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                    }}
+                    onClick={openGarageLightbox}
+                    onMouseOver={(e) => {
+                        e.currentTarget.style.transform = "scale(1.02)";
+                        e.currentTarget.style.boxShadow =
+                            "0 8px 24px rgba(0,0,0,0.15)";
+                    }}
+                    onMouseOut={(e) => {
+                        e.currentTarget.style.transform = "scale(1)";
+                        e.currentTarget.style.boxShadow =
+                            "0 2px 8px rgba(0,0,0,0.05)";
+                    }}
+                >
+                    <Image
+                        src="/img/garaz.jpg"
+                        width={1000}
+                        height={600}
+                        alt="Rzut garażu podziemnego"
+                        style={{
+                            width: "100%",
+                            height: "auto",
+                            borderRadius: "4px",
+                            display: "block",
+                        }}
+                    />
+                    <p
+                        style={{
+                            textAlign: "center",
+                            marginTop: "15px",
+                            fontSize: "14px",
+                            color: "#666",
+                            fontFamily: "Poppins, sans-serif",
+                        }}
+                    >
+                        Kliknij aby powiększyć
+                    </p>
+                </div>
+            </div>
+
+            {/* Lightbox */}
+            <Lightbox
+                images={lightboxImages}
+                isOpen={lightboxOpen}
+                onClose={() => setLightboxOpen(false)}
+                currentIndex={currentImageIndex}
+            />
 
             <style jsx>{`
                 .apartment-item:hover {
