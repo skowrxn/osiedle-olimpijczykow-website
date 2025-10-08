@@ -111,9 +111,20 @@ function ListaLokaliContent() {
         ],
     };
 
-    const FloorPlan = ({ imageSrc, desc, targetRoute, title, stage }) => (
-        <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-103 cursor-pointer">
-            <a href={targetRoute}>
+    const FloorPlan = ({
+        imageSrc,
+        desc,
+        targetRoute,
+        title,
+        stage,
+        isGrayedOut = false,
+    }) => (
+        <div
+            className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-103 ${
+                targetRoute !== "" ? "cursor-pointer" : ""
+            }`}
+        >
+            <a href={targetRoute == "" ? null : targetRoute}>
                 <img
                     src={imageSrc}
                     alt={title}
@@ -121,6 +132,8 @@ function ListaLokaliContent() {
                         width: "100%",
                         height: "400px",
                         objectFit: "cover",
+                        filter: isGrayedOut ? "grayscale(100%)" : "none",
+                        opacity: isGrayedOut ? "0.6" : "1",
                     }}
                     onError={(e) => {
                         console.log(`Error loading image: ${imageSrc}`);
@@ -138,7 +151,15 @@ function ListaLokaliContent() {
                         <span className="text-white text-2xl font-bold mb-2">
                             {title}
                         </span>
-                        <p className="text-neutral-200 text-md">{desc}</p>
+                        <p
+                            className={
+                                isGrayedOut
+                                    ? "text-gray-400 text-md"
+                                    : "text-neutral-200 text-md"
+                            }
+                        >
+                            {desc}
+                        </p>
                     </div>
                 </div>
             </a>
@@ -189,10 +210,11 @@ function ListaLokaliContent() {
                                         <FloorPlan
                                             imageSrc="/img/etap-3.jpg"
                                             areas={buildingAreas.etap3}
-                                            targetRoute="/etap3"
-                                            desc="Etap inwestycji w trakcie realizacji"
+                                            targetRoute=""
+                                            desc="Sprzedaż już wkrótce"
                                             title="Mieszkania - Etap 3"
                                             stage="etap3"
+                                            isGrayedOut={true}
                                         />
                                     </div>
                                 </div>
