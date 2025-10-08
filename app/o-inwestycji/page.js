@@ -80,7 +80,7 @@ export default function OInwestycji() {
                                     >
                                         <BoxWithIcon
                                             title="Bliskość rekreacji"
-                                            description="Aquapark, hala sportowa i park miejski w pobliżu osiedla zapewniają aktywny wypoczynek dla całej rodziny. Dodatkowo w pobliżu znajdziemy sklepy, punkty usługowe oraz placówki edukacyjne - co czyni codzienne życie jeszcze bardziej wygodnym."
+                                            description="Aquapark, hala sportowa i park miejski w pobliżu zapewniają aktywny wypoczynek. W okolicy znajdziemy również sklepy, punkty usługowe oraz placówki edukacyjne.Retry"
                                         >
                                             <img
                                                 src="/img/park.jpg"
@@ -168,7 +168,7 @@ export default function OInwestycji() {
                                             description="Wygoda na co dzień – każda klatka wyposażona jest w windę prowadzącą prosto do garażu. Oferujemy także komórki lokatorskie, które pozwalają bardziej cieszyć się przestrzenią w mieszkaniu."
                                         >
                                             <img
-                                                src="/img/partner.jpg"
+                                                src="/img/winda.jpg"
                                                 alt="Udogodnienia"
                                                 style={{
                                                     width: "100%",
