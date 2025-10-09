@@ -147,7 +147,7 @@ const ApartmentListCompact = ({
     };
 
     const openGarageLightbox = () => {
-        setLightboxImages(["/img/garaz.png"]);
+        setLightboxImages(["/img/garaz2.png"]);
         setCurrentImageIndex(0);
         setLightboxOpen(true);
     };
@@ -602,74 +602,63 @@ const ApartmentListCompact = ({
                 </div>
             )}
 
-            {/* Sekcja z rzutem garażu */}
-            <div
-                style={{
-                    marginTop: "40px",
-                    padding: "30px",
-                    backgroundColor: "#f8f9fa",
-                    borderRadius: "8px",
-                    border: "1px solid #e0e0e0",
-                }}
-            >
-                <h3
-                    style={{
-                        fontSize: "20px",
-                        fontWeight: "600",
-                        marginBottom: "20px",
-                        fontFamily: "Poppins, sans-serif",
-                        color: "#333",
-                    }}
-                >
-                    Rzut garażu
-                </h3>
+            {/* Rzut garażu - pokazuje się tylko gdy etap jest wybrany */}
+            {etap && (
                 <div
                     style={{
-                        backgroundColor: "white",
+                        marginTop: "40px",
+                        padding: "30px",
+                        backgroundColor: "#f8f9fa",
                         borderRadius: "8px",
-                        padding: "20px",
                         border: "1px solid #e0e0e0",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                    }}
-                    onClick={openGarageLightbox}
-                    onMouseOver={(e) => {
-                        e.currentTarget.style.transform = "scale(1.02)";
-                        e.currentTarget.style.boxShadow =
-                            "0 8px 24px rgba(0,0,0,0.15)";
-                    }}
-                    onMouseOut={(e) => {
-                        e.currentTarget.style.transform = "scale(1)";
-                        e.currentTarget.style.boxShadow =
-                            "0 2px 8px rgba(0,0,0,0.05)";
                     }}
                 >
-                    <Image
-                        src="/img/garaz.png"
-                        width={1000}
-                        height={600}
-                        alt="Rzut garażu podziemnego"
+                    <h3
                         style={{
-                            width: "100%",
-                            height: "auto",
-                            borderRadius: "4px",
-                            display: "block",
-                        }}
-                    />
-                    <p
-                        style={{
-                            textAlign: "center",
-                            marginTop: "15px",
-                            fontSize: "14px",
-                            color: "#666",
+                            fontSize: "20px",
+                            fontWeight: "600",
+                            marginBottom: "20px",
                             fontFamily: "Poppins, sans-serif",
+                            color: "#333",
                         }}
                     >
-                        Kliknij aby powiększyć
-                    </p>
+                        Rzut garażu
+                    </h3>
+                    <div
+                        style={{
+                            backgroundColor: "white",
+                            borderRadius: "8px",
+                            padding: "20px",
+                            border: "1px solid #e0e0e0",
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease",
+                        }}
+                        onClick={openGarageLightbox}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.transform = "scale(1.02)";
+                            e.currentTarget.style.boxShadow =
+                                "0 8px 24px rgba(0,0,0,0.15)";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.boxShadow =
+                                "0 2px 8px rgba(0,0,0,0.05)";
+                        }}
+                    >
+                        <img
+                            src={`/img/garaz${etap === "2" ? "2" : "3"}.png`}
+                            alt={`Rzut garażu - ${etap}`}
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto",
+                                borderRadius: "8px",
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                            }}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Lightbox */}
             <Lightbox
