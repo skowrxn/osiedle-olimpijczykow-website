@@ -17,7 +17,7 @@ const ApartmentListCompact = ({
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const parkingPrice = 4000;
+    const parkingPrice = 40000;
     const storagePrice = 15000;
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
@@ -147,7 +147,7 @@ const ApartmentListCompact = ({
     };
 
     const openGarageLightbox = () => {
-        setLightboxImages(["/img/garaz.jpg"]);
+        setLightboxImages(["/img/garaz.png"]);
         setCurrentImageIndex(0);
         setLightboxOpen(true);
     };
@@ -646,7 +646,7 @@ const ApartmentListCompact = ({
                     }}
                 >
                     <Image
-                        src="/img/garaz.jpg"
+                        src="/img/garaz.png"
                         width={1000}
                         height={600}
                         alt="Rzut garażu podziemnego"
