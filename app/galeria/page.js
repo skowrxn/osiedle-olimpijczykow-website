@@ -20,11 +20,11 @@ export default function Galeria() {
     const realizacja2Images = [
         "AKTUALNIE W SPRZEDAŻY (1).jpg",
         "img 6878.jpg",
-        "IMG_6885.jpg",
-        "IMG_6891.jpg",
-        "IMG_6902.jpg",
-        "IMG_6909.jpg",
-        "IMG_6916.jpg",
+        "IMG 6885.jpg",
+        "IMG 6891.jpg",
+        "IMG 6902.jpg",
+        "IMG 6909.jpg",
+        "IMG 6916.jpg",
     ];
 
     // Zdjęcia z folderu wizualizacje
