@@ -30,6 +30,7 @@ export default function Navigation() {
                         { href: "/o-inwestycji", label: "O inwestycji" },
                         { href: "/lokalizacja", label: "Lokalizacja" },
                         { href: "/lista-lokali", label: "Lista lokali" },
+                        { href: "/rzuty", label: "Rzuty" },
                         { href: "/galeria", label: "Galeria" },
                         { href: "/kontakt", label: "Kontakt" },
                     ].map(({ href, label }, idx, arr) => {
