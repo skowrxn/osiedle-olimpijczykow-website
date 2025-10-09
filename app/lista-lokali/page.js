@@ -55,61 +55,6 @@ function ListaLokaliContent() {
     };
 
     // Konfigurowalne obszary dla każdego budynku
-    const buildingAreas = {
-        etap2: [
-            {
-                id: 1,
-                x: 20,
-                y: 30,
-                width: 25,
-                height: 15,
-                title: "Mieszkania 1-10",
-            },
-            {
-                id: 2,
-                x: 55,
-                y: 25,
-                width: 20,
-                height: 20,
-                title: "Mieszkania 11-20",
-            },
-            {
-                id: 3,
-                x: 30,
-                y: 60,
-                width: 30,
-                height: 12,
-                title: "Mieszkania 21-30",
-            },
-        ],
-        etap3: [
-            {
-                id: 1,
-                x: 15,
-                y: 20,
-                width: 22,
-                height: 18,
-                title: "Apartamenty A",
-            },
-            {
-                id: 2,
-                x: 45,
-                y: 15,
-                width: 25,
-                height: 25,
-                title: "Apartamenty B",
-            },
-            {
-                id: 3,
-                x: 25,
-                y: 55,
-                width: 35,
-                height: 15,
-                title: "Apartamenty C",
-            },
-            { id: 4, x: 65, y: 65, width: 20, height: 20, title: "Penthouse" },
-        ],
-    };
 
     const FloorPlan = ({
         imageSrc,
@@ -200,7 +145,6 @@ function ListaLokaliContent() {
                                     >
                                         <FloorPlan
                                             imageSrc="/img/etap-2.jpg"
-                                            areas={buildingAreas.etap2}
                                             targetRoute="/etap2"
                                             desc="Etap zakończony - mieszkania gotowe do odbioru"
                                             title="Mieszkania - Etap 2"
@@ -209,7 +153,6 @@ function ListaLokaliContent() {
 
                                         <FloorPlan
                                             imageSrc="/img/etap-3.jpg"
-                                            areas={buildingAreas.etap3}
                                             targetRoute=""
                                             desc="Sprzedaż już wkrótce"
                                             title="Mieszkania - Etap 3"
