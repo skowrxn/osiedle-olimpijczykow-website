@@ -327,6 +327,7 @@ export default function Etap2Component() {
 
                     {/* Tooltip nad kursorem */}
                     {hoveredArea !== null &&
+                        areas[hoveredArea] &&
                         (areas[hoveredArea].unavailable ? (
                             // Uproszczony tooltip dla niedostępnych
                             <div

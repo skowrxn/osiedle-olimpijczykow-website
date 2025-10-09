@@ -257,6 +257,9 @@ export default function Etap3Component() {
 
     // Preload apartment data for all areas when floor changes
     useEffect(() => {
+        // Reset hovered area when floor changes
+        setHoveredArea(null);
+
         const loadApartmentData = async () => {
             const data = {};
             for (const area of areas) {
@@ -517,6 +520,7 @@ export default function Etap3Component() {
 
                     {/* Tooltip */}
                     {hoveredArea !== null &&
+                        areas[hoveredArea] &&
                         (areas[hoveredArea].unavailable ? (
                             <div
                                 style={{
