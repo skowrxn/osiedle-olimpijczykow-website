@@ -21,8 +21,8 @@ export default function Footer() {
             className="text-neutral-300"
             style={{ backgroundColor: "var(--quere-button-color-idle)" }}
         >
-            <div className="container max-w-7xl mx-auto px-4 py-12">
-                <div className="flex flex-col md:flex-row gap-6 lg:gap-12 justify-between items-start">
+            <div className="container max-w-7xl mx-auto px-8 md:px-4 py-12">
+                <div className="flex flex-col md:flex-row gap-10 lg:gap-12 justify-between items-start">
                     {/* Column 1: Logo and Description */}
                     <div
                         className="flex flex-col items-start flex-shrink-0"
@@ -43,7 +43,7 @@ export default function Footer() {
                     {/* Column 2: Contact Info */}
                     <div
                         className="flex flex-col items-start flex-shrink-0"
-                        style={{ width: "240px" }}
+                        style={{ width: "280px" }}
                     >
                         <p className="text-white text-lg font-semibold mb-4 w-full">
                             Indelit Olimpijczyków Sp. z o.o.
