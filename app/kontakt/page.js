@@ -9,7 +9,7 @@ export default function Kontakt() {
                         Skontaktuj się
                     </h1>
                     <span className="font-bold my-12 text-neutral-700 text-xl">
-                        INDELIT Sp. z o.o.
+                        Indelit Olimpijczyków Sp. z o.o.
                     </span>
                     <p className="leading-10">
                         42-612 Tarnowskie Góry <br />
