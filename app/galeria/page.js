@@ -19,7 +19,7 @@ export default function Galeria() {
     // Zdjęcia z folderu realizacja-2
     const realizacja2Images = [
         "AKTUALNIE W SPRZEDAŻY (1).jpg",
-        "IMG_6878.jpg",
+        "img_6878.jpg",
         "IMG_6885.jpg",
         "IMG_6891.jpg",
         "IMG_6902.jpg",
