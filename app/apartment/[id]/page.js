@@ -17,8 +17,8 @@ const ApartmentDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [priceHistoryOpen, setPriceHistoryOpen] = useState(false);
-    const parkingPrice = 15000;
-    const storagePrice = 40000;
+    const parkingPrice = 40000;
+    const storagePrice = 15000;
 
     useEffect(() => {
         const fetchApartment = async () => {
