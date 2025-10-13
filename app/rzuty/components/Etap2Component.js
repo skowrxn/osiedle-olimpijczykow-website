@@ -45,10 +45,7 @@ export default function Etap2Component() {
             title: "Niedostępne",
         },
         {
-            coords: [
-                2674, 779, 2671, 1114, 2102, 1108, 2096, 1900, 2142, 1919, 2148,
-                3027, 2658, 3034, 2658, 1349, 3134, 1351, 3131, 772,
-            ],
+            coords: [2145, 2127, 2148, 3027, 2658, 3034, 2654, 2127],
             unavailable: true,
             title: "Niedostępne",
         },
