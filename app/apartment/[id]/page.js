@@ -228,7 +228,7 @@ const ApartmentDetail = () => {
                                                     padding: "0px 40px",
                                                     display: "flex",
                                                     flexDirection: "column",
-                                                    justifyContent: "center",
+                                                    justifyContent: "start",
                                                 }}
                                             >
                                                 <h1
