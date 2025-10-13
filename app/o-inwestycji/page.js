@@ -80,7 +80,7 @@ export default function OInwestycji() {
                                     >
                                         <BoxWithIcon
                                             title="Bliskość rekreacji"
-                                            description="Aquapark, hala sportowa i park miejski w pobliżu zapewniają aktywny wypoczynek. W okolicy znajdziemy również sklepy, punkty usługowe oraz placówki edukacyjne.Retry"
+                                            description="Aquapark, hala sportowa i park miejski w pobliżu zapewniają aktywny wypoczynek. W okolicy znajdziemy również sklepy, punkty usługowe oraz placówki edukacyjne."
                                         >
                                             <img
                                                 src="/img/park.jpg"
