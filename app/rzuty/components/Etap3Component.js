@@ -8,6 +8,7 @@ export default function Etap3Component() {
     const imageRef = useRef(null);
     const [hoveredArea, setHoveredArea] = useState(null);
     const [apartmentData, setApartmentData] = useState({});
+    const [isLoadingData, setIsLoadingData] = useState(true);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [selectedFloor, setSelectedFloor] = useState(0);
     const router = useRouter();
@@ -261,6 +262,7 @@ export default function Etap3Component() {
         setHoveredArea(null);
 
         const loadApartmentData = async () => {
+            setIsLoadingData(true);
             const data = {};
             for (const area of areas) {
                 if (!area.unavailable) {
@@ -273,6 +275,7 @@ export default function Etap3Component() {
                 }
             }
             setApartmentData(data);
+            setIsLoadingData(false);
         };
         loadApartmentData();
     }, [selectedFloor]);
@@ -556,103 +559,142 @@ export default function Etap3Component() {
                                     <span>{areas[hoveredArea].title}</span>
                                 </div>
                             </div>
-                        ) : (
-                            apartmentData[
-                                areas[hoveredArea].apartmentNumber
-                            ] && (
+                        ) : isLoadingData ||
+                          !apartmentData[
+                              areas[hoveredArea].apartmentNumber
+                          ] ? (
+                            // Loading spinner gdy dane się ładują
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    left: `${tooltipPosition.x + 15}px`,
+                                    top: `${tooltipPosition.y + 15}px`,
+                                    backgroundColor: "#2d2d2d",
+                                    color: "white",
+                                    padding: "20px",
+                                    borderRadius: "6px",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                                    fontFamily: "Poppins, sans-serif",
+                                    pointerEvents: "none",
+                                    zIndex: 1000,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
                                 <div
                                     style={{
-                                        position: "fixed",
-                                        left: `${tooltipPosition.x + 15}px`,
-                                        top: `${tooltipPosition.y + 15}px`,
-                                        backgroundColor: "#2d2d2d",
-                                        color: "white",
-                                        padding: "12px 16px",
-                                        borderRadius: "6px",
-                                        boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                                        fontFamily: "Poppins, sans-serif",
-                                        fontSize: "13px",
-                                        pointerEvents: "none",
-                                        zIndex: 1000,
-                                        minWidth: "180px",
+                                        width: "24px",
+                                        height: "24px",
+                                        border: "3px solid rgba(255,255,255,0.3)",
+                                        borderTop: "3px solid white",
+                                        borderRadius: "50%",
+                                        animation: "spin 0.8s linear infinite",
+                                    }}
+                                ></div>
+                                <style jsx>{`
+                                    @keyframes spin {
+                                        0% {
+                                            transform: rotate(0deg);
+                                        }
+                                        100% {
+                                            transform: rotate(360deg);
+                                        }
+                                    }
+                                `}</style>
+                            </div>
+                        ) : (
+                            <div
+                                style={{
+                                    position: "fixed",
+                                    left: `${tooltipPosition.x + 15}px`,
+                                    top: `${tooltipPosition.y + 15}px`,
+                                    backgroundColor: "#2d2d2d",
+                                    color: "white",
+                                    padding: "12px 16px",
+                                    borderRadius: "6px",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                                    fontFamily: "Poppins, sans-serif",
+                                    fontSize: "13px",
+                                    pointerEvents: "none",
+                                    zIndex: 1000,
+                                    minWidth: "180px",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        fontWeight: "600",
+                                        marginBottom: "8px",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    Mieszkanie nr.{" "}
+                                    {areas[hoveredArea].apartmentNumber}
+                                </div>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        marginBottom: "4px",
                                     }}
                                 >
                                     <div
                                         style={{
-                                            fontWeight: "600",
-                                            marginBottom: "8px",
-                                            fontSize: "14px",
-                                        }}
-                                    >
-                                        Mieszkanie nr.{" "}
-                                        {areas[hoveredArea].apartmentNumber}
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            gap: "8px",
-                                            marginBottom: "4px",
-                                        }}
-                                    >
-                                        <div
-                                            style={{
-                                                width: "8px",
-                                                height: "8px",
-                                                borderRadius: "50%",
-                                                backgroundColor:
-                                                    apartmentData[
-                                                        areas[hoveredArea]
-                                                            .apartmentNumber
-                                                    ].dostepnosc === "DOSTEPNE"
-                                                        ? "#28a745"
-                                                        : apartmentData[
-                                                              areas[hoveredArea]
-                                                                  .apartmentNumber
-                                                          ].dostepnosc ===
-                                                          "REZERWACJA"
-                                                        ? "#ffc107"
-                                                        : "#dc3545",
-                                            }}
-                                        ></div>
-                                        <span style={{ fontSize: "12px" }}>
-                                            {apartmentData[
-                                                areas[hoveredArea]
-                                                    .apartmentNumber
-                                            ].dostepnosc === "DOSTEPNE"
-                                                ? "Dostępne"
-                                                : apartmentData[
-                                                      areas[hoveredArea]
-                                                          .apartmentNumber
-                                                  ].dostepnosc === "REZERWACJA"
-                                                ? "Rezerwacja"
-                                                : "Sprzedane"}
-                                        </span>
-                                    </div>
-                                    {apartmentData[
-                                        areas[hoveredArea].apartmentNumber
-                                    ].cena > 0 && (
-                                        <div
-                                            style={{
-                                                fontSize: "15px",
-                                                fontWeight: "600",
-                                                marginTop: "6px",
-                                            }}
-                                        >
-                                            {new Intl.NumberFormat("pl-PL", {
-                                                style: "currency",
-                                                currency: "PLN",
-                                                minimumFractionDigits: 0,
-                                            }).format(
+                                            width: "8px",
+                                            height: "8px",
+                                            borderRadius: "50%",
+                                            backgroundColor:
                                                 apartmentData[
                                                     areas[hoveredArea]
                                                         .apartmentNumber
-                                                ].cena
-                                            )}
-                                        </div>
-                                    )}
+                                                ].dostepnosc === "DOSTEPNE"
+                                                    ? "#28a745"
+                                                    : apartmentData[
+                                                          areas[hoveredArea]
+                                                              .apartmentNumber
+                                                      ].dostepnosc ===
+                                                      "REZERWACJA"
+                                                    ? "#ffc107"
+                                                    : "#dc3545",
+                                        }}
+                                    ></div>
+                                    <span style={{ fontSize: "12px" }}>
+                                        {apartmentData[
+                                            areas[hoveredArea].apartmentNumber
+                                        ].dostepnosc === "DOSTEPNE"
+                                            ? "Dostępne"
+                                            : apartmentData[
+                                                  areas[hoveredArea]
+                                                      .apartmentNumber
+                                              ].dostepnosc === "REZERWACJA"
+                                            ? "Rezerwacja"
+                                            : "Sprzedane"}
+                                    </span>
                                 </div>
-                            )
+                                {apartmentData[
+                                    areas[hoveredArea].apartmentNumber
+                                ].cena > 0 && (
+                                    <div
+                                        style={{
+                                            fontSize: "15px",
+                                            fontWeight: "600",
+                                            marginTop: "6px",
+                                        }}
+                                    >
+                                        {new Intl.NumberFormat("pl-PL", {
+                                            style: "currency",
+                                            currency: "PLN",
+                                            minimumFractionDigits: 0,
+                                        }).format(
+                                            apartmentData[
+                                                areas[hoveredArea]
+                                                    .apartmentNumber
+                                            ].cena
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         ))}
                 </div>
             </div>
