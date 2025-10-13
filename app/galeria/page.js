@@ -94,7 +94,7 @@ export default function Galeria() {
                 />
 
                 <GallerySection
-                    title="Wizualizacja budynku - etap II"
+                    title="Realizacja budynku - etap II"
                     images={realizacja2Images}
                     folder="realizacja-2"
                 />
