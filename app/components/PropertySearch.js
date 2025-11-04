@@ -41,6 +41,9 @@ export default function PropertySearch({
 
         if (searchFilters.stage) {
             params.set("stage", searchFilters.stage);
+        } else if (!showStage) {
+            // Gdy nie ma wyboru etapu (strona główna), domyślnie ustaw etap2
+            params.set("stage", "etap2");
         }
 
         if (searchFilters.availability) {
@@ -57,8 +60,8 @@ export default function PropertySearch({
                 : currentPath;
             router.push(newUrl);
         } else {
-            // Domyślne zachowanie - przekieruj na etap3
-            const newUrl = queryString ? `/etap3?${queryString}` : "/etap3";
+            // Domyślne zachowanie - przekieruj na etap2
+            const newUrl = queryString ? `/etap2?${queryString}` : "/etap2";
             router.push(newUrl);
         }
     };
