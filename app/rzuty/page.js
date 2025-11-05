@@ -90,7 +90,7 @@ export default function RzutyPage() {
 
                 <FloorPlan
                     imageSrc="/img/etap-3.jpg"
-                    onClick={() => setSelectedStage("etap3")}
+                    onClick={null}
                     desc="Sprzedaż już wkrótce"
                     title="Rzuty kondygnacji - Etap 3"
                     stage="etap3"
