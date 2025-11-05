@@ -1,17 +1,23 @@
 "use client";
 
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropertySearch from "./components/PropertySearch";
 import BoxWithIcon from "./components/BoxWithIcon";
 import Lightbox from "./components/Lightbox";
 import ContactSection from "./components/ContactSection";
 import Poppins from "next/font/google/";
+import { preloadApartments } from "./lib/strapi";
 
 export default function Home() {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    // Preload apartments data on page load
+    useEffect(() => {
+        preloadApartments();
+    }, []);
 
     // Zdjęcia wizualizacji na stronie głównej
     const visualizationImages = [

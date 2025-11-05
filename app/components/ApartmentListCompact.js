@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { buildApiUrl } from "../lib/strapi";
+import { buildApiUrl, getCachedData, setCachedData } from "../lib/strapi";
 import Image from "next/image";
 import Lightbox from "./Lightbox";
 
@@ -91,6 +91,14 @@ const ApartmentListCompact = ({
                 );
                 console.log("Fetching from:", apiUrl);
 
+                // Sprawdź cache przed fetch
+                const cachedResult = getCachedData(apiUrl);
+                if (cachedResult) {
+                    setApartments(cachedResult.data || []);
+                    setLoading(false);
+                    return;
+                }
+
                 const response = await fetch(apiUrl);
 
                 if (!response.ok) {
@@ -98,6 +106,10 @@ const ApartmentListCompact = ({
                 }
 
                 const result = await response.json();
+
+                // Zapisz w cache
+                setCachedData(apiUrl, result);
+
                 setApartments(result.data || []);
             } catch (err) {
                 setError(err.message);

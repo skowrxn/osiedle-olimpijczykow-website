@@ -17,6 +17,91 @@ export const FIELD_MAPPING = {
     additionalElements: "elementy_dodatkowe",
 };
 
+// ===== CACHE/PRELOAD MECHANISM =====
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minut cache
+const cache = new Map();
+
+// Funkcja do generowania klucza cache
+const getCacheKey = (url) => url;
+
+// Funkcja sprawdzająca czy cache jest ważny
+const isCacheValid = (timestamp) => {
+    return Date.now() - timestamp < CACHE_DURATION;
+};
+
+// Funkcja do cache'owania danych
+export const getCachedData = (url) => {
+    const cached = cache.get(getCacheKey(url));
+    if (cached && isCacheValid(cached.timestamp)) {
+        console.log("[Cache] Hit:", url);
+        return cached.data;
+    }
+    console.log("[Cache] Miss:", url);
+    return null;
+};
+
+// Funkcja do zapisywania w cache
+export const setCachedData = (url, data) => {
+    cache.set(getCacheKey(url), {
+        data,
+        timestamp: Date.now(),
+    });
+    console.log("[Cache] Saved:", url);
+};
+
+// Funkcja do preload'owania najczęściej używanych zapytań
+export const preloadApartments = async () => {
+    try {
+        // Preload wszystkich mieszkań z etapu 2
+        const etap2Url = buildApiUrl("apartments", {
+            populate: "*",
+            "filters[etap][$eq]": "etap2",
+        });
+
+        // Preload wszystkich mieszkań z etapu 3
+        const etap3Url = buildApiUrl("apartments", {
+            populate: "*",
+            "filters[etap][$eq]": "etap3",
+        });
+
+        // Wykonaj oba zapytania równolegle
+        const [etap2Response, etap3Response] = await Promise.all([
+            fetch(etap2Url),
+            fetch(etap3Url),
+        ]);
+
+        if (etap2Response.ok) {
+            const etap2Data = await etap2Response.json();
+            setCachedData(etap2Url, etap2Data);
+        }
+
+        if (etap3Response.ok) {
+            const etap3Data = await etap3Response.json();
+            setCachedData(etap3Url, etap3Data);
+        }
+
+        console.log("[Preload] Apartments preloaded successfully");
+    } catch (error) {
+        console.warn("[Preload] Failed to preload apartments:", error);
+    }
+};
+
+// Funkcja do czyszczenia starego cache
+export const cleanCache = () => {
+    const now = Date.now();
+    for (const [key, value] of cache.entries()) {
+        if (!isCacheValid(value.timestamp)) {
+            cache.delete(key);
+        }
+    }
+    console.log("[Cache] Cleaned old entries");
+};
+
+// Automatyczne czyszczenie cache co 10 minut
+if (typeof window !== "undefined") {
+    setInterval(cleanCache, 10 * 60 * 1000);
+}
+
 // Funkcja do konwersji parametrów wyszukiwania
 export const convertSearchParams = (searchParams) => {
     const converted = new URLSearchParams({ populate: "*" });
