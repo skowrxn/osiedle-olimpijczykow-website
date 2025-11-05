@@ -9,17 +9,51 @@ const ContactSection = () => {
         phone: "",
         message: "",
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form submitted:", formData);
-        // Tu można dodać logikę wysyłania formularza
-        alert("Formularz został wysłany! (funkcjonalność do implementacji)");
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setSubmitStatus("success");
+                // Wyczyść formularz po udanym wysłaniu
+                setFormData({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    message: "",
+                });
+                // Ukryj komunikat sukcesu po 5 sekundach
+                setTimeout(() => setSubmitStatus(null), 5000);
+            } else {
+                setSubmitStatus("error");
+                console.error("Error response:", data);
+            }
+        } catch (error) {
+            setSubmitStatus("error");
+            console.error("Error submitting form:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -120,6 +154,39 @@ const ContactSection = () => {
                             className="wpcf7-form space-y-2"
                             onSubmit={handleSubmit}
                         >
+                            {/* Status messages */}
+                            {submitStatus === "success" && (
+                                <div
+                                    style={{
+                                        backgroundColor: "#d4edda",
+                                        color: "#155724",
+                                        padding: "12px",
+                                        borderRadius: "4px",
+                                        marginBottom: "15px",
+                                        border: "1px solid #c3e6cb",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    ✓ Wiadomość została wysłana pomyślnie!
+                                    Skontaktujemy się z Tobą wkrótce.
+                                </div>
+                            )}
+                            {submitStatus === "error" && (
+                                <div
+                                    style={{
+                                        backgroundColor: "#f8d7da",
+                                        color: "#721c24",
+                                        padding: "12px",
+                                        borderRadius: "4px",
+                                        marginBottom: "15px",
+                                        border: "1px solid #f5c6cb",
+                                        fontSize: "14px",
+                                    }}
+                                >
+                                    ✗ Wystąpił błąd podczas wysyłania wiadomości.
+                                    Spróbuj ponownie.
+                                </div>
+                            )}
                             <input
                                 type="text"
                                 name="name"
@@ -247,14 +314,19 @@ const ContactSection = () => {
                             ></textarea>
                             <button
                                 type="submit"
+                                disabled={isSubmitting}
                                 style={{
-                                    backgroundColor: "#232323",
+                                    backgroundColor: isSubmitting
+                                        ? "#666"
+                                        : "#232323",
                                     color: "white",
                                     marginTop: "10px",
                                     padding: "16px 32px",
                                     border: "none",
                                     borderRadius: "50px",
-                                    cursor: "pointer",
+                                    cursor: isSubmitting
+                                        ? "not-allowed"
+                                        : "pointer",
                                     fontSize: "16px",
                                     fontWeight: "600",
                                     fontFamily: "Poppins, sans-serif",
@@ -264,18 +336,40 @@ const ContactSection = () => {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
+                                    gap: "10px",
+                                    opacity: isSubmitting ? 0.7 : 1,
                                 }}
                                 onMouseOver={(e) => {
-                                    e.target.style.backgroundColor = "#3a3a3a";
-                                    e.target.style.transform =
-                                        "translateY(-1px)";
+                                    if (!isSubmitting) {
+                                        e.target.style.backgroundColor = "#3a3a3a";
+                                        e.target.style.transform =
+                                            "translateY(-1px)";
+                                    }
                                 }}
                                 onMouseOut={(e) => {
-                                    e.target.style.backgroundColor = "#232323";
-                                    e.target.style.transform = "translateY(0)";
+                                    if (!isSubmitting) {
+                                        e.target.style.backgroundColor = "#232323";
+                                        e.target.style.transform = "translateY(0)";
+                                    }
                                 }}
                             >
-                                Wyślij
+                                {isSubmitting ? (
+                                    <>
+                                        <span
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                border: "2px solid #fff",
+                                                borderTop: "2px solid transparent",
+                                                borderRadius: "50%",
+                                                animation: "spin 0.8s linear infinite",
+                                            }}
+                                        ></span>
+                                        Wysyłanie...
+                                    </>
+                                ) : (
+                                    "Wyślij"
+                                )}
                             </button>
                         </form>
                     </div>
@@ -295,6 +389,15 @@ const ContactSection = () => {
                     color: #232323;
                     opacity: 1;
                     font-size: 14px;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
                 }
             `}</style>
         </section>
