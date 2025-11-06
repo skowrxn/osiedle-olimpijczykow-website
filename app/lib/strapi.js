@@ -18,7 +18,7 @@ export const FIELD_MAPPING = {
 };
 
 // ===== CACHE/PRELOAD MECHANISM =====
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minut cache
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 godziny cache (bardzo długo)
 const cache = new Map();
 
 // Funkcja do generowania klucza cache
@@ -97,9 +97,9 @@ export const cleanCache = () => {
     console.log("[Cache] Cleaned old entries");
 };
 
-// Automatyczne czyszczenie cache co 10 minut
+// Automatyczne czyszczenie cache co 24 godziny (raz dziennie)
 if (typeof window !== "undefined") {
-    setInterval(cleanCache, 10 * 60 * 1000);
+    setInterval(cleanCache, 24 * 60 * 60 * 1000);
 }
 
 // Funkcja do konwersji parametrów wyszukiwania
