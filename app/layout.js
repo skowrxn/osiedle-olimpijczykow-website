@@ -2,6 +2,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import StrapiKeepAlive from "./components/StrapiKeepAlive";
+import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
 import Head from "next/head";
 
 export const metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
                 />
             </head>
             <body className="scroll-smooth">
+                <ServiceWorkerRegistration />
                 <StrapiKeepAlive />
                 <Navigation />
                 <main>{children}</main>

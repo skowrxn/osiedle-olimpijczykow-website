@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        unoptimized: true, // Wyłącza optymalizację obrazów
-        formats: ["image/avif", "image/webp"], // preferowane formaty
+        unoptimized: false, // Włącz optymalizację obrazów (cache + kompresja)
+        formats: ["image/avif", "image/webp"], // Preferowane formaty (lżejsze)
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-        minimumCacheTTL: 60,
+        minimumCacheTTL: 31536000, // Cache na 1 rok (365 dni)
         remotePatterns: [
             // Strapi production
             {
@@ -19,6 +19,20 @@ const nextConfig = {
                 port: "1337",
             },
         ],
+    },
+    // Dodatkowe headers dla cache
+    async headers() {
+        return [
+            {
+                source: "/:all*(svg|jpg|jpeg|png|gif|webp|avif|ico)",
+                headers: [
+                    {
+                        key: "Cache-Control",
+                        value: "public, max-age=31536000, immutable",
+                    },
+                ],
+            },
+        ];
     },
 };
 export default nextConfig;
