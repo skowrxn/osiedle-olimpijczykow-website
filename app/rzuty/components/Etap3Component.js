@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildApiUrl } from "../../lib/strapi";
-import Lightbox from "../../../components/Lightbox";
+import Lightbox from "../../components/Lightbox";
 
 export default function Etap3Component() {
     const canvasRef = useRef(null);
