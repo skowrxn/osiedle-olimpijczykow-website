@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildApiUrl } from "../../lib/strapi";
+import Lightbox from "../../../components/Lightbox";
 
 export default function Etap2Component() {
     const canvasRef = useRef(null);
@@ -10,6 +11,8 @@ export default function Etap2Component() {
     const [apartmentData, setApartmentData] = useState({});
     const [isLoadingData, setIsLoadingData] = useState(true);
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
     const router = useRouter();
 
     const areas = [
@@ -536,6 +539,10 @@ export default function Etap2Component() {
                             cursor: "pointer",
                             transition: "all 0.3s ease",
                         }}
+                        onClick={() => {
+                            setLightboxImages(["/img/garaz2.png"]);
+                            setLightboxOpen(true);
+                        }}
                         onMouseOver={(e) => {
                             e.currentTarget.style.transform = "scale(1.02)";
                             e.currentTarget.style.boxShadow =
@@ -560,6 +567,14 @@ export default function Etap2Component() {
                     </div>
                 </div>
             </div>
+
+            {/* Lightbox */}
+            <Lightbox
+                images={lightboxImages}
+                isOpen={lightboxOpen}
+                onClose={() => setLightboxOpen(false)}
+                currentIndex={0}
+            />
         </section>
     );
 }
