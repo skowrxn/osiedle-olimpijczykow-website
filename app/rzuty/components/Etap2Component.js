@@ -503,6 +503,62 @@ export default function Etap2Component() {
                             </div>
                         ))}
                 </div>
+
+                {/* Rzut garażu - Etap 2 */}
+                <div
+                    style={{
+                        marginTop: "60px",
+                        padding: "30px",
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "8px",
+                        border: "1px solid #e0e0e0",
+                    }}
+                >
+                    <h3
+                        style={{
+                            fontSize: "24px",
+                            fontWeight: "600",
+                            marginBottom: "20px",
+                            fontFamily: "Poppins, sans-serif",
+                            color: "#333",
+                            textAlign: "center",
+                        }}
+                    >
+                        Rzut garażu - Etap 2
+                    </h3>
+                    <div
+                        style={{
+                            backgroundColor: "white",
+                            borderRadius: "8px",
+                            padding: "20px",
+                            border: "1px solid #e0e0e0",
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease",
+                        }}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.transform = "scale(1.02)";
+                            e.currentTarget.style.boxShadow =
+                                "0 8px 24px rgba(0,0,0,0.15)";
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.transform = "scale(1)";
+                            e.currentTarget.style.boxShadow =
+                                "0 2px 8px rgba(0,0,0,0.05)";
+                        }}
+                    >
+                        <img
+                            src="/img/garaz2.png"
+                            alt="Rzut garażu - Etap 2"
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto",
+                                borderRadius: "8px",
+                                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                            }}
+                        />
+                    </div>
+                </div>
             </div>
         </section>
     );
