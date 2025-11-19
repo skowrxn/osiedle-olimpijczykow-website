@@ -4,7 +4,7 @@ const IMAGE_CACHE_NAME = "osiedle-images-cache-v1";
 
 // Obrazki z Strapi do cache
 const STRAPI_IMAGE_PATTERN =
-    /https:\/\/light-sparkle-4fc84d1e23\.strapiapp\.com\/uploads\/.*/;
+    /https:\/\/admin-panel-olimpijczykow-dlpb9\.ondigitalocean\.app\/uploads\/.*/;
 const LOCAL_IMAGE_PATTERN = /\/_next\/image\?url=.*/;
 const STATIC_IMAGE_PATTERN = /\/img\/.*/;
 

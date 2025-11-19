@@ -10,7 +10,7 @@ const nextConfig = {
             // Strapi production
             {
                 protocol: "https",
-                hostname: "light-sparkle-4fc84d1e23.strapiapp.com",
+                hostname: "admin-panel-olimpijczykow-dlpb9.ondigitalocean.app",
             },
             // Strapi localhost (dla developmentu)
             {
