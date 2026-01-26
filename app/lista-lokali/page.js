@@ -153,11 +153,11 @@ function ListaLokaliContent() {
 
                                         <FloorPlan
                                             imageSrc="/img/etap-3.jpg"
-                                            targetRoute=""
-                                            desc="Sprzedaż już wkrótce"
+                                            targetRoute="/etap3"
+                                            desc="Mieszkania w budowie"
                                             title="Mieszkania - Etap 3"
                                             stage="etap3"
-                                            isGrayedOut={true}
+                                            isGrayedOut={false} // Zmieniono na false aby odblokować
                                         />
                                     </div>
                                 </div>

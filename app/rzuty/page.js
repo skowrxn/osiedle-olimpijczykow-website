@@ -90,11 +90,11 @@ export default function RzutyPage() {
 
                 <FloorPlan
                     imageSrc="/img/etap-3.jpg"
-                    onClick={null}
-                    desc="Sprzedaż już wkrótce"
+                    onClick={() => setSelectedStage("etap3")}
+                    desc="Mieszkania w budowie"
                     title="Rzuty kondygnacji - Etap 3"
                     stage="etap3"
-                    isGrayedOut={true}
+                    isGrayedOut={false} // Zmieniono na false aby odblokować
                 />
             </div>
 
