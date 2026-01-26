@@ -1,27 +1,27 @@
 {
-    "name": "osiedle-olimpijczykow",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev --turbopack",
-        "build": "next build --turbopack",
-        "start": "next start",
-        "lint": "eslint",
-        "strapi": "cd ../strapi-cms && npm run develop",
-        "dev:all": "concurrently \"npm run strapi\" \"npm run dev\""
-    },
-    "dependencies": {
-        "next": "15.5.3",
-        "react": "19.1.0",
-        "react-dom": "19.1.0",
-        "resend": "^6.4.1"
-    },
-    "devDependencies": {
-        "@eslint/eslintrc": "^3",
-        "@tailwindcss/postcss": "^4.1.16",
-        "concurrently": "^8.2.2",
-        "eslint": "^9",
-        "eslint-config-next": "15.5.3",
-        "tailwindcss": "^4"
-    }
+  "name": "osiedle-olimpijczykow",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "strapi": "cd ../strapi-cms && npm run develop",
+    "dev:all": "concurrently \"npm run strapi\" \"npm run dev\""
+  },
+  "dependencies": {
+    "next": "15.5.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "resend": "^6.4.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.16",
+    "concurrently": "^8.2.2",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "tailwindcss": "^4"
+  }
 }
