@@ -54,15 +54,30 @@ export const setCachedData = (url, data) => {
 // Funkcja do preload'owania najczęściej używanych zapytań
 export const preloadApartments = async () => {
     try {
+        const fields = [
+            "liczba_pokoi",
+            "powierzchnia",
+            "kondygnacja",
+            "cena",
+            "dostepnosc",
+            "numer",
+            "etap",
+        ];
+
+        const fieldsParams = {};
+        fields.forEach((field, index) => {
+            fieldsParams[`fields[${index}]`] = field;
+        });
+
         // Preload wszystkich mieszkań z etapu 2
         const etap2Url = buildApiUrl("apartments", {
-            populate: "*",
+            ...fieldsParams,
             "filters[etap][$eq]": "etap2",
         });
 
         // Preload wszystkich mieszkań z etapu 3
         const etap3Url = buildApiUrl("apartments", {
-            populate: "*",
+            ...fieldsParams,
             "filters[etap][$eq]": "etap3",
         });
 
@@ -112,7 +127,7 @@ export const convertSearchParams = (searchParams) => {
         const polishField = FIELD_MAPPING[key] || key;
         converted.append(
             key.replace(/^filters\[(\w+)\]/, `filters[${polishField}]`),
-            value
+            value,
         );
     }
 

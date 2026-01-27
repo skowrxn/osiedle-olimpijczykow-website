@@ -30,8 +30,20 @@ const ApartmentListCompact = ({
 
             try {
                 // Build query parameters for Strapi
-                const params = new URLSearchParams({
-                    populate: "*",
+                const params = new URLSearchParams();
+
+                // Optymalizacja: pobieraj tylko potrzebne pola
+                const fields = [
+                    "liczba_pokoi",
+                    "powierzchnia",
+                    "kondygnacja",
+                    "cena",
+                    "dostepnosc",
+                    "numer",
+                    "etap",
+                ];
+                fields.forEach((field, index) => {
+                    params.append(`fields[${index}]`, field);
                 });
 
                 // Add etap filter if specified
@@ -92,7 +104,7 @@ const ApartmentListCompact = ({
 
                 const apiUrl = buildApiUrl(
                     "apartments",
-                    Object.fromEntries(params)
+                    Object.fromEntries(params),
                 );
                 console.log("Fetching from:", apiUrl);
 
@@ -285,7 +297,7 @@ const ApartmentListCompact = ({
                             className="apartment-item"
                             onClick={() =>
                                 router.push(
-                                    `/apartment/${apartment.documentId}`
+                                    `/apartment/${apartment.documentId}`,
                                 )
                             }
                         >
@@ -311,7 +323,7 @@ const ApartmentListCompact = ({
                                             width: "12px",
                                             height: "60px",
                                             backgroundColor: getStatusColor(
-                                                attrs.dostepnosc
+                                                attrs.dostepnosc,
                                             ),
                                             borderRadius: "0",
                                         }}
@@ -322,7 +334,7 @@ const ApartmentListCompact = ({
                                             fontSize: "12px",
                                             fontWeight: "600",
                                             color: getStatusColor(
-                                                attrs.dostepnosc
+                                                attrs.dostepnosc,
                                             ),
                                             textTransform: "uppercase",
                                             letterSpacing: "0.5px",
@@ -504,7 +516,7 @@ const ApartmentListCompact = ({
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         router.push(
-                                            `/apartment/${apartment.documentId}`
+                                            `/apartment/${apartment.documentId}`,
                                         );
                                     }}
                                 >
