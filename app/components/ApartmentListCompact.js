@@ -88,10 +88,7 @@ const ApartmentListCompact = ({
                     params.append("filters[etap][$eq]", stage);
                 }
 
-                // Tymczasowo ukryj mieszkania z etapu 3
-                if (!etap) {
-                    params.append("filters[etap][$ne]", "etap3");
-                }
+                // Usunieto tymczasowe ukrywanie mieszkan z etapu 3
 
                 if (availability) {
                     params.append("filters[dostepnosc][$eq]", availability);
