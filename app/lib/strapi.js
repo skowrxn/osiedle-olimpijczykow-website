@@ -1,6 +1,8 @@
 // Konfiguracja API Strapi
 export const STRAPI_URL =
-    process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+    typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 export const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 
 // Mapowanie nowych polskich nazw pól

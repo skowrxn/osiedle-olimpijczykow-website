@@ -34,5 +34,19 @@ const nextConfig = {
             },
         ];
     },
+    async rewrites() {
+        return [
+            {
+                source: "/api/:path*",
+                destination:
+                    "https://admin-panel-olimpijczykow-dlpb9.ondigitalocean.app/api/:path*",
+            },
+            {
+                source: "/uploads/:path*",
+                destination:
+                    "https://admin-panel-olimpijczykow-dlpb9.ondigitalocean.app/uploads/:path*",
+            },
+        ];
+    },
 };
 export default nextConfig;
