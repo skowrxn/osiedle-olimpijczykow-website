@@ -8,7 +8,8 @@ const navLinks = [
     { href: "/lista-lokali", label: "Lista lokali" },
     { href: "/galeria", label: "Galeria" },
     { href: "/kontakt", label: "Kontakt" },
-    { href: "/prospekt", label: "Prospekt" },
+    { href: "/prospekt", label: "Prospekt - Etap II" },
+    { href: "/prospekt-etap3", label: "Prospekt - Etap III" },
     {
         href: "http://www.indelit.com.pl/services-view/osiedle-dominikanskie-etap-iii/",
         label: "Osiedle Dominikańskie",
