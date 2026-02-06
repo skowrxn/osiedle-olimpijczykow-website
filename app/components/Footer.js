@@ -104,18 +104,25 @@ export default function Footer() {
                         <p className="text-white text-lg font-semibold mb-4 w-full">
                             Nasi Partnerzy
                         </p>
-                        <div className="text-neutral-400 text-[15px] mb-2 text-left">
-                            W Swoim Stylu Anna Swoboda
-                            <br />
-                            Projektowanie wnętrz domowych
-                        </div>
-                        <Image
-                            src="/img/projektowanie-wnetrz-logo.png"
-                            alt="Projektowanie wnętrz logo"
-                            width={100}
-                            height={40}
-                            className="mt-2"
-                        />
+                        <a
+                            href="https://wswoimstylu.pl/oferta/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:opacity-80 transition-opacity"
+                        >
+                            <div className="text-neutral-400 text-[15px] mb-2 text-left hover:text-white transition-colors">
+                                W Swoim Stylu Anna Swoboda
+                                <br />
+                                Projektowanie wnętrz domowych
+                            </div>
+                            <Image
+                                src="/img/projektowanie-wnetrz-logo.png"
+                                alt="Projektowanie wnętrz logo"
+                                width={100}
+                                height={40}
+                                className="mt-2"
+                            />
+                        </a>
                     </div>
                 </div>
             </div>
