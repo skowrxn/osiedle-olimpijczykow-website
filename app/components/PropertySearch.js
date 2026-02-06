@@ -42,8 +42,8 @@ export default function PropertySearch({
         if (searchFilters.stage) {
             params.set("stage", searchFilters.stage);
         } else if (!showStage) {
-            // Gdy nie ma wyboru etapu (strona główna), domyślnie ustaw etap2
-            params.set("stage", "etap2");
+            // Gdy nie ma wyboru etapu (strona główna), domyślnie ustaw etap3
+            params.set("stage", "etap3");
         }
 
         if (searchFilters.availability) {
@@ -60,8 +60,8 @@ export default function PropertySearch({
                 : currentPath;
             router.push(newUrl);
         } else {
-            // Domyślne zachowanie - przekieruj na etap2
-            const newUrl = queryString ? `/etap2?${queryString}` : "/etap2";
+            // Domyślne zachowanie - przekieruj na etap3
+            const newUrl = queryString ? `/etap3?${queryString}` : "/etap3";
             router.push(newUrl);
         }
     };
@@ -91,7 +91,13 @@ export default function PropertySearch({
                 >
                     {/* Etap - pokazuje tylko gdy showStage jest true */}
                     {showStage && (
-                        <div style={{ flex: "1", minWidth: "140px", maxWidth: "160px" }}>
+                        <div
+                            style={{
+                                flex: "1",
+                                minWidth: "140px",
+                                maxWidth: "160px",
+                            }}
+                        >
                             <div
                                 style={{
                                     position: "relative",
@@ -147,7 +153,13 @@ export default function PropertySearch({
                     )}
 
                     {/* Liczba pokoi */}
-                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
+                    <div
+                        style={{
+                            flex: "1",
+                            minWidth: showStage ? "140px" : "200px",
+                            maxWidth: showStage ? "160px" : "none",
+                        }}
+                    >
                         <div
                             style={{
                                 position: "relative",
@@ -205,7 +217,13 @@ export default function PropertySearch({
                     </div>
 
                     {/* Powierzchnia */}
-                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
+                    <div
+                        style={{
+                            flex: "1",
+                            minWidth: showStage ? "140px" : "200px",
+                            maxWidth: showStage ? "160px" : "none",
+                        }}
+                    >
                         <div
                             style={{
                                 position: "relative",
@@ -270,7 +288,13 @@ export default function PropertySearch({
                     </div>
 
                     {/* Piętro */}
-                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
+                    <div
+                        style={{
+                            flex: "1",
+                            minWidth: showStage ? "140px" : "200px",
+                            maxWidth: showStage ? "160px" : "none",
+                        }}
+                    >
                         <div
                             style={{
                                 position: "relative",
@@ -328,7 +352,13 @@ export default function PropertySearch({
                     </div>
 
                     {/* Dostępność */}
-                    <div style={{ flex: "1", minWidth: showStage ? "140px" : "200px", maxWidth: showStage ? "160px" : "none" }}>
+                    <div
+                        style={{
+                            flex: "1",
+                            minWidth: showStage ? "140px" : "200px",
+                            maxWidth: showStage ? "160px" : "none",
+                        }}
+                    >
                         <div
                             style={{
                                 position: "relative",
