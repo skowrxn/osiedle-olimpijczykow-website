@@ -1,4 +1,4 @@
-"use client";
+x"use client";
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -17,8 +17,8 @@ const ApartmentDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [priceHistoryOpen, setPriceHistoryOpen] = useState(false);
-    const parkingPrice = 40000;
-    const storagePrice = 15000;
+    const parkingPrice = apartment?.etap === "etap3" ? 50000 : 40000;
+    const storagePrice = apartment?.etap === "etap3" ? 20000 : 15000;
 
     useEffect(() => {
         const fetchApartment = async () => {
