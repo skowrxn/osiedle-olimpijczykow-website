@@ -44,6 +44,11 @@ const ContactSection = () => {
                 });
                 // Ukryj komunikat sukcesu po 5 sekundach
                 setTimeout(() => setSubmitStatus(null), 5000);
+
+                // Meta Pixel Event
+                if (typeof window !== "undefined" && window.fbq) {
+                    window.fbq('track', 'Lead');
+                }
             } else {
                 setSubmitStatus("error");
                 console.error("Error response:", data);
