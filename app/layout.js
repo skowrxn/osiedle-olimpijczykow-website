@@ -42,9 +42,9 @@ export default function RootLayout({ children }) {
                     `}
                 </Script>
                 <noscript>
-                    <img 
-                        height="1" 
-                        width="1" 
+                    <img
+                        height="1"
+                        width="1"
                         style={{ display: "none" }}
                         src="https://www.facebook.com/tr?id=895598576889746&ev=PageView&noscript=1"
                         alt=""

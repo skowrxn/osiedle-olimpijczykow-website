@@ -47,7 +47,7 @@ const ContactSection = () => {
 
                 // Meta Pixel Event
                 if (typeof window !== "undefined" && window.fbq) {
-                    window.fbq('track', 'Lead');
+                    window.fbq("track", "Lead");
                 }
             } else {
                 setSubmitStatus("error");
@@ -188,8 +188,8 @@ const ContactSection = () => {
                                         fontSize: "14px",
                                     }}
                                 >
-                                    ✗ Wystąpił błąd podczas wysyłania wiadomości.
-                                    Spróbuj ponownie.
+                                    ✗ Wystąpił błąd podczas wysyłania
+                                    wiadomości. Spróbuj ponownie.
                                 </div>
                             )}
                             <input
@@ -346,15 +346,18 @@ const ContactSection = () => {
                                 }}
                                 onMouseOver={(e) => {
                                     if (!isSubmitting) {
-                                        e.target.style.backgroundColor = "#3a3a3a";
+                                        e.target.style.backgroundColor =
+                                            "#3a3a3a";
                                         e.target.style.transform =
                                             "translateY(-1px)";
                                     }
                                 }}
                                 onMouseOut={(e) => {
                                     if (!isSubmitting) {
-                                        e.target.style.backgroundColor = "#232323";
-                                        e.target.style.transform = "translateY(0)";
+                                        e.target.style.backgroundColor =
+                                            "#232323";
+                                        e.target.style.transform =
+                                            "translateY(0)";
                                     }
                                 }}
                             >
@@ -365,9 +368,11 @@ const ContactSection = () => {
                                                 width: "16px",
                                                 height: "16px",
                                                 border: "2px solid #fff",
-                                                borderTop: "2px solid transparent",
+                                                borderTop:
+                                                    "2px solid transparent",
                                                 borderRadius: "50%",
-                                                animation: "spin 0.8s linear infinite",
+                                                animation:
+                                                    "spin 0.8s linear infinite",
                                             }}
                                         ></span>
                                         Wysyłanie...
