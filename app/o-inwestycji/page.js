@@ -462,7 +462,7 @@ export default function OInwestycji() {
                                                         height: "20px",
                                                         borderRadius: "50%",
                                                         backgroundColor:
-                                                            index === 0
+                                                            index <= 1
                                                                 ? "#333"
                                                                 : "#e0e0e0",
                                                         marginBottom: "15px",
@@ -478,11 +478,11 @@ export default function OInwestycji() {
                                                         fontFamily:
                                                             "Poppins, sans-serif",
                                                         color:
-                                                            index === 0
+                                                            index <= 1
                                                                 ? "#333"
                                                                 : "#7e7e7e",
                                                         fontWeight:
-                                                            index === 0
+                                                            index <= 1
                                                                 ? "600"
                                                                 : "400",
                                                         maxWidth: "110px",
