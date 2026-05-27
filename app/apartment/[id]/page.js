@@ -17,8 +17,8 @@ const ApartmentDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [priceHistoryOpen, setPriceHistoryOpen] = useState(false);
-    const parkingPrice = apartment?.etap === "etap3" ? 50000 : 40000;
-    const storagePrice = apartment?.etap === "etap3" ? 20000 : 15000;
+    const parkingPrice = 50000;
+    const storagePrice = 20000;
 
     useEffect(() => {
         const fetchApartment = async () => {
@@ -40,7 +40,7 @@ const ApartmentDetail = () => {
 
                 console.log(
                     "First attempt - Response status:",
-                    response.status
+                    response.status,
                 );
 
                 // Jeśli nie zadziała, spróbuj innego endpointu
@@ -52,7 +52,7 @@ const ApartmentDetail = () => {
                     response = await fetch(apiUrl);
                     console.log(
                         "Second attempt - Response status:",
-                        response.status
+                        response.status,
                     );
                 }
 
@@ -263,17 +263,17 @@ const ApartmentDetail = () => {
                                                                 "DOSTEPNE"
                                                                     ? "rgba(34, 197, 94, 0.1)"
                                                                     : attributes.dostepnosc ===
-                                                                      "REZERWACJA"
-                                                                    ? "rgba(255, 193, 7, 0.1)"
-                                                                    : "rgba(239, 68, 68, 0.1)",
+                                                                        "REZERWACJA"
+                                                                      ? "rgba(255, 193, 7, 0.1)"
+                                                                      : "rgba(239, 68, 68, 0.1)",
                                                             border: `1px solid ${
                                                                 attributes.dostepnosc ===
                                                                 "DOSTEPNE"
                                                                     ? "rgba(34, 197, 94, 0.2)"
                                                                     : attributes.dostepnosc ===
-                                                                      "REZERWACJA"
-                                                                    ? "rgba(255, 193, 7, 0.2)"
-                                                                    : "rgba(239, 68, 68, 0.2)"
+                                                                        "REZERWACJA"
+                                                                      ? "rgba(255, 193, 7, 0.2)"
+                                                                      : "rgba(239, 68, 68, 0.2)"
                                                             }`,
                                                         }}
                                                     >
@@ -288,9 +288,9 @@ const ApartmentDetail = () => {
                                                                     "DOSTEPNE"
                                                                         ? "#22c55e"
                                                                         : attributes.dostepnosc ===
-                                                                          "REZERWACJA"
-                                                                        ? "#ffc107"
-                                                                        : "#ef4444",
+                                                                            "REZERWACJA"
+                                                                          ? "#ffc107"
+                                                                          : "#ef4444",
                                                             }}
                                                         ></div>
                                                         <span
@@ -306,18 +306,18 @@ const ApartmentDetail = () => {
                                                                     "DOSTEPNE"
                                                                         ? "#15803d"
                                                                         : attributes.dostepnosc ===
-                                                                          "REZERWACJA"
-                                                                        ? "#ffc107"
-                                                                        : "#dc2626",
+                                                                            "REZERWACJA"
+                                                                          ? "#ffc107"
+                                                                          : "#dc2626",
                                                             }}
                                                         >
                                                             {attributes.dostepnosc ===
                                                             "DOSTEPNE"
                                                                 ? "DOSTEPNE"
                                                                 : attributes.dostepnosc ===
-                                                                  "REZERWACJA"
-                                                                ? "Rezerwacja"
-                                                                : "Sprzedane"}
+                                                                    "REZERWACJA"
+                                                                  ? "Rezerwacja"
+                                                                  : "Sprzedane"}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -348,7 +348,7 @@ const ApartmentDetail = () => {
                                                                 }}
                                                             >
                                                                 {formatPrice(
-                                                                    attributes.cena
+                                                                    attributes.cena,
                                                                 )}
                                                             </div>
                                                             <p
@@ -370,7 +370,7 @@ const ApartmentDetail = () => {
                                                                     <button
                                                                         onClick={() =>
                                                                             setPriceHistoryOpen(
-                                                                                !priceHistoryOpen
+                                                                                !priceHistoryOpen,
                                                                             )
                                                                         }
                                                                         style={{
@@ -398,7 +398,7 @@ const ApartmentDetail = () => {
                                                                             gap: "8px",
                                                                         }}
                                                                         onMouseOver={(
-                                                                            e
+                                                                            e,
                                                                         ) => {
                                                                             e.target.style.backgroundColor =
                                                                                 "rgba(255,255,255,0.1)";
@@ -406,7 +406,7 @@ const ApartmentDetail = () => {
                                                                                 "rgba(255,255,255,0.5)";
                                                                         }}
                                                                         onMouseOut={(
-                                                                            e
+                                                                            e,
                                                                         ) => {
                                                                             e.target.style.backgroundColor =
                                                                                 "transparent";
@@ -487,19 +487,19 @@ const ApartmentDetail = () => {
                                                                                 .sort(
                                                                                     (
                                                                                         a,
-                                                                                        b
+                                                                                        b,
                                                                                     ) =>
                                                                                         new Date(
-                                                                                            b.data
+                                                                                            b.data,
                                                                                         ) -
                                                                                         new Date(
-                                                                                            a.data
-                                                                                        )
+                                                                                            a.data,
+                                                                                        ),
                                                                                 )
                                                                                 .map(
                                                                                     (
                                                                                         entry,
-                                                                                        index
+                                                                                        index,
                                                                                     ) => (
                                                                                         <div
                                                                                             key={
@@ -528,14 +528,14 @@ const ApartmentDetail = () => {
                                                                                                 }}
                                                                                             >
                                                                                                 {new Date(
-                                                                                                    entry.data
+                                                                                                    entry.data,
                                                                                                 ).toLocaleDateString(
                                                                                                     "pl-PL",
                                                                                                     {
                                                                                                         year: "numeric",
                                                                                                         month: "long",
                                                                                                         day: "numeric",
-                                                                                                    }
+                                                                                                    },
                                                                                                 )}
                                                                                             </span>
                                                                                             <span
@@ -548,11 +548,11 @@ const ApartmentDetail = () => {
                                                                                                 }}
                                                                                             >
                                                                                                 {formatPrice(
-                                                                                                    entry.cena
+                                                                                                    entry.cena,
                                                                                                 )}
                                                                                             </span>
                                                                                         </div>
-                                                                                    )
+                                                                                    ),
                                                                                 )}
                                                                         </div>
                                                                     </div>
@@ -654,7 +654,7 @@ const ApartmentDetail = () => {
                                                             }}
                                                         >
                                                             {formatFloor(
-                                                                attributes.kondygnacja
+                                                                attributes.kondygnacja,
                                                             )}
                                                         </div>
                                                         <p
@@ -739,24 +739,24 @@ const ApartmentDetail = () => {
                                                             onClick={() => {
                                                                 const imageUrl =
                                                                     attributes.karta_mieszkania.url.startsWith(
-                                                                        "http"
+                                                                        "http",
                                                                     )
                                                                         ? attributes
                                                                               .karta_mieszkania
                                                                               .url
                                                                         : `${STRAPI_URL}${attributes.karta_mieszkania.url}`;
                                                                 setLightboxImages(
-                                                                    [imageUrl]
+                                                                    [imageUrl],
                                                                 );
                                                                 setCurrentImageIndex(
-                                                                    0
+                                                                    0,
                                                                 );
                                                                 setLightboxOpen(
-                                                                    true
+                                                                    true,
                                                                 );
                                                             }}
                                                             onMouseOver={(
-                                                                e
+                                                                e,
                                                             ) => {
                                                                 e.currentTarget.style.transform =
                                                                     "scale(1.02)";
@@ -773,7 +773,7 @@ const ApartmentDetail = () => {
                                                             <img
                                                                 src={
                                                                     attributes.karta_mieszkania.url.startsWith(
-                                                                        "http"
+                                                                        "http",
                                                                     )
                                                                         ? attributes
                                                                               .karta_mieszkania
@@ -888,7 +888,7 @@ const ApartmentDetail = () => {
                                                                         }}
                                                                     >
                                                                         {formatPrice(
-                                                                            parkingPrice
+                                                                            parkingPrice,
                                                                         )}
                                                                     </span>
                                                                 </div>
@@ -935,7 +935,7 @@ const ApartmentDetail = () => {
                                                                         }}
                                                                     >
                                                                         {formatPrice(
-                                                                            storagePrice
+                                                                            storagePrice,
                                                                         )}
                                                                     </span>
                                                                 </div>
@@ -991,11 +991,11 @@ const ApartmentDetail = () => {
                                                                     }}
                                                                     onClick={() =>
                                                                         openLightbox(
-                                                                            index
+                                                                            index,
                                                                         )
                                                                     }
                                                                     onMouseOver={(
-                                                                        e
+                                                                        e,
                                                                     ) => {
                                                                         e.currentTarget.style.transform =
                                                                             "scale(1.05)";
@@ -1003,7 +1003,7 @@ const ApartmentDetail = () => {
                                                                             "0 8px 24px rgba(0,0,0,0.15)";
                                                                     }}
                                                                     onMouseOut={(
-                                                                        e
+                                                                        e,
                                                                     ) => {
                                                                         e.currentTarget.style.transform =
                                                                             "scale(1)";
@@ -1015,17 +1015,17 @@ const ApartmentDetail = () => {
                                                                         src={(() => {
                                                                             const finalUrl =
                                                                                 image.url.startsWith(
-                                                                                    "http"
+                                                                                    "http",
                                                                                 )
                                                                                     ? image.url
                                                                                     : `${STRAPI_URL}${image.url}`;
                                                                             console.log(
                                                                                 "Gallery Image URL:",
-                                                                                finalUrl
+                                                                                finalUrl,
                                                                             );
                                                                             console.log(
                                                                                 "Original image.url:",
-                                                                                image.url
+                                                                                image.url,
                                                                             );
                                                                             return finalUrl;
                                                                         })()}
@@ -1043,7 +1043,7 @@ const ApartmentDetail = () => {
                                                                         }}
                                                                     />
                                                                 </div>
-                                                            )
+                                                            ),
                                                         )}
                                                     </div>
                                                 ) : (

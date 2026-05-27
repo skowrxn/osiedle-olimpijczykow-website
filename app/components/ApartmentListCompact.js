@@ -17,8 +17,8 @@ const ApartmentListCompact = ({
     const [apartments, setApartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const parkingPrice = etap === "3" ? 50000 : 40000;
-    const storagePrice = etap === "3" ? 20000 : 15000;
+    const parkingPrice = 50000;
+    const storagePrice = 20000;
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
