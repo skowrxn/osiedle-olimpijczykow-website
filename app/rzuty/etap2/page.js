@@ -1,6 +1,7 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { buildApiUrl } from "../../lib/strapi";
 
 export default function Etap2Rzut() {
@@ -11,56 +12,59 @@ export default function Etap2Rzut() {
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const router = useRouter();
 
-    const areas = [
-        {
-            coords: [
-                2460, 460, 2457, 835, 2658, 838, 2658, 763, 3138, 759, 3138,
-                463, 2832, 462,
-            ],
-            apartmentNumber: "B0.2",
-            title: "Mieszkanie nr. B0.2",
-        },
-        {
-            coords: [
-                2099, 1712, 2099, 1913, 2148, 1916, 2148, 1985, 2165, 1985,
-                2165, 2064, 2142, 2064, 2148, 2113, 2658, 2113, 2658, 1712,
-            ],
-            apartmentNumber: "C0.4",
-            title: "Mieszkanie nr. C0.4",
-        },
-        // Unavailable areas
-        {
-            coords: [1379, 454, 606, 447, 597, 108, 1372, 112],
-            unavailable: true,
-            title: "Niedostępne",
-        },
-        {
-            coords: [610, 726, 606, 1213, 1701, 1210, 1695, 726],
-            unavailable: true,
-            title: "Niedostępne",
-        },
-        {
-            coords: [1737, 463, 1737, 835, 2086, 835, 2086, 463],
-            unavailable: true,
-            title: "Niedostępne",
-        },
-        {
-            coords: [
-                2674, 779, 2671, 1114, 2102, 1108, 2096, 1900, 2142, 1919, 2148,
-                3027, 2658, 3034, 2658, 1349, 3134, 1351, 3131, 772,
-            ],
-            unavailable: true,
-            title: "Niedostępne",
-        },
-        {
-            coords: [
-                1415, 1929, 1422, 3034, 1780, 3034, 1780, 2850, 1872, 2846,
-                1869, 1929,
-            ],
-            unavailable: true,
-            title: "Niedostępne",
-        },
-    ];
+    const areas = useMemo(
+        () => [
+            {
+                coords: [
+                    2460, 460, 2457, 835, 2658, 838, 2658, 763, 3138, 759, 3138,
+                    463, 2832, 462,
+                ],
+                apartmentNumber: "B0.2",
+                title: "Mieszkanie nr. B0.2",
+            },
+            {
+                coords: [
+                    2099, 1712, 2099, 1913, 2148, 1916, 2148, 1985, 2165, 1985,
+                    2165, 2064, 2142, 2064, 2148, 2113, 2658, 2113, 2658, 1712,
+                ],
+                apartmentNumber: "C0.4",
+                title: "Mieszkanie nr. C0.4",
+            },
+            // Unavailable areas
+            {
+                coords: [1379, 454, 606, 447, 597, 108, 1372, 112],
+                unavailable: true,
+                title: "Niedostępne",
+            },
+            {
+                coords: [610, 726, 606, 1213, 1701, 1210, 1695, 726],
+                unavailable: true,
+                title: "Niedostępne",
+            },
+            {
+                coords: [1737, 463, 1737, 835, 2086, 835, 2086, 463],
+                unavailable: true,
+                title: "Niedostępne",
+            },
+            {
+                coords: [
+                    2674, 779, 2671, 1114, 2102, 1108, 2096, 1900, 2142, 1919,
+                    2148, 3027, 2658, 3034, 2658, 1349, 3134, 1351, 3131, 772,
+                ],
+                unavailable: true,
+                title: "Niedostępne",
+            },
+            {
+                coords: [
+                    1415, 1929, 1422, 3034, 1780, 3034, 1780, 2850, 1872, 2846,
+                    1869, 1929,
+                ],
+                unavailable: true,
+                title: "Niedostępne",
+            },
+        ],
+        [],
+    );
 
     // Fetch apartment data by number
     const getApartmentDataByNumber = async (apartmentNumber) => {
@@ -69,7 +73,7 @@ export default function Etap2Rzut() {
                 buildApiUrl("apartments", {
                     "filters[numer][$eq]": apartmentNumber,
                     "filters[etap][$eq]": "etap2",
-                })
+                }),
             );
             const data = await response.json();
             if (data.data && data.data.length > 0) {
@@ -88,7 +92,7 @@ export default function Etap2Rzut() {
             const data = {};
             for (const area of areas) {
                 const apartment = await getApartmentDataByNumber(
-                    area.apartmentNumber
+                    area.apartmentNumber,
                 );
                 if (apartment) {
                     data[area.apartmentNumber] = apartment;
@@ -97,7 +101,7 @@ export default function Etap2Rzut() {
             setApartmentData(data);
         };
         loadApartmentData();
-    }, []);
+    }, [areas]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -115,7 +119,7 @@ export default function Etap2Rzut() {
             const scaleX = canvas.width / originalWidth;
             const scaleY = canvas.height / originalHeight;
             return coords.map((coord, index) =>
-                index % 2 === 0 ? coord * scaleX : coord * scaleY
+                index % 2 === 0 ? coord * scaleX : coord * scaleY,
             );
         };
 
@@ -215,7 +219,7 @@ export default function Etap2Rzut() {
                         router.push(`/apartment/${apartment.documentId}`);
                     } else {
                         alert(
-                            `Nie znaleziono mieszkania ${area.apartmentNumber}`
+                            `Nie znaleziono mieszkania ${area.apartmentNumber}`,
                         );
                     }
                     break;
@@ -240,7 +244,7 @@ export default function Etap2Rzut() {
             canvas.removeEventListener("mousemove", handleMouseMove);
             canvas.removeEventListener("click", handleClick);
         };
-    }, [hoveredArea]);
+    }, [hoveredArea, apartmentData, areas, router]);
 
     return (
         <div className="home wp-singular page-template">
@@ -293,7 +297,9 @@ export default function Etap2Rzut() {
                                         boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                                     }}
                                 >
-                                    <option value={0}>Kondygnacja 0 (Parter)</option>
+                                    <option value={0}>
+                                        Kondygnacja 0 (Parter)
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -306,15 +312,18 @@ export default function Etap2Rzut() {
                                 margin: "0 auto",
                             }}
                         >
-                            <img
+                            <Image
                                 ref={imageRef}
                                 src="/img/rzuty/rzut-etap2-0.png"
-                                alt="Rzut kondygnacji etap 2"
+                                alt="Rzut kondygnacji"
+                                width={900}
+                                height={600}
                                 style={{
                                     display: "block",
                                     width: "100%",
                                     height: "auto",
                                 }}
+                                unoptimized
                             />
                             <canvas
                                 ref={canvasRef}
@@ -432,15 +441,15 @@ export default function Etap2Rzut() {
                                                             "DOSTEPNE"
                                                                 ? "#28a745"
                                                                 : apartmentData[
-                                                                      areas[
-                                                                          hoveredArea
-                                                                      ]
-                                                                          .apartmentNumber
-                                                                  ]
-                                                                      .dostepnosc ===
-                                                                  "REZERWACJA"
-                                                                ? "#ffc107"
-                                                                : "#dc3545",
+                                                                        areas[
+                                                                            hoveredArea
+                                                                        ]
+                                                                            .apartmentNumber
+                                                                    ]
+                                                                        .dostepnosc ===
+                                                                    "REZERWACJA"
+                                                                  ? "#ffc107"
+                                                                  : "#dc3545",
                                                     }}
                                                 ></div>
                                                 <span
@@ -452,12 +461,14 @@ export default function Etap2Rzut() {
                                                     ].dostepnosc === "DOSTEPNE"
                                                         ? "Dostępne"
                                                         : apartmentData[
-                                                              areas[hoveredArea]
-                                                                  .apartmentNumber
-                                                          ].dostepnosc ===
-                                                          "REZERWACJA"
-                                                        ? "Rezerwacja"
-                                                        : "Sprzedane"}
+                                                                areas[
+                                                                    hoveredArea
+                                                                ]
+                                                                    .apartmentNumber
+                                                            ].dostepnosc ===
+                                                            "REZERWACJA"
+                                                          ? "Rezerwacja"
+                                                          : "Sprzedane"}
                                                 </span>
                                             </div>
                                             {apartmentData[
@@ -477,12 +488,12 @@ export default function Etap2Rzut() {
                                                             style: "currency",
                                                             currency: "PLN",
                                                             minimumFractionDigits: 0,
-                                                        }
+                                                        },
                                                     ).format(
                                                         apartmentData[
                                                             areas[hoveredArea]
                                                                 .apartmentNumber
-                                                        ].cena
+                                                        ].cena,
                                                     )}
                                                 </div>
                                             )}

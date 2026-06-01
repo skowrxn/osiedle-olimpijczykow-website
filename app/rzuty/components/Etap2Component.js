@@ -1,6 +1,7 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { buildApiUrl } from "../../lib/strapi";
 import Lightbox from "../../components/Lightbox";
 
@@ -15,7 +16,7 @@ export default function Etap2Component() {
     const [lightboxImages, setLightboxImages] = useState([]);
     const router = useRouter();
 
-    const areas = [
+    const areas = useMemo(() => [
         {
             coords: [
                 2460, 460, 2457, 835, 2658, 838, 2658, 763, 3138, 759, 3138,
@@ -61,7 +62,7 @@ export default function Etap2Component() {
             unavailable: true,
             title: "Niedostępne",
         },
-    ];
+    ], []);
 
     // Fetch apartment data by number
     const getApartmentDataByNumber = async (apartmentNumber) => {
@@ -102,7 +103,7 @@ export default function Etap2Component() {
             setIsLoadingData(false);
         };
         loadApartmentData();
-    }, []);
+    }, [areas]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -245,7 +246,7 @@ export default function Etap2Component() {
             canvas.removeEventListener("mousemove", handleMouseMove);
             canvas.removeEventListener("click", handleClick);
         };
-    }, [hoveredArea, areas]);
+    }, [hoveredArea, apartmentData, areas, router]);
 
     return (
         <section style={{ padding: "60px 20px", backgroundColor: "#fff" }}>
@@ -307,15 +308,18 @@ export default function Etap2Component() {
                         margin: "0 auto",
                     }}
                 >
-                    <img
+                    <Image
                         ref={imageRef}
                         src="/img/rzuty/rzut-etap2-0.png"
-                        alt="Rzut kondygnacji etap 2"
+                        alt="Rzut kondygnacji"
+                        width={900}
+                        height={600}
                         style={{
                             display: "block",
                             width: "100%",
                             height: "auto",
                         }}
+                        unoptimized
                     />
                     <canvas
                         ref={canvasRef}
@@ -554,15 +558,18 @@ export default function Etap2Component() {
                                 "0 2px 8px rgba(0,0,0,0.05)";
                         }}
                     >
-                        <img
+                        <Image
                             src="/img/garaz2.png"
                             alt="Rzut garażu - Etap 2"
+                            width={900}
+                            height={600}
                             style={{
                                 maxWidth: "100%",
                                 height: "auto",
                                 borderRadius: "8px",
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                             }}
+                            unoptimized
                         />
                     </div>
                 </div>

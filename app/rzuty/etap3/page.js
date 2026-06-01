@@ -1,6 +1,7 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { buildApiUrl } from "../../lib/strapi";
 
 export default function Etap3Rzut() {
@@ -23,7 +24,10 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 0.1",
                 },
                 {
-                    coords: [1592, 1389, 1592, 1630, 1613, 1632, 1615, 1704, 2115, 1704, 2117, 1391],
+                    coords: [
+                        1592, 1389, 1592, 1630, 1613, 1632, 1615, 1704, 2115,
+                        1704, 2117, 1391,
+                    ],
                     apartmentNumber: "0.2",
                     title: "Mieszkanie nr. 0.2",
                 },
@@ -48,12 +52,18 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 0.6",
                 },
                 {
-                    coords: [791, 738, 793, 1088, 1314, 1088, 1314, 1067, 1349, 1067, 1349, 738],
+                    coords: [
+                        791, 738, 793, 1088, 1314, 1088, 1314, 1067, 1349, 1067,
+                        1349, 738,
+                    ],
                     apartmentNumber: "0.7",
                     title: "Mieszkanie nr. 0.7",
                 },
                 {
-                    coords: [791, 1105, 793, 1205, 409, 1207, 409, 1703, 969, 1705, 971, 1105, 953, 1105],
+                    coords: [
+                        791, 1105, 793, 1205, 409, 1207, 409, 1703, 969, 1705,
+                        971, 1105, 953, 1105,
+                    ],
                     apartmentNumber: "0.8",
                     title: "Mieszkanie nr. 0.8",
                 },
@@ -69,12 +79,18 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 1.9",
                 },
                 {
-                    coords: [1563, 1335, 1566, 1569, 1589, 1569, 1589, 1643, 2066, 1643, 2066, 1338],
+                    coords: [
+                        1563, 1335, 1566, 1569, 1589, 1569, 1589, 1643, 2066,
+                        1643, 2066, 1338,
+                    ],
                     apartmentNumber: "1.10",
                     title: "Mieszkanie nr. 1.10",
                 },
                 {
-                    coords: [1563, 981, 1566, 1321, 2068, 1321, 2066, 1132, 2154, 1134, 2154, 986],
+                    coords: [
+                        1563, 981, 1566, 1321, 2068, 1321, 2066, 1132, 2154,
+                        1134, 2154, 986,
+                    ],
                     apartmentNumber: "1.11",
                     title: "Mieszkanie nr. 1.11",
                 },
@@ -99,7 +115,10 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 1.15",
                 },
                 {
-                    coords: [969, 1067, 971, 1641, 432, 1641, 434, 1462, 346, 1462, 346, 1338, 432, 1333, 429, 1164, 804, 1162, 797, 1067],
+                    coords: [
+                        969, 1067, 971, 1641, 432, 1641, 434, 1462, 346, 1462,
+                        346, 1338, 432, 1333, 429, 1164, 804, 1162, 797, 1067,
+                    ],
                     apartmentNumber: "1.16",
                     title: "Mieszkanie nr. 1.16",
                 },
@@ -120,12 +139,18 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 2.18",
                 },
                 {
-                    coords: [1563, 1335, 1566, 1569, 1589, 1569, 1589, 1643, 2066, 1643, 2066, 1338],
+                    coords: [
+                        1563, 1335, 1566, 1569, 1589, 1569, 1589, 1643, 2066,
+                        1643, 2066, 1338,
+                    ],
                     apartmentNumber: "2.19",
                     title: "Mieszkanie nr. 2.19",
                 },
                 {
-                    coords: [1563, 981, 1566, 1321, 2068, 1321, 2066, 1132, 2154, 1134, 2154, 986],
+                    coords: [
+                        1563, 981, 1566, 1321, 2068, 1321, 2066, 1132, 2154,
+                        1134, 2154, 986,
+                    ],
                     apartmentNumber: "2.20",
                     title: "Mieszkanie nr. 2.20",
                 },
@@ -150,7 +175,10 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 2.24",
                 },
                 {
-                    coords: [969, 1067, 971, 1641, 432, 1641, 434, 1462, 346, 1462, 346, 1338, 432, 1333, 429, 1164, 804, 1162, 797, 1067],
+                    coords: [
+                        969, 1067, 971, 1641, 432, 1641, 434, 1462, 346, 1462,
+                        346, 1338, 432, 1333, 429, 1164, 804, 1162, 797, 1067,
+                    ],
                     apartmentNumber: "2.26",
                     title: "Mieszkanie nr. 2.26",
                 },
@@ -166,7 +194,10 @@ export default function Etap3Rzut() {
             title: "Kondygnacja 3 (Piętro 3)",
             areas: [
                 {
-                    coords: [1415, 1688, 1417, 2021, 1810, 2023, 1812, 1961, 2108, 1961, 2108, 1686, 2108, 1353, 1473, 1351, 1473, 1684],
+                    coords: [
+                        1415, 1688, 1417, 2021, 1810, 2023, 1812, 1961, 2108,
+                        1961, 2108, 1686, 2108, 1353, 1473, 1351, 1473, 1684,
+                    ],
                     apartmentNumber: "3.27",
                     title: "Mieszkanie nr. 3.27",
                 },
@@ -176,17 +207,26 @@ export default function Etap3Rzut() {
                     title: "Mieszkanie nr. 3.28",
                 },
                 {
-                    coords: [1470, 135, 1473, 599, 1584, 597, 1584, 967, 2108, 967, 2108, 403, 1988, 403, 1988, 137],
+                    coords: [
+                        1470, 135, 1473, 599, 1584, 597, 1584, 967, 2108, 967,
+                        2108, 403, 1988, 403, 1988, 137,
+                    ],
                     apartmentNumber: "3.29",
                     title: "Mieszkanie nr. 3.29",
                 },
                 {
-                    coords: [1309, 1052, 782, 1050, 782, 403, 930, 405, 932, 137, 1452, 135, 1456, 685, 1339, 687, 1339, 1031, 1309, 1031],
+                    coords: [
+                        1309, 1052, 782, 1050, 782, 403, 930, 405, 932, 137,
+                        1452, 135, 1456, 685, 1339, 687, 1339, 1031, 1309, 1031,
+                    ],
                     apartmentNumber: "3.30",
                     title: "Mieszkanie nr. 3.30",
                 },
                 {
-                    coords: [784, 1068, 784, 1168, 403, 1172, 401, 1332, 461, 1336, 465, 1669, 1456, 1669, 1454, 1352, 964, 1352, 964, 1068],
+                    coords: [
+                        784, 1068, 784, 1168, 403, 1172, 401, 1332, 461, 1336,
+                        465, 1669, 1456, 1669, 1454, 1352, 964, 1352, 964, 1068,
+                    ],
                     apartmentNumber: "3.31",
                     title: "Mieszkanie nr. 3.31",
                 },
@@ -194,7 +234,10 @@ export default function Etap3Rzut() {
         },
     };
 
-    const areas = floorData[selectedFloor].areas;
+    const areas = useMemo(
+        () => floorData[selectedFloor].areas,
+        [selectedFloor],
+    );
 
     // Fetch apartment data by number
     const getApartmentDataByNumber = async (apartmentNumber) => {
@@ -203,7 +246,7 @@ export default function Etap3Rzut() {
                 buildApiUrl("apartments", {
                     "filters[numer][$eq]": apartmentNumber,
                     "filters[etap][$eq]": "etap3",
-                })
+                }),
             );
             const data = await response.json();
             if (data.data && data.data.length > 0) {
@@ -223,7 +266,7 @@ export default function Etap3Rzut() {
             for (const area of areas) {
                 if (!area.unavailable) {
                     const apartment = await getApartmentDataByNumber(
-                        area.apartmentNumber
+                        area.apartmentNumber,
                     );
                     if (apartment) {
                         data[area.apartmentNumber] = apartment;
@@ -233,7 +276,7 @@ export default function Etap3Rzut() {
             setApartmentData(data);
         };
         loadApartmentData();
-    }, [selectedFloor]);
+    }, [selectedFloor, areas]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -251,7 +294,7 @@ export default function Etap3Rzut() {
             const scaleX = canvas.width / originalWidth;
             const scaleY = canvas.height / originalHeight;
             return coords.map((coord, index) =>
-                index % 2 === 0 ? coord * scaleX : coord * scaleY
+                index % 2 === 0 ? coord * scaleX : coord * scaleY,
             );
         };
 
@@ -351,7 +394,7 @@ export default function Etap3Rzut() {
                         router.push(`/apartment/${apartment.documentId}`);
                     } else {
                         alert(
-                            `Nie znaleziono mieszkania ${area.apartmentNumber}`
+                            `Nie znaleziono mieszkania ${area.apartmentNumber}`,
                         );
                     }
                     break;
@@ -376,7 +419,7 @@ export default function Etap3Rzut() {
             canvas.removeEventListener("mousemove", handleMouseMove);
             canvas.removeEventListener("click", handleClick);
         };
-    }, [hoveredArea]);
+    }, [hoveredArea, selectedFloor, areas, apartmentData, router]);
 
     return (
         <div className="home wp-singular page-template">
@@ -408,7 +451,11 @@ export default function Etap3Rzut() {
                             <div style={{ maxWidth: "400px", width: "100%" }}>
                                 <select
                                     value={selectedFloor}
-                                    onChange={(e) => setSelectedFloor(parseInt(e.target.value))}
+                                    onChange={(e) =>
+                                        setSelectedFloor(
+                                            parseInt(e.target.value),
+                                        )
+                                    }
                                     style={{
                                         width: "100%",
                                         padding: "18px 24px",
@@ -431,11 +478,13 @@ export default function Etap3Rzut() {
                                     }}
                                     onMouseEnter={(e) => {
                                         e.target.style.borderColor = "#333";
-                                        e.target.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                                        e.target.style.boxShadow =
+                                            "0 4px 12px rgba(0,0,0,0.1)";
                                     }}
                                     onMouseLeave={(e) => {
                                         e.target.style.borderColor = "#e0e0e0";
-                                        e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
+                                        e.target.style.boxShadow =
+                                            "0 2px 8px rgba(0,0,0,0.05)";
                                     }}
                                 >
                                     {Object.keys(floorData).map((floor) => (
@@ -455,15 +504,18 @@ export default function Etap3Rzut() {
                                 margin: "0 auto",
                             }}
                         >
-                            <img
+                            <Image
                                 ref={imageRef}
                                 src={floorData[selectedFloor].image}
                                 alt={`Rzut kondygnacji ${floorData[selectedFloor].title}`}
+                                width={900}
+                                height={600}
                                 style={{
                                     display: "block",
                                     width: "100%",
                                     height: "auto",
                                 }}
+                                unoptimized
                             />
                             <canvas
                                 ref={canvasRef}
@@ -581,15 +633,15 @@ export default function Etap3Rzut() {
                                                             "DOSTEPNE"
                                                                 ? "#28a745"
                                                                 : apartmentData[
-                                                                      areas[
-                                                                          hoveredArea
-                                                                      ]
-                                                                          .apartmentNumber
-                                                                  ]
-                                                                      .dostepnosc ===
-                                                                  "REZERWACJA"
-                                                                ? "#ffc107"
-                                                                : "#dc3545",
+                                                                        areas[
+                                                                            hoveredArea
+                                                                        ]
+                                                                            .apartmentNumber
+                                                                    ]
+                                                                        .dostepnosc ===
+                                                                    "REZERWACJA"
+                                                                  ? "#ffc107"
+                                                                  : "#dc3545",
                                                     }}
                                                 ></div>
                                                 <span
@@ -601,12 +653,14 @@ export default function Etap3Rzut() {
                                                     ].dostepnosc === "DOSTEPNE"
                                                         ? "Dostpne"
                                                         : apartmentData[
-                                                              areas[hoveredArea]
-                                                                  .apartmentNumber
-                                                          ].dostepnosc ===
-                                                          "REZERWACJA"
-                                                        ? "Rezerwacja"
-                                                        : "Sprzedane"}
+                                                                areas[
+                                                                    hoveredArea
+                                                                ]
+                                                                    .apartmentNumber
+                                                            ].dostepnosc ===
+                                                            "REZERWACJA"
+                                                          ? "Rezerwacja"
+                                                          : "Sprzedane"}
                                                 </span>
                                             </div>
                                             {apartmentData[
@@ -626,12 +680,12 @@ export default function Etap3Rzut() {
                                                             style: "currency",
                                                             currency: "PLN",
                                                             minimumFractionDigits: 0,
-                                                        }
+                                                        },
                                                     ).format(
                                                         apartmentData[
                                                             areas[hoveredArea]
                                                                 .apartmentNumber
-                                                        ].cena
+                                                        ].cena,
                                                     )}
                                                 </div>
                                             )}

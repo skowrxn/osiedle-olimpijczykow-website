@@ -1,6 +1,7 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { buildApiUrl } from "../../lib/strapi";
 import Lightbox from "../../components/Lightbox";
 
@@ -237,7 +238,10 @@ export default function Etap3Component() {
         },
     };
 
-    const areas = floorData[selectedFloor].areas;
+    const areas = useMemo(
+        () => floorData[selectedFloor].areas,
+        [selectedFloor],
+    );
 
     // Fetch apartment data by number
     const getApartmentDataByNumber = async (apartmentNumber) => {
@@ -246,7 +250,7 @@ export default function Etap3Component() {
                 buildApiUrl("apartments", {
                     "filters[numer][$eq]": apartmentNumber,
                     "filters[etap][$eq]": "etap3",
-                })
+                }),
             );
             const data = await response.json();
             if (data.data && data.data.length > 0) {
@@ -270,7 +274,7 @@ export default function Etap3Component() {
             for (const area of areas) {
                 if (!area.unavailable) {
                     const apartment = await getApartmentDataByNumber(
-                        area.apartmentNumber
+                        area.apartmentNumber,
                     );
                     if (apartment) {
                         data[area.apartmentNumber] = apartment;
@@ -281,7 +285,7 @@ export default function Etap3Component() {
             setIsLoadingData(false);
         };
         loadApartmentData();
-    }, [selectedFloor]);
+    }, [selectedFloor, areas]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -299,7 +303,7 @@ export default function Etap3Component() {
             const scaleX = canvas.width / originalWidth;
             const scaleY = canvas.height / originalHeight;
             return coords.map((coord, index) =>
-                index % 2 === 0 ? coord * scaleX : coord * scaleY
+                index % 2 === 0 ? coord * scaleX : coord * scaleY,
             );
         };
 
@@ -399,7 +403,7 @@ export default function Etap3Component() {
                         router.push(`/apartment/${apartment.documentId}`);
                     } else {
                         alert(
-                            `Nie znaleziono mieszkania ${area.apartmentNumber}`
+                            `Nie znaleziono mieszkania ${area.apartmentNumber}`,
                         );
                     }
                     break;
@@ -424,7 +428,7 @@ export default function Etap3Component() {
             canvas.removeEventListener("mousemove", handleMouseMove);
             canvas.removeEventListener("click", handleClick);
         };
-    }, [hoveredArea, selectedFloor, areas]);
+    }, [hoveredArea, selectedFloor, areas, apartmentData, router]);
 
     return (
         <section style={{ padding: "60px 20px", backgroundColor: "#fff" }}>
@@ -503,15 +507,18 @@ export default function Etap3Component() {
                         margin: "0 auto",
                     }}
                 >
-                    <img
+                    <Image
                         ref={imageRef}
                         src={floorData[selectedFloor].image}
                         alt={`Rzut kondygnacji ${floorData[selectedFloor].title}`}
+                        width={900}
+                        height={600}
                         style={{
                             display: "block",
                             width: "100%",
                             height: "auto",
                         }}
+                        unoptimized
                     />
                     <canvas
                         ref={canvasRef}
@@ -563,9 +570,7 @@ export default function Etap3Component() {
                                 </div>
                             </div>
                         ) : isLoadingData ||
-                          !apartmentData[
-                              areas[hoveredArea].apartmentNumber
-                          ] ? (
+                          !apartmentData[areas[hoveredArea].apartmentNumber] ? (
                             // Loading spinner gdy dane się ładują
                             <div
                                 style={{
@@ -654,12 +659,12 @@ export default function Etap3Component() {
                                                 ].dostepnosc === "DOSTEPNE"
                                                     ? "#28a745"
                                                     : apartmentData[
-                                                          areas[hoveredArea]
-                                                              .apartmentNumber
-                                                      ].dostepnosc ===
-                                                      "REZERWACJA"
-                                                    ? "#ffc107"
-                                                    : "#dc3545",
+                                                            areas[hoveredArea]
+                                                                .apartmentNumber
+                                                        ].dostepnosc ===
+                                                        "REZERWACJA"
+                                                      ? "#ffc107"
+                                                      : "#dc3545",
                                         }}
                                     ></div>
                                     <span style={{ fontSize: "12px" }}>
@@ -668,11 +673,11 @@ export default function Etap3Component() {
                                         ].dostepnosc === "DOSTEPNE"
                                             ? "Dostępne"
                                             : apartmentData[
-                                                  areas[hoveredArea]
-                                                      .apartmentNumber
-                                              ].dostepnosc === "REZERWACJA"
-                                            ? "Rezerwacja"
-                                            : "Sprzedane"}
+                                                    areas[hoveredArea]
+                                                        .apartmentNumber
+                                                ].dostepnosc === "REZERWACJA"
+                                              ? "Rezerwacja"
+                                              : "Sprzedane"}
                                     </span>
                                 </div>
                                 {apartmentData[
@@ -693,7 +698,7 @@ export default function Etap3Component() {
                                             apartmentData[
                                                 areas[hoveredArea]
                                                     .apartmentNumber
-                                            ].cena
+                                            ].cena,
                                         )}
                                     </div>
                                 )}
@@ -748,15 +753,18 @@ export default function Etap3Component() {
                                 "0 2px 8px rgba(0,0,0,0.05)";
                         }}
                     >
-                        <img
+                        <Image
                             src="/img/garaz3.png"
                             alt="Rzut garażu - Etap 3"
+                            width={900}
+                            height={600}
                             style={{
                                 maxWidth: "100%",
                                 height: "auto",
                                 borderRadius: "8px",
                                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                             }}
+                            unoptimized
                         />
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Etap2Component from "./components/Etap2Component";
 import Etap3Component from "./components/Etap3Component";
 
@@ -21,9 +22,12 @@ export default function RzutyPage() {
             }`}
             onClick={onClick}
         >
-            <img
+            <Image
                 src={imageSrc}
                 alt={title}
+                width={800}
+                height={400}
+                unoptimized
                 style={{
                     width: "100%",
                     height: "400px",
