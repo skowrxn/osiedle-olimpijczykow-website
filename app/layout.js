@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import CookieBanner from "./components/CookieBanner";
 import StrapiKeepAlive from "./components/StrapiKeepAlive";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
 import Head from "next/head";
@@ -55,6 +56,7 @@ export default function RootLayout({ children }) {
                 <Navigation />
                 <main>{children}</main>
                 <Footer />
+                <CookieBanner />
             </body>
         </html>
     );
