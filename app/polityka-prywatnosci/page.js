@@ -401,7 +401,7 @@ export default function PolitykaPrywatnosci() {
                                 </li>
                                 <li>
                                     <strong>usunięcia</strong> danych („prawo do
-                                    bycia zapomnianym") (art. 17 RODO),
+                                    bycia zapomnianym&rdquo;) (art. 17 RODO),
                                 </li>
                                 <li>
                                     <strong>ograniczenia przetwarzania</strong>{" "}
