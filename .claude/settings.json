@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.\\\\node_modules\\\\.bin\\\\next build *)",
+      "Bash(git -C \"c:\\\\Users\\\\bskowron\\\\projekty\\\\mana\\\\olimpijczykow\\\\osiedle-olimpijczykow-website\" diff)"
+    ]
+  }
+}
