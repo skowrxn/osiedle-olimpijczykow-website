@@ -19,11 +19,22 @@ const mapStatus = (s) => {
   return "SPRZEDANE";
 };
 
+const parsePrivateKey = (raw) => {
+  if (!raw) return raw;
+  // Strip surrounding quotes (Vercel UI may include them if copied from .env.local)
+  let key = raw.trim();
+  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
+    key = key.slice(1, -1);
+  }
+  // Convert literal \n escape sequences to actual newlines
+  return key.replace(/\\n/g, "\n");
+};
+
 const makeAuth = () =>
   new google.auth.GoogleAuth({
     credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim(),
+      private_key: parsePrivateKey(process.env.GOOGLE_PRIVATE_KEY),
     },
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
