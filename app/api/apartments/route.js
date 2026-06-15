@@ -51,7 +51,10 @@ export async function GET(request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Apartments API error:", error);
-    return NextResponse.json({ error: "Nie udało się pobrać danych mieszkań" }, { status: 500 });
+    console.error("Apartments API error:", error?.message, error?.stack);
+    return NextResponse.json(
+      { error: error?.message || "Unknown error", details: error?.stack },
+      { status: 500 }
+    );
   }
 }
