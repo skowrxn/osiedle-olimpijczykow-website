@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import Lightbox from "../../components/Lightbox";
 import ContactSection from "../../components/ContactSection";
 import { getApartmentById, PARKING_PRICE, STORAGE_PRICE } from "../../lib/apartments";
@@ -393,6 +394,8 @@ const ApartmentDetail = () => {
                                                             <div
                                                                 key={index}
                                                                 style={{
+                                                                    position: "relative",
+                                                                    height: "200px",
                                                                     cursor: "pointer",
                                                                     borderRadius: "8px",
                                                                     overflow: "hidden",
@@ -409,15 +412,13 @@ const ApartmentDetail = () => {
                                                                     e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
                                                                 }}
                                                             >
-                                                                <img
+                                                                <Image
                                                                     src={imgPath}
                                                                     alt={`Mieszkanie ${apartment.numer} – zdjęcie ${index + 1}`}
-                                                                    style={{
-                                                                        width: "100%",
-                                                                        height: "200px",
-                                                                        objectFit: "cover",
-                                                                        display: "block",
-                                                                    }}
+                                                                    fill
+                                                                    sizes="(max-width: 768px) 50vw, 25vw"
+                                                                    style={{ objectFit: "cover" }}
+                                                                    priority={index === 0}
                                                                 />
                                                             </div>
                                                         ))}
