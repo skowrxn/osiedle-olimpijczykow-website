@@ -19,23 +19,25 @@ const mapStatus = (s) => {
   return "SPRZEDANE";
 };
 
-const parsePrivateKey = (raw) => {
-  if (!raw) return raw;
-  // Strip surrounding quotes (Vercel UI may include them if copied from .env.local)
-  let key = raw.trim();
+const getCredentials = () => {
+  const b64 = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  if (b64) {
+    return JSON.parse(Buffer.from(b64, "base64").toString("utf8"));
+  }
+  // Fallback: separate env vars (legacy)
+  let key = (process.env.GOOGLE_PRIVATE_KEY || "").trim();
   if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
     key = key.slice(1, -1);
   }
-  // Convert literal \n escape sequences to actual newlines
-  return key.replace(/\\n/g, "\n");
+  return {
+    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim(),
+    private_key: key.replace(/\\n/g, "\n"),
+  };
 };
 
 const makeAuth = () =>
   new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim(),
-      private_key: parsePrivateKey(process.env.GOOGLE_PRIVATE_KEY),
-    },
+    credentials: getCredentials(),
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
 
