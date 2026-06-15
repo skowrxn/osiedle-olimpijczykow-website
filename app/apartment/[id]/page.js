@@ -1,133 +1,39 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Lightbox from "../../components/Lightbox";
 import ContactSection from "../../components/ContactSection";
-import { buildApiUrl, STRAPI_URL } from "../../lib/strapi";
+import { getApartmentById, PARKING_PRICE, STORAGE_PRICE } from "../../lib/apartments";
 
 const ApartmentDetail = () => {
-    const params = useParams();
-    const { id } = params;
-    const [apartment, setApartment] = useState(null);
+    const { id } = useParams();
+    const apartment = getApartmentById(id);
+
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [priceHistoryOpen, setPriceHistoryOpen] = useState(false);
-    const parkingPrice = 50000;
-    const storagePrice = 20000;
 
-    useEffect(() => {
-        const fetchApartment = async () => {
-            if (!id) return;
-
-            setLoading(true);
-            setError(null);
-
-            try {
-                console.log("Fetching apartment with documentId:", id);
-
-                // Spróbujmy kilku różnych endpointów
-                let apiUrl = buildApiUrl("apartments", {
-                    "filters[documentId][$eq]": id,
-                    populate: "*",
-                });
-
-                let response = await fetch(apiUrl);
-
-                console.log(
-                    "First attempt - Response status:",
-                    response.status,
-                );
-
-                // Jeśli nie zadziała, spróbuj innego endpointu
-                if (!response.ok) {
-                    console.log("Trying alternative endpoint...");
-                    apiUrl = buildApiUrl(`apartments/${id}`, {
-                        populate: "*",
-                    });
-                    response = await fetch(apiUrl);
-                    console.log(
-                        "Second attempt - Response status:",
-                        response.status,
-                    );
-                }
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.log("Error response:", errorText);
-                    throw new Error("Mieszkanie nie zostało znalezione");
-                }
-
-                const result = await response.json();
-                console.log("API Result:", result);
-
-                // Jeśli to jest wynik z filtrem, weź pierwszy element z array
-                if (result.data && Array.isArray(result.data)) {
-                    setApartment(result.data[0]);
-                } else {
-                    setApartment(result.data);
-                }
-            } catch (err) {
-                setError(err.message);
-                console.error("Error fetching apartment:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchApartment();
-    }, [id]);
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat("pl-PL", {
+    const formatPrice = (price) =>
+        new Intl.NumberFormat("pl-PL", {
             style: "currency",
             currency: "PLN",
             minimumFractionDigits: 0,
         }).format(price);
+
+    const formatFloor = (floor) => (floor === 0 ? "Parter" : `${floor}. piętro`);
+
+    const openLightbox = (images, index = 0) => {
+        setLightboxImages(images);
+        setCurrentImageIndex(index);
+        setLightboxOpen(true);
     };
-
-    const formatFloor = (floor) => {
-        return floor === 0 ? "Parter" : `${floor}. piętro`;
-    };
-
-    if (loading) {
-        return (
-            <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                <p className="mt-4 text-neutral-600">
-                    Ładowanie szczegółów mieszkania...
-                </p>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="text-center py-12">
-                <p className="text-red-600 text-lg">Błąd: {error}</p>
-                <p className="text-neutral-600 mt-2">
-                    Sprawdź czy Strapi CMS jest uruchomione na porcie 1337
-                </p>
-                <Link
-                    href="/"
-                    className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
-                >
-                    Powrót do strony głównej
-                </Link>
-            </div>
-        );
-    }
 
     if (!apartment) {
         return (
             <div className="text-center py-12">
-                <p className="text-neutral-600 text-lg">
-                    Mieszkanie nie zostało znalezione.
-                </p>
+                <p className="text-neutral-600 text-lg">Mieszkanie nie zostało znalezione.</p>
                 <Link
                     href="/"
                     className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors"
@@ -138,48 +44,49 @@ const ApartmentDetail = () => {
         );
     }
 
-    // W Strapi 5.x dane przychodzą bezpośrednio w obiekcie, nie w attributes
-    const attributes = apartment;
-    const hasImages = attributes.zdjecia && attributes.zdjecia.length > 0;
+    const etapNumber = apartment.etap.replace("etap", "");
+    const hasImages = apartment.zdjecia && apartment.zdjecia.length > 0;
 
-    // Extract etap number from the enum value (etap2 -> 2, etap3 -> 3)
-    const etapNumber = attributes.etap.replace("etap", "");
+    const statusBg = apartment.dostepnosc === "DOSTEPNE"
+        ? "rgba(34, 197, 94, 0.1)"
+        : apartment.dostepnosc === "REZERWACJA"
+        ? "rgba(255, 193, 7, 0.1)"
+        : "rgba(239, 68, 68, 0.1)";
 
-    const openLightbox = (index) => {
-        const imageUrls = attributes.zdjecia.map((img) => {
-            const finalUrl = img.url.startsWith("http")
-                ? img.url
-                : `${STRAPI_URL}${img.url}`;
-            console.log("Image URL:", finalUrl);
-            console.log("Original img.url:", img.url);
-            console.log("STRAPI_URL:", STRAPI_URL);
-            return finalUrl;
-        });
-        setLightboxImages(imageUrls);
-        setCurrentImageIndex(index);
-        setLightboxOpen(true);
-    };
+    const statusBorder = apartment.dostepnosc === "DOSTEPNE"
+        ? "rgba(34, 197, 94, 0.2)"
+        : apartment.dostepnosc === "REZERWACJA"
+        ? "rgba(255, 193, 7, 0.2)"
+        : "rgba(239, 68, 68, 0.2)";
+
+    const statusDot = apartment.dostepnosc === "DOSTEPNE"
+        ? "#22c55e"
+        : apartment.dostepnosc === "REZERWACJA"
+        ? "#ffc107"
+        : "#ef4444";
+
+    const statusLabel = apartment.dostepnosc === "DOSTEPNE"
+        ? "Dostępne"
+        : apartment.dostepnosc === "REZERWACJA"
+        ? "Rezerwacja"
+        : "Sprzedane";
+
+    const statusTextColor = apartment.dostepnosc === "DOSTEPNE"
+        ? "#15803d"
+        : apartment.dostepnosc === "REZERWACJA"
+        ? "#ffc107"
+        : "#dc2626";
 
     return (
         <div className="home wp-singular page-template elementor-default elementor-page">
             <main id="main" className="site-main">
                 <div>
-                    <section
-                        style={{
-                            padding: "60px 0",
-                            backgroundColor: "#f8f9fa",
-                        }}
-                    >
+                    <section style={{ padding: "60px 0", backgroundColor: "#f8f9fa" }}>
                         <div className="elementor-container">
                             <div className="elementor-column elementor-col-100">
                                 <div className="elementor-widget-wrap elementor-element-populated">
-                                    {/* Navigation breadcrumb */}
-                                    <div
-                                        style={{
-                                            marginBottom: "40px",
-                                            paddingLeft: "20px",
-                                        }}
-                                    >
+                                    {/* Breadcrumb */}
+                                    <div style={{ marginBottom: "40px", paddingLeft: "20px" }}>
                                         <Link
                                             href={`/etap${etapNumber}`}
                                             style={{
@@ -189,16 +96,10 @@ const ApartmentDetail = () => {
                                                 fontWeight: "500",
                                                 transition: "color 0.3s ease",
                                             }}
-                                            onMouseOver={(e) =>
-                                                (e.target.style.color = "#666")
-                                            }
-                                            onMouseOut={(e) =>
-                                                (e.target.style.color =
-                                                    "#232323")
-                                            }
+                                            onMouseOver={(e) => (e.target.style.color = "#666")}
+                                            onMouseOut={(e) => (e.target.style.color = "#232323")}
                                         >
-                                            ← Powrót do listy mieszkań Etap{" "}
-                                            {etapNumber}
+                                            ← Powrót do listy mieszkań Etap {etapNumber}
                                         </Link>
                                     </div>
 
@@ -207,8 +108,7 @@ const ApartmentDetail = () => {
                                         style={{
                                             backgroundColor: "white",
                                             borderRadius: "0px",
-                                            boxShadow:
-                                                "0 4px 20px rgba(0,0,0,0.1)",
+                                            boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                                             overflow: "hidden",
                                         }}
                                     >
@@ -220,12 +120,12 @@ const ApartmentDetail = () => {
                                             }}
                                             className="apartment-detail-grid"
                                         >
-                                            {/* Left side - Apartment info */}
+                                            {/* Left – info */}
                                             <div
                                                 style={{
                                                     backgroundColor: "#232323",
                                                     color: "white",
-                                                    padding: "0px 40px",
+                                                    padding: "40px 40px",
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     justifyContent: "start",
@@ -235,395 +135,106 @@ const ApartmentDetail = () => {
                                                     style={{
                                                         fontSize: "42px",
                                                         fontWeight: "600",
-                                                        marginBottom: "30px",
-                                                        fontFamily:
-                                                            "Poppins, sans-serif",
+                                                        marginBottom: "20px",
+                                                        fontFamily: "Poppins, sans-serif",
                                                         lineHeight: "1.2",
                                                     }}
                                                 >
-                                                    Mieszkanie{" "}
-                                                    {attributes.rooms}-pokojowe
+                                                    Mieszkanie {apartment.numer}
                                                 </h1>
 
-                                                <div>
+                                                {/* Status badge */}
+                                                <div
+                                                    style={{
+                                                        display: "inline-flex",
+                                                        alignItems: "center",
+                                                        marginBottom: "20px",
+                                                        gap: "8px",
+                                                        padding: "8px 24px",
+                                                        borderRadius: "20px",
+                                                        backgroundColor: statusBg,
+                                                        border: `1px solid ${statusBorder}`,
+                                                        width: "fit-content",
+                                                    }}
+                                                >
                                                     <div
                                                         style={{
-                                                            display:
-                                                                "inline-flex",
-                                                            alignItems:
-                                                                "center",
-                                                            marginBottom:
-                                                                "20px",
-                                                            gap: "8px",
-                                                            padding: "8px 24px",
-                                                            borderRadius:
-                                                                "20px",
-                                                            backgroundColor:
-                                                                attributes.dostepnosc ===
-                                                                "DOSTEPNE"
-                                                                    ? "rgba(34, 197, 94, 0.1)"
-                                                                    : attributes.dostepnosc ===
-                                                                        "REZERWACJA"
-                                                                      ? "rgba(255, 193, 7, 0.1)"
-                                                                      : "rgba(239, 68, 68, 0.1)",
-                                                            border: `1px solid ${
-                                                                attributes.dostepnosc ===
-                                                                "DOSTEPNE"
-                                                                    ? "rgba(34, 197, 94, 0.2)"
-                                                                    : attributes.dostepnosc ===
-                                                                        "REZERWACJA"
-                                                                      ? "rgba(255, 193, 7, 0.2)"
-                                                                      : "rgba(239, 68, 68, 0.2)"
-                                                            }`,
+                                                            width: "8px",
+                                                            height: "8px",
+                                                            borderRadius: "50%",
+                                                            backgroundColor: statusDot,
+                                                        }}
+                                                    />
+                                                    <span
+                                                        style={{
+                                                            fontSize: "14px",
+                                                            fontWeight: "600",
+                                                            fontFamily: "Poppins, sans-serif",
+                                                            color: statusTextColor,
                                                         }}
                                                     >
-                                                        <div
-                                                            style={{
-                                                                width: "8px",
-                                                                height: "8px",
-                                                                borderRadius:
-                                                                    "50%",
-                                                                backgroundColor:
-                                                                    attributes.dostepnosc ===
-                                                                    "DOSTEPNE"
-                                                                        ? "#22c55e"
-                                                                        : attributes.dostepnosc ===
-                                                                            "REZERWACJA"
-                                                                          ? "#ffc107"
-                                                                          : "#ef4444",
-                                                            }}
-                                                        ></div>
-                                                        <span
-                                                            style={{
-                                                                fontSize:
-                                                                    "14px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
-                                                                color:
-                                                                    attributes.dostepnosc ===
-                                                                    "DOSTEPNE"
-                                                                        ? "#15803d"
-                                                                        : attributes.dostepnosc ===
-                                                                            "REZERWACJA"
-                                                                          ? "#ffc107"
-                                                                          : "#dc2626",
-                                                            }}
-                                                        >
-                                                            {attributes.dostepnosc ===
-                                                            "DOSTEPNE"
-                                                                ? "DOSTEPNE"
-                                                                : attributes.dostepnosc ===
-                                                                    "REZERWACJA"
-                                                                  ? "Rezerwacja"
-                                                                  : "Sprzedane"}
-                                                        </span>
-                                                    </div>
+                                                        {statusLabel}
+                                                    </span>
                                                 </div>
 
-                                                {/* Cena - wyświetl tylko jeśli mieszkanie DOSTEPNE lub w rezerwacji i cena > 0 */}
-                                                {(attributes.dostepnosc ===
-                                                    "DOSTEPNE" ||
-                                                    attributes.dostepnosc ===
-                                                        "REZERWACJA") &&
-                                                    attributes.cena > 0 && (
-                                                        <div
-                                                            style={{
-                                                                marginBottom:
-                                                                    "40px",
-                                                            }}
-                                                        >
+                                                {/* Price */}
+                                                {(apartment.dostepnosc === "DOSTEPNE" ||
+                                                    apartment.dostepnosc === "REZERWACJA") &&
+                                                    apartment.cena > 0 && (
+                                                        <div style={{ marginBottom: "30px" }}>
                                                             <div
                                                                 style={{
-                                                                    fontSize:
-                                                                        "48px",
-                                                                    fontWeight:
-                                                                        "700",
+                                                                    fontSize: "48px",
+                                                                    fontWeight: "700",
                                                                     color: "white",
-                                                                    marginBottom:
-                                                                        "8px",
-                                                                    fontFamily:
-                                                                        "Poppins, sans-serif",
+                                                                    marginBottom: "8px",
+                                                                    fontFamily: "Poppins, sans-serif",
                                                                 }}
                                                             >
-                                                                {formatPrice(
-                                                                    attributes.cena,
-                                                                )}
+                                                                {formatPrice(apartment.cena)}
                                                             </div>
-                                                            <p
-                                                                style={{
-                                                                    color: "#d1d5db",
-                                                                    fontSize:
-                                                                        "16px",
-                                                                }}
-                                                            >
+                                                            <p style={{ color: "#d1d5db", fontSize: "16px" }}>
                                                                 Cena mieszkania
                                                             </p>
-
-                                                            {/* Przycisk Historia Cen */}
-                                                            {attributes.historia_cen &&
-                                                                attributes
-                                                                    .historia_cen
-                                                                    .length >
-                                                                    0 && (
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            setPriceHistoryOpen(
-                                                                                !priceHistoryOpen,
-                                                                            )
-                                                                        }
-                                                                        style={{
-                                                                            marginTop:
-                                                                                "15px",
-                                                                            backgroundColor:
-                                                                                "transparent",
-                                                                            border: "1px solid rgba(255,255,255,0.3)",
-                                                                            color: "white",
-                                                                            padding:
-                                                                                "8px 16px",
-                                                                            borderRadius:
-                                                                                "20px",
-                                                                            cursor: "pointer",
-                                                                            fontSize:
-                                                                                "14px",
-                                                                            fontFamily:
-                                                                                "Poppins, sans-serif",
-                                                                            transition:
-                                                                                "all 0.3s ease",
-                                                                            display:
-                                                                                "flex",
-                                                                            alignItems:
-                                                                                "center",
-                                                                            gap: "8px",
-                                                                        }}
-                                                                        onMouseOver={(
-                                                                            e,
-                                                                        ) => {
-                                                                            e.target.style.backgroundColor =
-                                                                                "rgba(255,255,255,0.1)";
-                                                                            e.target.style.borderColor =
-                                                                                "rgba(255,255,255,0.5)";
-                                                                        }}
-                                                                        onMouseOut={(
-                                                                            e,
-                                                                        ) => {
-                                                                            e.target.style.backgroundColor =
-                                                                                "transparent";
-                                                                            e.target.style.borderColor =
-                                                                                "rgba(255,255,255,0.3)";
-                                                                        }}
-                                                                    >
-                                                                        <svg
-                                                                            width="16"
-                                                                            height="16"
-                                                                            viewBox="0 0 24 24"
-                                                                            fill="none"
-                                                                            stroke="currentColor"
-                                                                            strokeWidth="2"
-                                                                            style={{
-                                                                                transform:
-                                                                                    priceHistoryOpen
-                                                                                        ? "rotate(180deg)"
-                                                                                        : "rotate(0deg)",
-                                                                                transition:
-                                                                                    "transform 0.3s ease",
-                                                                            }}
-                                                                        >
-                                                                            <polyline points="6 9 12 15 18 9" />
-                                                                        </svg>
-                                                                        Historia
-                                                                        cen
-                                                                    </button>
-                                                                )}
-
-                                                            {/* Lista historii cen */}
-                                                            {priceHistoryOpen &&
-                                                                attributes.historia_cen &&
-                                                                attributes
-                                                                    .historia_cen
-                                                                    .length >
-                                                                    0 && (
-                                                                    <div
-                                                                        style={{
-                                                                            marginTop:
-                                                                                "20px",
-                                                                            padding:
-                                                                                "20px",
-                                                                            backgroundColor:
-                                                                                "rgba(255,255,255,0.05)",
-                                                                            borderRadius:
-                                                                                "8px",
-                                                                            border: "1px solid rgba(255,255,255,0.1)",
-                                                                        }}
-                                                                    >
-                                                                        <h4
-                                                                            style={{
-                                                                                fontSize:
-                                                                                    "16px",
-                                                                                fontWeight:
-                                                                                    "600",
-                                                                                marginBottom:
-                                                                                    "15px",
-                                                                                color: "#d1d5db",
-                                                                                fontFamily:
-                                                                                    "Poppins, sans-serif",
-                                                                            }}
-                                                                        >
-                                                                            Historia
-                                                                            zmian
-                                                                            cen
-                                                                        </h4>
-                                                                        <div
-                                                                            style={{
-                                                                                display:
-                                                                                    "flex",
-                                                                                flexDirection:
-                                                                                    "column",
-                                                                                gap: "10px",
-                                                                            }}
-                                                                        >
-                                                                            {attributes.historia_cen
-                                                                                .sort(
-                                                                                    (
-                                                                                        a,
-                                                                                        b,
-                                                                                    ) =>
-                                                                                        new Date(
-                                                                                            b.data,
-                                                                                        ) -
-                                                                                        new Date(
-                                                                                            a.data,
-                                                                                        ),
-                                                                                )
-                                                                                .map(
-                                                                                    (
-                                                                                        entry,
-                                                                                        index,
-                                                                                    ) => (
-                                                                                        <div
-                                                                                            key={
-                                                                                                index
-                                                                                            }
-                                                                                            style={{
-                                                                                                display:
-                                                                                                    "flex",
-                                                                                                justifyContent:
-                                                                                                    "space-between",
-                                                                                                alignItems:
-                                                                                                    "center",
-                                                                                                padding:
-                                                                                                    "10px 15px",
-                                                                                                backgroundColor:
-                                                                                                    "rgba(255,255,255,0.03)",
-                                                                                                borderRadius:
-                                                                                                    "6px",
-                                                                                            }}
-                                                                                        >
-                                                                                            <span
-                                                                                                style={{
-                                                                                                    fontSize:
-                                                                                                        "14px",
-                                                                                                    color: "#9ca3af",
-                                                                                                }}
-                                                                                            >
-                                                                                                {new Date(
-                                                                                                    entry.data,
-                                                                                                ).toLocaleDateString(
-                                                                                                    "pl-PL",
-                                                                                                    {
-                                                                                                        year: "numeric",
-                                                                                                        month: "long",
-                                                                                                        day: "numeric",
-                                                                                                    },
-                                                                                                )}
-                                                                                            </span>
-                                                                                            <span
-                                                                                                style={{
-                                                                                                    fontSize:
-                                                                                                        "18px",
-                                                                                                    fontWeight:
-                                                                                                        "600",
-                                                                                                    color: "white",
-                                                                                                }}
-                                                                                            >
-                                                                                                {formatPrice(
-                                                                                                    entry.cena,
-                                                                                                )}
-                                                                                            </span>
-                                                                                        </div>
-                                                                                    ),
-                                                                                )}
-                                                                        </div>
-                                                                    </div>
-                                                                )}
                                                         </div>
                                                     )}
 
+                                                {/* Stats grid */}
                                                 <div
                                                     style={{
                                                         display: "grid",
-                                                        gridTemplateColumns:
-                                                            "1fr 1fr",
+                                                        gridTemplateColumns: "1fr 1fr",
                                                         gap: "30px",
-                                                        marginBottom: "40px",
+                                                        marginBottom: "30px",
                                                     }}
                                                 >
                                                     <div>
                                                         <div
                                                             style={{
-                                                                fontSize:
-                                                                    "32px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "8px",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
+                                                                fontSize: "32px",
+                                                                fontWeight: "600",
+                                                                marginBottom: "8px",
+                                                                fontFamily: "Poppins, sans-serif",
                                                             }}
                                                         >
-                                                            {
-                                                                attributes.liczba_pokoi
-                                                            }
+                                                            {apartment.liczba_pokoi}
                                                         </div>
-                                                        <p
-                                                            style={{
-                                                                color: "#d1d5db",
-                                                                fontSize:
-                                                                    "14px",
-                                                            }}
-                                                        >
-                                                            {attributes.liczba_pokoi ===
-                                                            1
-                                                                ? "pokój"
-                                                                : "pokoje"}
+                                                        <p style={{ color: "#d1d5db", fontSize: "14px" }}>
+                                                            {apartment.liczba_pokoi === 1 ? "pokój" : "pokoje"}
                                                         </p>
                                                     </div>
                                                     <div>
                                                         <div
                                                             style={{
-                                                                fontSize:
-                                                                    "32px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "8px",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
+                                                                fontSize: "32px",
+                                                                fontWeight: "600",
+                                                                marginBottom: "8px",
+                                                                fontFamily: "Poppins, sans-serif",
                                                             }}
                                                         >
-                                                            {
-                                                                attributes.powierzchnia
-                                                            }{" "}
-                                                            m²
+                                                            {apartment.powierzchnia} m²
                                                         </div>
-                                                        <p
-                                                            style={{
-                                                                color: "#d1d5db",
-                                                                fontSize:
-                                                                    "14px",
-                                                            }}
-                                                        >
+                                                        <p style={{ color: "#d1d5db", fontSize: "14px" }}>
                                                             powierzchnia
                                                         </p>
                                                     </div>
@@ -632,94 +243,56 @@ const ApartmentDetail = () => {
                                                 <div
                                                     style={{
                                                         display: "grid",
-                                                        gridTemplateColumns:
-                                                            attributes.elementy_dodatkowe
-                                                                ? "1fr 1fr"
-                                                                : "1fr",
+                                                        gridTemplateColumns: apartment.elementy_dodatkowe ? "1fr 1fr" : "1fr",
                                                         gap: "30px",
-                                                        marginBottom: "40px",
+                                                        marginBottom: "30px",
                                                     }}
                                                 >
                                                     <div>
                                                         <div
                                                             style={{
-                                                                fontSize:
-                                                                    "24px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "8px",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
+                                                                fontSize: "24px",
+                                                                fontWeight: "600",
+                                                                marginBottom: "8px",
+                                                                fontFamily: "Poppins, sans-serif",
                                                             }}
                                                         >
-                                                            {formatFloor(
-                                                                attributes.kondygnacja,
-                                                            )}
+                                                            {formatFloor(apartment.kondygnacja)}
                                                         </div>
-                                                        <p
-                                                            style={{
-                                                                color: "#d1d5db",
-                                                                fontSize:
-                                                                    "14px",
-                                                            }}
-                                                        >
+                                                        <p style={{ color: "#d1d5db", fontSize: "14px" }}>
                                                             lokalizacja
                                                         </p>
                                                     </div>
-
-                                                    {attributes.elementy_dodatkowe && (
+                                                    {apartment.elementy_dodatkowe && (
                                                         <div>
                                                             <div
                                                                 style={{
-                                                                    fontSize:
-                                                                        "24px",
-                                                                    lineHeight:
-                                                                        "45px",
-                                                                    fontWeight:
-                                                                        "600",
-                                                                    marginBottom:
-                                                                        "8px",
-                                                                    fontFamily:
-                                                                        "Poppins, sans-serif",
+                                                                    fontSize: "24px",
+                                                                    lineHeight: "45px",
+                                                                    fontWeight: "600",
+                                                                    marginBottom: "8px",
+                                                                    fontFamily: "Poppins, sans-serif",
                                                                 }}
                                                             >
-                                                                {
-                                                                    attributes.elementy_dodatkowe
-                                                                }
+                                                                {apartment.elementy_dodatkowe}
                                                             </div>
-                                                            <p
-                                                                style={{
-                                                                    color: "#d1d5db",
-                                                                    fontSize:
-                                                                        "14px",
-                                                                }}
-                                                            >
-                                                                dodatkowe
-                                                                elementy
+                                                            <p style={{ color: "#d1d5db", fontSize: "14px" }}>
+                                                                dodatkowe elementy
                                                             </p>
                                                         </div>
                                                     )}
                                                 </div>
 
-                                                {attributes.karta_mieszkania && (
-                                                    <div
-                                                        style={{
-                                                            marginBottom:
-                                                                "40px",
-                                                        }}
-                                                    >
+                                                {/* Apartment card */}
+                                                {apartment.karta && (
+                                                    <div style={{ marginBottom: "30px" }}>
                                                         <h3
                                                             style={{
-                                                                fontSize:
-                                                                    "20px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "15px",
+                                                                fontSize: "20px",
+                                                                fontWeight: "600",
+                                                                marginBottom: "15px",
                                                                 color: "white",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
+                                                                fontFamily: "Poppins, sans-serif",
                                                             }}
                                                         >
                                                             Karta mieszkania
@@ -727,238 +300,81 @@ const ApartmentDetail = () => {
                                                         <div
                                                             style={{
                                                                 cursor: "pointer",
-                                                                borderRadius:
-                                                                    "8px",
-                                                                overflow:
-                                                                    "hidden",
-                                                                boxShadow:
-                                                                    "0 4px 12px rgba(0,0,0,0.2)",
-                                                                transition:
-                                                                    "transform 0.3s ease, box-shadow 0.3s ease",
+                                                                borderRadius: "8px",
+                                                                overflow: "hidden",
+                                                                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                                                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
                                                             }}
-                                                            onClick={() => {
-                                                                const imageUrl =
-                                                                    attributes.karta_mieszkania.url.startsWith(
-                                                                        "http",
-                                                                    )
-                                                                        ? attributes
-                                                                              .karta_mieszkania
-                                                                              .url
-                                                                        : `${STRAPI_URL}${attributes.karta_mieszkania.url}`;
-                                                                setLightboxImages(
-                                                                    [imageUrl],
-                                                                );
-                                                                setCurrentImageIndex(
-                                                                    0,
-                                                                );
-                                                                setLightboxOpen(
-                                                                    true,
-                                                                );
-                                                            }}
-                                                            onMouseOver={(
-                                                                e,
-                                                            ) => {
-                                                                e.currentTarget.style.transform =
-                                                                    "scale(1.02)";
-                                                                e.currentTarget.style.boxShadow =
-                                                                    "0 8px 24px rgba(0,0,0,0.3)";
+                                                            onClick={() => openLightbox([apartment.karta], 0)}
+                                                            onMouseOver={(e) => {
+                                                                e.currentTarget.style.transform = "scale(1.02)";
+                                                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
                                                             }}
                                                             onMouseOut={(e) => {
-                                                                e.currentTarget.style.transform =
-                                                                    "scale(1)";
-                                                                e.currentTarget.style.boxShadow =
-                                                                    "0 4px 12px rgba(0,0,0,0.2)";
+                                                                e.currentTarget.style.transform = "scale(1)";
+                                                                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
                                                             }}
                                                         >
                                                             <img
-                                                                src={
-                                                                    attributes.karta_mieszkania.url.startsWith(
-                                                                        "http",
-                                                                    )
-                                                                        ? attributes
-                                                                              .karta_mieszkania
-                                                                              .url
-                                                                        : `${STRAPI_URL}${attributes.karta_mieszkania.url}`
-                                                                }
+                                                                src={apartment.karta}
                                                                 alt="Karta mieszkania"
-                                                                style={{
-                                                                    width: "100%",
-                                                                    height: "auto",
-                                                                    display:
-                                                                        "block",
-                                                                }}
+                                                                style={{ width: "100%", height: "auto", display: "block" }}
                                                             />
                                                         </div>
                                                     </div>
                                                 )}
 
-                                                {attributes.opis && (
-                                                    <div
-                                                        style={{
-                                                            marginBottom:
-                                                                "40px",
-                                                        }}
-                                                    >
-                                                        <h3
-                                                            style={{
-                                                                fontSize:
-                                                                    "20px",
-                                                                fontWeight:
-                                                                    "600",
-                                                                marginBottom:
-                                                                    "15px",
-                                                                fontFamily:
-                                                                    "Poppins, sans-serif",
-                                                            }}
-                                                        >
-                                                            Opis
-                                                        </h3>
-                                                        <p
-                                                            style={{
-                                                                color: "#d1d5db",
-                                                                lineHeight:
-                                                                    "1.6",
-                                                                fontSize:
-                                                                    "16px",
-                                                            }}
-                                                        >
-                                                            {attributes.opis}
-                                                        </p>
-                                                    </div>
-                                                )}
-
-                                                {/* Elementy Dodatkowe */}
-                                                {(parkingPrice ||
-                                                    storagePrice) && (
-                                                    <div
-                                                        style={{
-                                                            marginBottom:
-                                                                "40px",
-                                                        }}
-                                                    >
+                                                {/* Additional elements pricing */}
+                                                <div style={{ marginBottom: "30px" }}>
+                                                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                                                         <div
                                                             style={{
                                                                 display: "flex",
-                                                                flexDirection:
-                                                                    "column",
-                                                                gap: "12px",
+                                                                justifyContent: "space-between",
+                                                                alignItems: "center",
+                                                                padding: "16px 20px",
+                                                                backgroundColor: "rgba(255,255,255,0.05)",
+                                                                borderRadius: "8px",
+                                                                border: "1px solid rgba(255,255,255,0.1)",
                                                             }}
                                                         >
-                                                            {parkingPrice && (
-                                                                <div
-                                                                    style={{
-                                                                        display:
-                                                                            "flex",
-                                                                        justifyContent:
-                                                                            "space-between",
-                                                                        alignItems:
-                                                                            "center",
-                                                                        padding:
-                                                                            "16px 20px",
-                                                                        backgroundColor:
-                                                                            "rgba(255,255,255,0.05)",
-                                                                        borderRadius:
-                                                                            "8px",
-                                                                        border: "1px solid rgba(255,255,255,0.1)",
-                                                                    }}
-                                                                >
-                                                                    <span
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "16px",
-                                                                            color: "#d1d5db",
-                                                                            fontFamily:
-                                                                                "Poppins, sans-serif",
-                                                                        }}
-                                                                    >
-                                                                        Miejsce
-                                                                        postojowe
-                                                                        w garażu
-                                                                        podziemnym
-                                                                    </span>
-                                                                    <span
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "20px",
-                                                                            fontWeight:
-                                                                                "600",
-                                                                            color: "white",
-                                                                            fontFamily:
-                                                                                "Poppins, sans-serif",
-                                                                        }}
-                                                                    >
-                                                                        {formatPrice(
-                                                                            parkingPrice,
-                                                                        )}
-                                                                    </span>
-                                                                </div>
-                                                            )}
-                                                            {storagePrice && (
-                                                                <div
-                                                                    style={{
-                                                                        display:
-                                                                            "flex",
-                                                                        justifyContent:
-                                                                            "space-between",
-                                                                        alignItems:
-                                                                            "center",
-                                                                        padding:
-                                                                            "16px 20px",
-                                                                        backgroundColor:
-                                                                            "rgba(255,255,255,0.05)",
-                                                                        borderRadius:
-                                                                            "8px",
-                                                                        border: "1px solid rgba(255,255,255,0.1)",
-                                                                    }}
-                                                                >
-                                                                    <span
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "16px",
-                                                                            color: "#d1d5db",
-                                                                            fontFamily:
-                                                                                "Poppins, sans-serif",
-                                                                        }}
-                                                                    >
-                                                                        Komórka
-                                                                        lokatorska
-                                                                    </span>
-                                                                    <span
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "20px",
-                                                                            fontWeight:
-                                                                                "600",
-                                                                            color: "white",
-                                                                            fontFamily:
-                                                                                "Poppins, sans-serif",
-                                                                        }}
-                                                                    >
-                                                                        {formatPrice(
-                                                                            storagePrice,
-                                                                        )}
-                                                                    </span>
-                                                                </div>
-                                                            )}
+                                                            <span style={{ fontSize: "16px", color: "#d1d5db", fontFamily: "Poppins, sans-serif" }}>
+                                                                Miejsce postojowe w garażu podziemnym
+                                                            </span>
+                                                            <span style={{ fontSize: "20px", fontWeight: "600", color: "white", fontFamily: "Poppins, sans-serif" }}>
+                                                                {formatPrice(PARKING_PRICE)}
+                                                            </span>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                justifyContent: "space-between",
+                                                                alignItems: "center",
+                                                                padding: "16px 20px",
+                                                                backgroundColor: "rgba(255,255,255,0.05)",
+                                                                borderRadius: "8px",
+                                                                border: "1px solid rgba(255,255,255,0.1)",
+                                                            }}
+                                                        >
+                                                            <span style={{ fontSize: "16px", color: "#d1d5db", fontFamily: "Poppins, sans-serif" }}>
+                                                                Komórka lokatorska
+                                                            </span>
+                                                            <span style={{ fontSize: "20px", fontWeight: "600", color: "white", fontFamily: "Poppins, sans-serif" }}>
+                                                                {formatPrice(STORAGE_PRICE)}
+                                                            </span>
                                                         </div>
                                                     </div>
-                                                )}
+                                                </div>
                                             </div>
 
-                                            {/* Right side - Gallery */}
-                                            <div
-                                                style={{
-                                                    padding: "60px 40px",
-                                                    backgroundColor: "white",
-                                                }}
-                                            >
+                                            {/* Right – gallery */}
+                                            <div style={{ padding: "60px 40px", backgroundColor: "white" }}>
                                                 <h2
                                                     style={{
                                                         fontSize: "32px",
                                                         fontWeight: "600",
                                                         marginBottom: "30px",
-                                                        fontFamily:
-                                                            "Poppins, sans-serif",
+                                                        fontFamily: "Poppins, sans-serif",
                                                         color: "#232323",
                                                     }}
                                                 >
@@ -969,116 +385,54 @@ const ApartmentDetail = () => {
                                                     <div
                                                         style={{
                                                             display: "grid",
-                                                            gridTemplateColumns:
-                                                                "repeat(auto-fit, minmax(200px, 1fr))",
+                                                            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                                                             gap: "20px",
                                                         }}
                                                     >
-                                                        {attributes.zdjecia.map(
-                                                            (image, index) => (
-                                                                <div
-                                                                    key={index}
+                                                        {apartment.zdjecia.map((imgPath, index) => (
+                                                            <div
+                                                                key={index}
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    borderRadius: "8px",
+                                                                    overflow: "hidden",
+                                                                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                                                                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                                                }}
+                                                                onClick={() => openLightbox(apartment.zdjecia, index)}
+                                                                onMouseOver={(e) => {
+                                                                    e.currentTarget.style.transform = "scale(1.05)";
+                                                                    e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.15)";
+                                                                }}
+                                                                onMouseOut={(e) => {
+                                                                    e.currentTarget.style.transform = "scale(1)";
+                                                                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={imgPath}
+                                                                    alt={`Mieszkanie ${apartment.numer} – zdjęcie ${index + 1}`}
                                                                     style={{
-                                                                        cursor: "pointer",
-                                                                        borderRadius:
-                                                                            "8px",
-                                                                        overflow:
-                                                                            "hidden",
-                                                                        boxShadow:
-                                                                            "0 4px 12px rgba(0,0,0,0.1)",
-                                                                        transition:
-                                                                            "transform 0.3s ease, box-shadow 0.3s ease",
+                                                                        width: "100%",
+                                                                        height: "200px",
+                                                                        objectFit: "cover",
+                                                                        display: "block",
                                                                     }}
-                                                                    onClick={() =>
-                                                                        openLightbox(
-                                                                            index,
-                                                                        )
-                                                                    }
-                                                                    onMouseOver={(
-                                                                        e,
-                                                                    ) => {
-                                                                        e.currentTarget.style.transform =
-                                                                            "scale(1.05)";
-                                                                        e.currentTarget.style.boxShadow =
-                                                                            "0 8px 24px rgba(0,0,0,0.15)";
-                                                                    }}
-                                                                    onMouseOut={(
-                                                                        e,
-                                                                    ) => {
-                                                                        e.currentTarget.style.transform =
-                                                                            "scale(1)";
-                                                                        e.currentTarget.style.boxShadow =
-                                                                            "0 4px 12px rgba(0,0,0,0.1)";
-                                                                    }}
-                                                                >
-                                                                    <img
-                                                                        src={(() => {
-                                                                            const finalUrl =
-                                                                                image.url.startsWith(
-                                                                                    "http",
-                                                                                )
-                                                                                    ? image.url
-                                                                                    : `${STRAPI_URL}${image.url}`;
-                                                                            console.log(
-                                                                                "Gallery Image URL:",
-                                                                                finalUrl,
-                                                                            );
-                                                                            console.log(
-                                                                                "Original image.url:",
-                                                                                image.url,
-                                                                            );
-                                                                            return finalUrl;
-                                                                        })()}
-                                                                        alt={`Mieszkanie - zdjęcie ${
-                                                                            index +
-                                                                            1
-                                                                        }`}
-                                                                        style={{
-                                                                            width: "100%",
-                                                                            height: "200px",
-                                                                            objectFit:
-                                                                                "cover",
-                                                                            display:
-                                                                                "block",
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            ),
-                                                        )}
+                                                                />
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 ) : (
                                                     <div
                                                         style={{
                                                             textAlign: "center",
-                                                            padding:
-                                                                "60px 20px",
-                                                            backgroundColor:
-                                                                "#f8f9fa",
+                                                            padding: "60px 20px",
+                                                            backgroundColor: "#f8f9fa",
                                                             borderRadius: "8px",
                                                         }}
                                                     >
-                                                        <div
-                                                            style={{
-                                                                fontSize:
-                                                                    "64px",
-                                                                marginBottom:
-                                                                    "20px",
-                                                                color: "#9ca3af",
-                                                            }}
-                                                        >
-                                                            🏠
-                                                        </div>
-                                                        <p
-                                                            style={{
-                                                                color: "#6b7280",
-                                                                fontSize:
-                                                                    "18px",
-                                                                marginBottom:
-                                                                    "8px",
-                                                            }}
-                                                        >
-                                                            Brak zdjęć dla tego
-                                                            mieszkania
+                                                        <p style={{ color: "#6b7280", fontSize: "18px", marginBottom: "8px" }}>
+                                                            Brak wizualizacji dla tego mieszkania
                                                         </p>
                                                     </div>
                                                 )}

@@ -2,7 +2,6 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import CookieBanner from "./components/CookieBanner";
-import StrapiKeepAlive from "./components/StrapiKeepAlive";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
 import Head from "next/head";
 import Script from "next/script";
@@ -52,7 +51,6 @@ export default function RootLayout({ children }) {
                     />
                 </noscript>
                 <ServiceWorkerRegistration />
-                <StrapiKeepAlive />
                 <Navigation />
                 <main>{children}</main>
                 <Footer />
