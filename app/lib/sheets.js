@@ -95,5 +95,5 @@ const fetchAllApartments = async () => {
 export const getCachedApartments = unstable_cache(
   fetchAllApartments,
   ["apartments-sheets"],
-  { revalidate: 1800 }
+  { revalidate: 60 }
 );

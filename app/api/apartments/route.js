@@ -49,7 +49,9 @@ export async function GET(request) {
 
     if (limit) result = result.slice(0, parseInt(limit, 10));
 
-    return NextResponse.json(result);
+    return NextResponse.json(result, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     console.error("Apartments API error:", error?.message, error?.stack);
     return NextResponse.json(
