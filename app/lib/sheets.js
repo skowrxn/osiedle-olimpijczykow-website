@@ -19,8 +19,8 @@ const mapStatus = (s) => {
   return "SPRZEDANE";
 };
 
-const getSheetRows = async (spreadsheetId, range = "A:J") => {
-  const auth = new google.auth.GoogleAuth({
+const makeAuth = () =>
+  new google.auth.GoogleAuth({
     credentials: {
       client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
       private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
@@ -28,7 +28,20 @@ const getSheetRows = async (spreadsheetId, range = "A:J") => {
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });
 
-  const sheets = google.sheets({ version: "v4", auth });
+const getSheetRows = async (spreadsheetId, gid) => {
+  const sheets = google.sheets({ version: "v4", auth: makeAuth() });
+
+  // Resolve gid → sheet name (needed when data is not on the first tab)
+  const meta = await sheets.spreadsheets.get({ spreadsheetId });
+  const sheetMeta = gid != null
+    ? meta.data.sheets.find((s) => s.properties.sheetId === gid)
+    : meta.data.sheets[0];
+
+  const sheetName = sheetMeta?.properties?.title;
+  const range = sheetName ? `'${sheetName}'!A:J` : "A:J";
+
+  console.log(`[sheets] ${spreadsheetId} → tab "${sheetName}" (gid ${gid})`);
+
   const res = await sheets.spreadsheets.values.get({ spreadsheetId, range });
   return res.data.values || [];
 };
@@ -56,8 +69,8 @@ const parseRows = (rows, etap) =>
 
 const fetchAllApartments = async () => {
   const [etap2Rows, etap3Rows] = await Promise.all([
-    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP2),
-    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP3),
+    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP2, 1101068206),
+    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP3, 905977375),
   ]);
 
   return [
