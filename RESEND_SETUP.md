@@ -20,7 +20,7 @@ Formularz kontaktowy jest już zaimplementowany i gotowy do użycia. Potrzebujes
 2. Kliknij **"Create API Key"**
 3. Nadaj nazwę kluczu (np. "Osiedle Olimpijczykow Production")
 4. **Skopiuj klucz API** - będzie wyświetlony tylko raz!
-   - Format: `re_xxxxxxxxxxxxxxxxxxxxxxxxxx`
+    - Format: `re_xxxxxxxxxxxxxxxxxxxxxxxxxx`
 
 ---
 
@@ -37,6 +37,7 @@ CONTACT_EMAIL_RECIPIENT=twoj-email@przyklad.pl
 ```
 
 **WAŻNE:**
+
 - Zamień `re_TwojPrawdziwyKluczZResend` na prawdziwy klucz z Resend
 - Zamień `twoj-email@przyklad.pl` na adres email, na który mają przychodzić wiadomości z formularza
 
@@ -58,14 +59,14 @@ npm run dev
 1. Otwórz stronę w przeglądarce
 2. Przewiń do sekcji "Skontaktuj się z nami"
 3. Wypełnij formularz:
-   - Imię
-   - Email
-   - Telefon (opcjonalnie)
-   - Wiadomość
+    - Imię
+    - Email
+    - Telefon (opcjonalnie)
+    - Wiadomość
 4. Kliknij **"Wyślij"**
 5. Powinieneś zobaczyć:
-   - Komunikat sukcesu: ✓ "Wiadomość została wysłana pomyślnie!"
-   - Email na adresie w `CONTACT_EMAIL_RECIPIENT`
+    - Komunikat sukcesu: ✓ "Wiadomość została wysłana pomyślnie!"
+    - Email na adresie w `CONTACT_EMAIL_RECIPIENT`
 
 ---
 
@@ -82,6 +83,7 @@ Więcej niż wystarczające dla strony z mieszkaniami!
 ## 🎨 Wygląd emaila
 
 Email wysłany z formularza zawiera:
+
 - ✉️ Dane kontaktowe osoby wypełniającej formularz
 - 📝 Treść wiadomości w czytelnym formacie
 - 🔁 Możliwość bezpośredniej odpowiedzi (Reply-To)
