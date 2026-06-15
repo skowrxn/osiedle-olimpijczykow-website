@@ -1,20 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Lightbox from "../../components/Lightbox";
 import ContactSection from "../../components/ContactSection";
-import { getApartmentById, PARKING_PRICE, STORAGE_PRICE } from "../../lib/apartments";
+import { PARKING_PRICE, STORAGE_PRICE } from "../../lib/apartments";
 
 const ApartmentDetail = () => {
     const { id } = useParams();
-    const apartment = getApartmentById(id);
+    const [apartment, setApartment] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        if (!id) return;
+        fetch(`/api/apartments?id=${encodeURIComponent(id)}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("Błąd serwera");
+                return res.json();
+            })
+            .then((data) => {
+                setApartment(data || null);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Fetch apartment error:", err);
+                setError("Nie udało się pobrać danych mieszkania.");
+                setLoading(false);
+            });
+    }, [id]);
 
     const formatPrice = (price) =>
         new Intl.NumberFormat("pl-PL", {
@@ -30,6 +50,39 @@ const ApartmentDetail = () => {
         setCurrentImageIndex(index);
         setLightboxOpen(true);
     };
+
+    if (loading) {
+        return (
+            <div style={{ textAlign: "center", padding: "120px 0" }}>
+                <div
+                    style={{
+                        display: "inline-block",
+                        width: "48px",
+                        height: "48px",
+                        border: "4px solid #e0e0e0",
+                        borderTopColor: "#232323",
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                    }}
+                />
+                <p style={{ color: "#666", marginTop: "20px", fontSize: "18px" }}>
+                    Ładowanie…
+                </p>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center py-12">
+                <p style={{ color: "#dc3545", fontSize: "18px" }}>{error}</p>
+                <Link href="/" style={{ display: "inline-block", marginTop: "16px", color: "#232323" }}>
+                    Powrót do strony głównej
+                </Link>
+            </div>
+        );
+    }
 
     if (!apartment) {
         return (

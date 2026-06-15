@@ -1,25 +1,54 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { filterApartments, PARKING_PRICE, STORAGE_PRICE } from "../lib/apartments";
+import { PARKING_PRICE, STORAGE_PRICE } from "../lib/apartments";
 import Lightbox from "./Lightbox";
 
 const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const [apartments, setApartments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const apartments = useMemo(() => {
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (etap) params.set("etap", etap);
+
         const rooms = searchParams.get("rooms");
         const floor = searchParams.get("floor");
         const area = searchParams.get("area");
         const stage = searchParams.get("stage");
         const status = searchParams.get("status");
 
-        return filterApartments({ etap, rooms, floor, area, stage, status, limit });
+        if (rooms) params.set("rooms", rooms);
+        if (floor) params.set("floor", floor);
+        if (area) params.set("area", area);
+        if (stage && !etap) params.set("stage", stage);
+        if (status) params.set("status", status);
+        if (limit) params.set("limit", limit);
+
+        setLoading(true);
+        setError(null);
+
+        fetch(`/api/apartments?${params.toString()}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("Błąd serwera");
+                return res.json();
+            })
+            .then((data) => {
+                setApartments(Array.isArray(data) ? data : []);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Fetch apartments error:", err);
+                setError("Nie udało się pobrać listy mieszkań.");
+                setLoading(false);
+            });
     }, [etap, searchParams, limit]);
 
     const formatPrice = (price) =>
@@ -50,6 +79,36 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
         setCurrentImageIndex(0);
         setLightboxOpen(true);
     };
+
+    if (loading) {
+        return (
+            <div style={{ textAlign: "center", padding: "60px 0" }}>
+                <div
+                    style={{
+                        display: "inline-block",
+                        width: "40px",
+                        height: "40px",
+                        border: "4px solid #e0e0e0",
+                        borderTopColor: "#232323",
+                        borderRadius: "50%",
+                        animation: "spin 0.8s linear infinite",
+                    }}
+                />
+                <p style={{ color: "#666", marginTop: "16px", fontSize: "16px" }}>
+                    Ładowanie mieszkań…
+                </p>
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div style={{ textAlign: "center", padding: "40px 0" }}>
+                <p style={{ color: "#dc3545", fontSize: "18px" }}>{error}</p>
+            </div>
+        );
+    }
 
     if (apartments.length === 0) {
         return (
@@ -99,7 +158,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                             minHeight: "80px",
                         }}
                         className="apartment-item"
-                        onClick={() => router.push(`/apartment/${apartment.id}`)}
+                        onClick={() => router.push(`/apartment/${encodeURIComponent(apartment.id)}`)}
                     >
                         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                             {/* Status bar */}
@@ -185,7 +244,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    router.push(`/apartment/${apartment.id}`);
+                                    router.push(`/apartment/${encodeURIComponent(apartment.id)}`);
                                 }}
                             >
                                 Zobacz
