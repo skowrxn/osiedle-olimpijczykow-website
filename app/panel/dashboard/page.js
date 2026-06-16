@@ -93,12 +93,20 @@ export default function PanelDashboard() {
           <span style={{ fontSize: "18px", fontWeight: "700", color: "#111" }}>Panel CMS</span>
           <span style={{ fontSize: "13px", color: "#888" }}>Osiedle Olimpijczyków</span>
         </div>
-        <button
-          onClick={handleLogout}
-          style={{ padding: "7px 18px", border: "1px solid #e0e0e0", borderRadius: "7px", backgroundColor: "white", cursor: "pointer", fontSize: "13px", color: "#555", fontFamily: "inherit" }}
-        >
-          Wyloguj
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <Link
+            href="/panel/postepy"
+            style={{ fontSize: "13px", color: "#007CBA", textDecoration: "none", fontWeight: "500", padding: "7px 16px", border: "1px solid #007CBA", borderRadius: "7px" }}
+          >
+            Postępy budowy
+          </Link>
+          <button
+            onClick={handleLogout}
+            style={{ padding: "7px 18px", border: "1px solid #e0e0e0", borderRadius: "7px", backgroundColor: "white", cursor: "pointer", fontSize: "13px", color: "#555", fontFamily: "inherit" }}
+          >
+            Wyloguj
+          </button>
+        </div>
       </div>
 
       <div style={{ padding: "32px", maxWidth: "1100px", margin: "0 auto" }}>

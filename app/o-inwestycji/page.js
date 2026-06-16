@@ -1,8 +1,10 @@
 import PropertySearch from "../components/PropertySearch";
 import BoxWithIcon from "../components/BoxWithIcon";
 import Image from "next/image";
+import { getCachedProgress } from "../lib/config";
 
-export default function OInwestycji() {
+export default async function OInwestycji() {
+    const progressStage = await getCachedProgress();
     return (
         <div className="home wp-singular page-template elementor-default elementor-page">
             {/* Main Content */}
@@ -462,7 +464,7 @@ export default function OInwestycji() {
                                                         height: "20px",
                                                         borderRadius: "50%",
                                                         backgroundColor:
-                                                            index <= 1
+                                                            index <= progressStage
                                                                 ? "#333"
                                                                 : "#e0e0e0",
                                                         marginBottom: "15px",
@@ -478,11 +480,11 @@ export default function OInwestycji() {
                                                         fontFamily:
                                                             "Poppins, sans-serif",
                                                         color:
-                                                            index <= 1
+                                                            index <= progressStage
                                                                 ? "#333"
                                                                 : "#7e7e7e",
                                                         fontWeight:
-                                                            index <= 1
+                                                            index <= progressStage
                                                                 ? "600"
                                                                 : "400",
                                                         maxWidth: "110px",

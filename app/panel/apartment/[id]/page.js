@@ -3,6 +3,23 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 
+const STATUS_LABEL = { DOSTEPNE: "Dostępne", REZERWACJA: "Rezerwacja", SPRZEDANE: "Sprzedane" };
+const STATUS_COLOR = { DOSTEPNE: "#16a34a", REZERWACJA: "#d97706", SPRZEDANE: "#dc2626" };
+
+function Field({ label, value, children }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <span style={{ fontSize: "11px", color: "#999", textTransform: "uppercase", letterSpacing: "0.04em", fontWeight: "600" }}>{label}</span>
+      <span style={{ fontSize: "14px", color: "#111", fontWeight: "500" }}>{children ?? value ?? "—"}</span>
+    </div>
+  );
+}
+
+function formatPrice(n) {
+  if (!n) return "";
+  return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " zł";
+}
+
 export default function ApartmentPhotos() {
   const { id } = useParams();
   const aptId = decodeURIComponent(id);
@@ -10,6 +27,14 @@ export default function ApartmentPhotos() {
   const [apartment, setApartment] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Edit state
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+
+  // Photo state
   const [uploading, setUploading] = useState(false);
   const [uploadKarta, setUploadKarta] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -25,15 +50,73 @@ export default function ApartmentPhotos() {
     setPhotos(Array.isArray(data) ? data : []);
   }, [aptId]);
 
+  const fetchApartment = useCallback(async () => {
+    const apt = await fetch(`/api/apartments?id=${encodeURIComponent(aptId)}`).then((r) => r.json());
+    setApartment(apt);
+    return apt;
+  }, [aptId]);
+
   useEffect(() => {
-    Promise.all([
-      fetch(`/api/apartments?id=${encodeURIComponent(aptId)}`).then((r) => r.json()),
-      fetchPhotos(),
-    ]).then(([apt]) => {
-      setApartment(apt);
-      setLoading(false);
+    Promise.all([fetchApartment(), fetchPhotos()]).then(() => setLoading(false));
+  }, [fetchApartment, fetchPhotos]);
+
+  // ── Edit handlers ─────────────────────────────────────────────────────────
+
+  const startEdit = () => {
+    setEditData({
+      dostepnosc: apartment.dostepnosc || "DOSTEPNE",
+      cena: apartment.cena || "",
+      powierzchnia: apartment.powierzchnia || "",
+      liczba_pokoi: apartment.liczba_pokoi || "",
+      kondygnacja: apartment.kondygnacja ?? "",
+      elementy_dodatkowe: apartment.elementy_dodatkowe || "",
     });
-  }, [aptId, fetchPhotos]);
+    setSaveError(null);
+    setEditMode(true);
+  };
+
+  const cancelEdit = () => {
+    setEditMode(false);
+    setEditData(null);
+    setSaveError(null);
+  };
+
+  const saveEdit = async () => {
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/panel/apartment", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: aptId,
+          data: {
+            dostepnosc: editData.dostepnosc,
+            cena: editData.cena ? Number(editData.cena) : null,
+            powierzchnia: editData.powierzchnia ? Number(editData.powierzchnia) : null,
+            liczba_pokoi: editData.liczba_pokoi ? Number(editData.liczba_pokoi) : null,
+            kondygnacja: editData.kondygnacja !== "" ? Number(editData.kondygnacja) : null,
+            elementy_dodatkowe: editData.elementy_dodatkowe,
+          },
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Błąd zapisu");
+      }
+      await fetchApartment();
+      setEditMode(false);
+      setEditData(null);
+    } catch (e) {
+      setSaveError(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const setField = (key, value) => setEditData((prev) => ({ ...prev, [key]: value }));
+
+  // ── Photo handlers ────────────────────────────────────────────────────────
 
   const doUpload = async (files, isKarta = false) => {
     if (!files.length) return;
@@ -83,6 +166,17 @@ export default function ApartmentPhotos() {
   const karta = photos.find((p) => p.public_id.endsWith("/karta"));
   const gallery = photos.filter((p) => !p.public_id.endsWith("/karta"));
 
+  const inputStyle = {
+    padding: "8px 12px",
+    border: "1.5px solid #e0e0e0",
+    borderRadius: "7px",
+    fontSize: "14px",
+    fontFamily: "Poppins, sans-serif",
+    outline: "none",
+    width: "100%",
+    boxSizing: "border-box",
+  };
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f0f2f5", fontFamily: "Poppins, sans-serif" }}>
       {/* Topbar */}
@@ -112,17 +206,152 @@ export default function ApartmentPhotos() {
 
       <div style={{ padding: "32px", maxWidth: "1280px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}>
 
+        {/* ── Dane mieszkania ──────────────────────────────────────────────── */}
+        <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: editMode ? "20px" : "16px" }}>
+            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", margin: 0 }}>Dane mieszkania</h3>
+            {!loading && !editMode && (
+              <button
+                onClick={startEdit}
+                style={{ padding: "7px 18px", border: "1.5px solid #007CBA", borderRadius: "8px", backgroundColor: "white", color: "#007CBA", cursor: "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+              >
+                Edytuj
+              </button>
+            )}
+          </div>
+
+          {loading ? (
+            <div style={{ color: "#aaa", fontSize: "14px" }}>Ładowanie…</div>
+          ) : !editMode ? (
+            /* ── View mode ── */
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "28px" }}>
+              <Field label="Status">
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                  <span style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: STATUS_COLOR[apartment.dostepnosc] || "#888", display: "inline-block" }} />
+                  {STATUS_LABEL[apartment.dostepnosc] || apartment.dostepnosc}
+                </span>
+              </Field>
+              <Field label="Cena" value={formatPrice(apartment.cena) || "—"} />
+              <Field label="Powierzchnia" value={apartment.powierzchnia ? `${apartment.powierzchnia} m²` : "—"} />
+              <Field label="Pokoje" value={apartment.liczba_pokoi ?? "—"} />
+              <Field label="Kondygnacja" value={apartment.kondygnacja != null ? `K${apartment.kondygnacja}` : "—"} />
+              <Field label="Elementy dodatkowe" value={apartment.elementy_dodatkowe || "—"} />
+            </div>
+          ) : (
+            /* ── Edit mode ── */
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: "14px" }}>
+                {/* Status */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Status</label>
+                  <select
+                    value={editData.dostepnosc}
+                    onChange={(e) => setField("dostepnosc", e.target.value)}
+                    style={{ ...inputStyle, cursor: "pointer" }}
+                  >
+                    <option value="DOSTEPNE">Dostępne</option>
+                    <option value="REZERWACJA">Rezerwacja</option>
+                    <option value="SPRZEDANE">Sprzedane</option>
+                  </select>
+                </div>
+
+                {/* Cena */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Cena (zł)</label>
+                  <input
+                    type="number"
+                    value={editData.cena}
+                    onChange={(e) => setField("cena", e.target.value)}
+                    placeholder="np. 650000"
+                    style={inputStyle}
+                  />
+                </div>
+
+                {/* Powierzchnia */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Powierzchnia (m²)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={editData.powierzchnia}
+                    onChange={(e) => setField("powierzchnia", e.target.value)}
+                    placeholder="np. 62.5"
+                    style={inputStyle}
+                  />
+                </div>
+
+                {/* Pokoje */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Liczba pokoi</label>
+                  <input
+                    type="number"
+                    value={editData.liczba_pokoi}
+                    onChange={(e) => setField("liczba_pokoi", e.target.value)}
+                    placeholder="np. 3"
+                    style={inputStyle}
+                  />
+                </div>
+
+                {/* Kondygnacja */}
+                <div>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Kondygnacja</label>
+                  <input
+                    type="number"
+                    value={editData.kondygnacja}
+                    onChange={(e) => setField("kondygnacja", e.target.value)}
+                    placeholder="np. 3"
+                    style={inputStyle}
+                  />
+                </div>
+
+                {/* Elementy dodatkowe — full width */}
+                <div style={{ gridColumn: "1 / -1" }}>
+                  <label style={{ display: "block", fontSize: "11px", color: "#888", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "5px" }}>Elementy dodatkowe</label>
+                  <input
+                    type="text"
+                    value={editData.elementy_dodatkowe}
+                    onChange={(e) => setField("elementy_dodatkowe", e.target.value)}
+                    placeholder="np. parking, komórka lokatorska"
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+
+              {saveError && (
+                <div style={{ padding: "10px 14px", backgroundColor: "#fef2f2", border: "1px solid #fca5a5", borderRadius: "8px", fontSize: "13px", color: "#dc2626" }}>
+                  {saveError}
+                </div>
+              )}
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  onClick={saveEdit}
+                  disabled={saving}
+                  style={{ padding: "9px 24px", backgroundColor: saving ? "#9ca3af" : "#007CBA", color: "white", border: "none", borderRadius: "8px", cursor: saving ? "not-allowed" : "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+                >
+                  {saving ? "Zapisywanie…" : "Zapisz zmiany"}
+                </button>
+                <button
+                  onClick={cancelEdit}
+                  disabled={saving}
+                  style={{ padding: "9px 20px", backgroundColor: "white", color: "#555", border: "1px solid #e0e0e0", borderRadius: "8px", cursor: "pointer", fontSize: "13px", fontFamily: "inherit" }}
+                >
+                  Anuluj
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* ── Karta mieszkania ─────────────────────────────────────────── */}
         <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-          <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", marginBottom: "16px" }}>
-            Karta mieszkania
-          </h3>
+          <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", marginBottom: "16px" }}>Karta mieszkania</h3>
 
           {loading ? (
             <div style={{ textAlign: "center", padding: "32px", color: "#aaa" }}>Ładowanie…</div>
           ) : karta ? (
             <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", flexWrap: "wrap" }}>
-              <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", width: "220px", flexShrink: 0 }}>
+              <div style={{ borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", width: "220px", flexShrink: 0 }}>
                 <img src={karta.secure_url} alt="Karta" style={{ width: "100%", display: "block" }} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -155,7 +384,6 @@ export default function ApartmentPhotos() {
             </div>
           )}
 
-          {/* Uploading karta indicator */}
           {uploading && uploadKarta && (
             <div style={{ marginTop: "12px", color: "#007CBA", fontSize: "13px" }}>
               Przesyłanie karty… {uploadProgress}%
@@ -225,38 +453,24 @@ export default function ApartmentPhotos() {
           </div>
 
           {/* Gallery grid */}
-          {loading ? null : gallery.length === 0 ? (
+          {!loading && (gallery.length === 0 ? (
             <div style={{ textAlign: "center", padding: "32px", color: "#aaa", backgroundColor: "#fafafa", borderRadius: "8px" }}>
               Brak zdjęć w galerii — dodaj pierwsze powyżej
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
               {gallery.map((photo) => (
-                <div
-                  key={photo.public_id}
-                  style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", aspectRatio: "4/3" }}
-                >
-                  <img
-                    src={photo.secure_url}
-                    alt=""
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
+                <div key={photo.public_id} style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", aspectRatio: "4/3" }}>
+                  <img src={photo.secure_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                   <button
                     onClick={() => handleDelete(photo.public_id)}
                     disabled={deleting === photo.public_id}
                     style={{
-                      position: "absolute",
-                      top: "8px",
-                      right: "8px",
+                      position: "absolute", top: "8px", right: "8px",
                       backgroundColor: deleting === photo.public_id ? "rgba(150,150,150,0.9)" : "rgba(220,38,38,0.88)",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "6px",
-                      padding: "5px 12px",
+                      color: "white", border: "none", borderRadius: "6px", padding: "5px 12px",
                       cursor: deleting === photo.public_id ? "not-allowed" : "pointer",
-                      fontSize: "12px",
-                      fontWeight: "600",
-                      fontFamily: "inherit",
+                      fontSize: "12px", fontWeight: "600", fontFamily: "inherit",
                     }}
                   >
                     {deleting === photo.public_id ? "…" : "Usuń"}
@@ -264,7 +478,7 @@ export default function ApartmentPhotos() {
                 </div>
               ))}
             </div>
-          )}
+          ))}
         </div>
 
       </div>
