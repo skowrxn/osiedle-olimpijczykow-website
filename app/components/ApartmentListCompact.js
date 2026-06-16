@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { PARKING_PRICE, STORAGE_PRICE } from "../lib/apartments";
 import Lightbox from "./Lightbox";
 
 const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) => {
@@ -15,6 +14,18 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [parkingPrice, setParkingPrice] = useState(50000);
+    const [storagePrice, setStoragePrice] = useState(20000);
+
+    useEffect(() => {
+        fetch("/api/prices")
+            .then((r) => r.json())
+            .then((d) => {
+                if (d.parkingPrice) setParkingPrice(d.parkingPrice);
+                if (d.storagePrice) setStoragePrice(d.storagePrice);
+            })
+            .catch(() => {});
+    }, []);
 
     useEffect(() => {
         const params = new URLSearchParams();
@@ -293,7 +304,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                             Miejsce postojowe w garażu podziemnym
                         </span>
                         <span style={{ fontSize: "22px", fontWeight: "600", color: "#232323", fontFamily: "Poppins, sans-serif" }}>
-                            {formatPrice(PARKING_PRICE)} PLN
+                            {formatPrice(parkingPrice)} PLN
                         </span>
                     </div>
                     <div
@@ -312,7 +323,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                             Komórka lokatorska
                         </span>
                         <span style={{ fontSize: "22px", fontWeight: "600", color: "#232323", fontFamily: "Poppins, sans-serif" }}>
-                            {formatPrice(STORAGE_PRICE)} PLN
+                            {formatPrice(storagePrice)} PLN
                         </span>
                     </div>
                 </div>
