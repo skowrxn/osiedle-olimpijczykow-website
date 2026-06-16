@@ -2,8 +2,6 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { buildApiUrl } from "../../lib/strapi";
-
 export default function Etap2Rzut() {
     const canvasRef = useRef(null);
     const imageRef = useRef(null);
@@ -66,42 +64,16 @@ export default function Etap2Rzut() {
         [],
     );
 
-    // Fetch apartment data by number
-    const getApartmentDataByNumber = async (apartmentNumber) => {
-        try {
-            const response = await fetch(
-                buildApiUrl("apartments", {
-                    "filters[numer][$eq]": apartmentNumber,
-                    "filters[etap][$eq]": "etap2",
-                }),
-            );
-            const data = await response.json();
-            if (data.data && data.data.length > 0) {
-                return data.data[0];
-            }
-            return null;
-        } catch (err) {
-            console.error("Error fetching apartment:", err);
-            return null;
-        }
-    };
-
-    // Preload apartment data for all areas
     useEffect(() => {
-        const loadApartmentData = async () => {
-            const data = {};
-            for (const area of areas) {
-                const apartment = await getApartmentDataByNumber(
-                    area.apartmentNumber,
-                );
-                if (apartment) {
-                    data[area.apartmentNumber] = apartment;
-                }
-            }
-            setApartmentData(data);
-        };
-        loadApartmentData();
-    }, [areas]);
+        fetch("/api/apartments?etap=2")
+            .then((r) => r.json())
+            .then((list) => {
+                const map = {};
+                if (Array.isArray(list)) list.forEach((a) => { map[a.numer] = a; });
+                setApartmentData(map);
+            })
+            .catch(() => {});
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -215,12 +187,8 @@ export default function Etap2Rzut() {
                     }
 
                     const apartment = apartmentData[area.apartmentNumber];
-                    if (apartment && apartment.documentId) {
-                        router.push(`/apartment/${apartment.documentId}`);
-                    } else {
-                        alert(
-                            `Nie znaleziono mieszkania ${area.apartmentNumber}`,
-                        );
+                    if (apartment?.id) {
+                        router.push(`/apartment/${encodeURIComponent(apartment.id)}`);
                     }
                     break;
                 }

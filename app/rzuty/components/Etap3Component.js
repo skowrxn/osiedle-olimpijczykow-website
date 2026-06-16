@@ -2,7 +2,6 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { buildApiUrl } from "../../lib/strapi";
 import Lightbox from "../../components/Lightbox";
 
 export default function Etap3Component() {
@@ -243,49 +242,26 @@ export default function Etap3Component() {
         [selectedFloor],
     );
 
-    // Fetch apartment data by number
-    const getApartmentDataByNumber = async (apartmentNumber) => {
-        try {
-            const response = await fetch(
-                buildApiUrl("apartments", {
-                    "filters[numer][$eq]": apartmentNumber,
-                    "filters[etap][$eq]": "etap3",
-                }),
-            );
-            const data = await response.json();
-            if (data.data && data.data.length > 0) {
-                return data.data[0];
-            }
-            return null;
-        } catch (err) {
-            console.error("Error fetching apartment:", err);
-            return null;
-        }
-    };
-
-    // Preload apartment data for all areas when floor changes
+    // Fetch all etap3 apartments once and build numer → apartment map
     useEffect(() => {
-        // Reset hovered area when floor changes
-        setHoveredArea(null);
-
-        const loadApartmentData = async () => {
-            setIsLoadingData(true);
-            const data = {};
-            for (const area of areas) {
-                if (!area.unavailable) {
-                    const apartment = await getApartmentDataByNumber(
-                        area.apartmentNumber,
-                    );
-                    if (apartment) {
-                        data[area.apartmentNumber] = apartment;
-                    }
+        setIsLoadingData(true);
+        fetch("/api/apartments?etap=3")
+            .then((r) => r.json())
+            .then((list) => {
+                const map = {};
+                if (Array.isArray(list)) {
+                    list.forEach((a) => { map[a.numer] = a; });
                 }
-            }
-            setApartmentData(data);
-            setIsLoadingData(false);
-        };
-        loadApartmentData();
-    }, [selectedFloor, areas]);
+                setApartmentData(map);
+                setIsLoadingData(false);
+            })
+            .catch(() => setIsLoadingData(false));
+    }, []);
+
+    // Reset hovered area when floor changes
+    useEffect(() => {
+        setHoveredArea(null);
+    }, [selectedFloor]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -399,12 +375,8 @@ export default function Etap3Component() {
                     }
 
                     const apartment = apartmentData[area.apartmentNumber];
-                    if (apartment && apartment.documentId) {
-                        router.push(`/apartment/${apartment.documentId}`);
-                    } else {
-                        alert(
-                            `Nie znaleziono mieszkania ${area.apartmentNumber}`,
-                        );
+                    if (apartment?.id) {
+                        router.push(`/apartment/${encodeURIComponent(apartment.id)}`);
                     }
                     break;
                 }
