@@ -2,6 +2,7 @@
 
 import Head from "next/head";
 import { useState } from "react";
+import Image from "next/image";
 import PropertySearch from "./components/PropertySearch";
 import BoxWithIcon from "./components/BoxWithIcon";
 import Lightbox from "./components/Lightbox";
@@ -170,12 +171,11 @@ export default function Home() {
                                                 title="Tarasy i balkony"
                                                 description="Urokliwe ogródki, balkony oraz przestronne tarasy na ostatnich piętrach. To idealne miejsce na poranną kawę, odpoczynek po pracy czy spotkania z bliskimi."
                                             >
-                                                <img
-                                                    srcSet="https://img.icons8.com/?size=80&amp;id=gQ4rIzkU1Og3&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=gQ4rIzkU1Og3&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=gQ4rIzkU1Og3&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Terrace icon"
-                                                    data-v-42ed8b2f=""
                                                 />
                                             </BoxWithIcon>
 
@@ -184,12 +184,11 @@ export default function Home() {
                                                 title="Hala sportowa i Aquapark"
                                                 description="Czas relaksu oraz rekreacji dostępne od ręki – aquapark, siłownia oraz nowoczesna hala sportowa w odległości kilku minut spacerem."
                                             >
-                                                <img
-                                                    srcSet="https://img.icons8.com/?size=80&amp;id=fk2FuaspJu3M&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=fk2FuaspJu3M&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=fk2FuaspJu3M&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Aquapark icon"
-                                                    data-v-42ed8b2f=""
                                                 />
                                             </BoxWithIcon>
 
@@ -198,13 +197,11 @@ export default function Home() {
                                                 title="Parking podziemny"
                                                 description="Dla każdego budynku przewidziano wielostanowiskowy parking podziemny. Dzięki temu mieszkańcy i ich goście nie muszą się martwić o miejsce postojowe."
                                             >
-                                                <img
-                                                    data-image-id="JfBZnogY095Z"
-                                                    srcSet="https://img.icons8.com/?size=80&amp;id=JfBZnogY095Z&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=JfBZnogY095Z&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=JfBZnogY095Z&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Parking icon"
-                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -213,13 +210,11 @@ export default function Home() {
                                                 title="Tereny zielone"
                                                 description="Osiedle w spokojnej okolicy, otoczone domami jednorodzinnymi i terenami zielonymi. Bliskość Parku Miejskiego sprawia, że to idealne miejsce dla osób ceniących ciszę i naturę."
                                             >
-                                                <img
-                                                    data-v-42ed8b2f=""
-                                                    srcSet="https://img.icons8.com/?size=50&amp;id=15803&amp;format=png 1x, https://img.icons8.com/?size=100&amp;id=15803&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=15803&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Leaf icon"
-                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -228,14 +223,11 @@ export default function Home() {
                                                 title="W pobliżu sklepów"
                                                 description="Codzienne zakupy jeszcze nigdy nie były tak wygodne – sklepy oraz punkty usługowe w zasięgu krótkiego spaceru."
                                             >
-                                                <img
-                                                    data-v-42ed8b2f=""
-                                                    data-image-id="HCYlvAbwfEfd"
-                                                    srcSet="https://img.icons8.com/?size=80&amp;id=HCYlvAbwfEfd&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=HCYlvAbwfEfd&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=HCYlvAbwfEfd&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Shopping Bag icon"
-                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
 
@@ -244,14 +236,11 @@ export default function Home() {
                                                 title="Monitorowane osiedle"
                                                 description="System monitoringu na osiedlu zwiększa bezpieczeństwo jego mieszkańców. Nowoczesne kamery obejmują kluczowe części osiedla, zapewniając spokój i komfort."
                                             >
-                                                <img
-                                                    data-v-42ed8b2f=""
-                                                    data-image-id="xBQkk9hOrt1r"
-                                                    srcSet="https://img.icons8.com/?size=80&amp;id=xBQkk9hOrt1r&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=xBQkk9hOrt1r&amp;format=png 2x"
-                                                    width="80"
-                                                    height="80"
+                                                <Image
+                                                    src="https://img.icons8.com/?size=80&id=xBQkk9hOrt1r&format=png"
+                                                    width={80}
+                                                    height={80}
                                                     alt="Cctv icon"
-                                                    className="loaded"
                                                 />
                                             </BoxWithIcon>
                                         </div>
@@ -313,17 +302,17 @@ export default function Home() {
                                             }}
                                         >
                                             <div style={{ flex: "1" }}>
-                                                <img
+                                                <Image
                                                     src="/img/wizualizacja-1.jpg"
                                                     alt="Wnętrze apartamentu"
+                                                    width={1200}
+                                                    height={900}
                                                     style={{
                                                         width: "100%",
                                                         height: "auto",
                                                         cursor: "pointer",
                                                     }}
-                                                    onClick={() =>
-                                                        openLightbox(0)
-                                                    }
+                                                    onClick={() => openLightbox(0)}
                                                     className="hover:scale-105 transition-transform duration-300"
                                                 />
                                             </div>
@@ -395,9 +384,11 @@ export default function Home() {
                                             flex: "1",
                                         }}
                                     >
-                                        <img
+                                        <Image
                                             src="/img/wizualizacja-2.jpg"
                                             alt="Wnętrze apartamentu"
+                                            width={1200}
+                                            height={900}
                                             style={{
                                                 width: "100%",
                                                 height: "auto",
@@ -426,87 +417,75 @@ export default function Home() {
                                             gap: "20px",
                                         }}
                                     >
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(2)}
+                                        >
+                                            <Image
                                                 src="/img/budynek-4.jpg"
                                                 alt="Wizualizacja budynku"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(2)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(3)}
+                                        >
+                                            <Image
                                                 src="/img/2025-08-wizualizacja_01_rev01-1220x1220.jpg"
                                                 alt="Wizualizacja budynku"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(3)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(4)}
+                                        >
+                                            <Image
                                                 src="/img/2025-08-wizualizacja_04_rev01-1220x1220.jpg"
                                                 alt="Wizualizacja osiedla"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(4)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(5)}
+                                        >
+                                            <Image
                                                 src="/img/2025-08-apartament-1.5_strefadzienna_01-2-2500x1250.jpg"
                                                 alt="Wnętrze apartamentu"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(5)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(6)}
+                                        >
+                                            <Image
                                                 src="/img/wizualizacja-3.jpg"
                                                 alt="Salon apartamentu"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(6)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>
-                                        <div>
-                                            <img
+                                        <div
+                                            style={{ position: "relative", height: "300px", cursor: "pointer", overflow: "hidden" }}
+                                            onClick={() => openLightbox(7)}
+                                        >
+                                            <Image
                                                 src="/img/wizualizacja-4.jpg"
                                                 alt="Łazienka apartamentu"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "300px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => openLightbox(7)}
+                                                fill
+                                                style={{ objectFit: "cover" }}
                                                 className="hover:scale-105 transition-transform duration-300"
                                             />
                                         </div>

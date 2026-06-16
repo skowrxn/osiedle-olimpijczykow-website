@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Suspense, useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import ApartmentListCompact from "../components/ApartmentListCompact";
 import ApartmentSearch from "../components/ApartmentSearch";
@@ -68,25 +69,17 @@ function ListaLokaliContent() {
             className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-103 ${
                 targetRoute !== "" ? "cursor-pointer" : ""
             }`}
+            style={{ height: "400px" }}
         >
             <a href={targetRoute == "" ? null : targetRoute}>
-                <img
+                <Image
                     src={imageSrc}
                     alt={title}
+                    fill
                     style={{
-                        width: "100%",
-                        height: "400px",
                         objectFit: "cover",
                         filter: isGrayedOut ? "grayscale(100%)" : "none",
                         opacity: isGrayedOut ? "0.6" : "1",
-                    }}
-                    onError={(e) => {
-                        console.log(`Error loading image: ${imageSrc}`);
-                        e.target.style.backgroundColor = "#f0f0f0";
-                        e.target.alt = "Błąd ładowania zdjęcia";
-                    }}
-                    onLoad={(e) => {
-                        console.log(`Image loaded successfully: ${imageSrc}`);
                     }}
                 />
 

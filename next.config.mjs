@@ -8,6 +8,7 @@ const nextConfig = {
         minimumCacheTTL: 31536000,
         remotePatterns: [
             { protocol: "https", hostname: "res.cloudinary.com" },
+            { protocol: "https", hostname: "img.icons8.com" },
         ],
     },
     async headers() {

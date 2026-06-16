@@ -84,103 +84,84 @@ export default async function OInwestycji() {
                                             title="Bliskość rekreacji"
                                             description="Aquapark, hala sportowa i park miejski w pobliżu zapewniają aktywny wypoczynek. W okolicy znajdziemy również sklepy, punkty usługowe oraz placówki edukacyjne."
                                         >
-                                            <img
-                                                src="/img/park.jpg"
-                                                alt="Bliskość rekreacji"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/park.jpg"
+                                                    alt="Bliskość rekreacji"
+                                                    fill
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
 
                                         <BoxWithIcon
                                             title="Różnorodność mieszkań"
                                             description="Na naszym osiedlu, każdy znajdzie idealne mieszkanie dla swoich potrzeb. Od przytulnych 35 m² po przestronne 130 m² – różnorodność mieszkań, która spełnia oczekiwania najbardziej wymagających."
                                         >
-                                            <img
-                                                src="/img/wizualizacja-1.jpg"
-                                                alt="Różnorodność mieszkań"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/wizualizacja-1.jpg"
+                                                    alt="Różnorodność mieszkań"
+                                                    fill
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
 
                                         <BoxWithIcon
                                             title="Komfort mieszkania"
                                             description="Komfort na pierwszym miejscu – tworzymy jasne, funkcjonalne i przyjazne przestrzenie, które zapewniają wygodę zarówno w mieszkaniach, jak i w częściach wspólnych."
                                         >
-                                            <img
-                                                src="/img/wizualizacja-4.jpg"
-                                                alt="Komfort mieszkania"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/wizualizacja-4.jpg"
+                                                    alt="Komfort mieszkania"
+                                                    fill
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
 
                                         <BoxWithIcon
                                             title="Dogodna lokalizacja"
                                             description="Lokalizacja osiedla zapewnia szybki dojazd zarówno do centrum Tarnowskich Gór, jak i innych miast aglomeracji śląskiej – dzięki drodze DK78 oraz Obwodnicy Tarnowskich Gór."
                                         >
-                                            <img
-                                                src="/img/budynek-2.jpg"
-                                                alt="Dogodna lokalizacja"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/budynek-2.jpg"
+                                                    alt="Dogodna lokalizacja"
+                                                    fill
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
 
                                         <BoxWithIcon
                                             title="Nowoczesny design"
                                             description="Nasze budynki wyróżnia ponadczasowa architektura, łącząca styl i wysoki standard wykonania, a przy tym doskonale komponująca się z otoczeniem."
                                         >
-                                            <img
-                                                src="/img/budynek-1.jpg"
-                                                alt="Nowoczesny design"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/budynek-1.jpg"
+                                                    alt="Nowoczesny design"
+                                                    fill
+                                                    style={{ objectFit: "cover" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
 
                                         <BoxWithIcon
                                             title="Udogodnienia"
                                             description="Wygoda na co dzień – każda klatka wyposażona jest w windę prowadzącą prosto do garażu. Oferujemy także komórki lokatorskie, które pozwalają bardziej cieszyć się przestrzenią w mieszkaniu."
                                         >
-                                            <img
-                                                src="/img/winda.jpg"
-                                                alt="Udogodnienia"
-                                                style={{
-                                                    width: "100%",
-                                                    objectPosition: "top",
-                                                    height: "200px",
-                                                    objectFit: "cover",
-                                                    borderRadius: "8px",
-                                                    marginBottom: "12px",
-                                                }}
-                                            />
+                                            <div style={{ position: "relative", height: "200px", borderRadius: "8px", overflow: "hidden", marginBottom: "12px" }}>
+                                                <Image
+                                                    src="/img/winda.jpg"
+                                                    alt="Udogodnienia"
+                                                    fill
+                                                    style={{ objectFit: "cover", objectPosition: "top" }}
+                                                />
+                                            </div>
                                         </BoxWithIcon>
                                     </div>
                                 </div>
@@ -240,13 +221,12 @@ export default async function OInwestycji() {
                                         }}
                                     >
                                         <div style={{ flex: "1" }}>
-                                            <img
+                                            <Image
                                                 src="/img/partner.jpg"
                                                 alt="Wnętrze apartamentu"
-                                                style={{
-                                                    width: "100%",
-                                                    height: "auto",
-                                                }}
+                                                width={600}
+                                                height={400}
+                                                style={{ width: "100%", height: "auto" }}
                                             />
                                         </div>
                                         <div style={{ flex: "1" }}>
@@ -296,16 +276,15 @@ export default async function OInwestycji() {
                                     style={{
                                         flex: "1",
                                         marginTop: "-50px",
+                                        position: "relative",
+                                        height: "400px",
                                     }}
                                 >
-                                    <img
+                                    <Image
                                         src="/img/doswiadczenie.jpg"
                                         alt="Wnętrze apartamentu"
-                                        style={{
-                                            width: "100%",
-                                            height: "400px",
-                                            objectFit: "cover",
-                                        }}
+                                        fill
+                                        style={{ objectFit: "cover" }}
                                     />
                                 </div>
                             </div>

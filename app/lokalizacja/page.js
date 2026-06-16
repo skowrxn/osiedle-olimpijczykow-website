@@ -126,12 +126,11 @@ export default function Lokalizacja() {
                                             title="Tarasy i balkony"
                                             description="Urokliwe ogródki, balkony oraz przestronne tarasy na ostatnich piętrach. To idealne miejsce na poranną kawę, odpoczynek po pracy czy spotkania z bliskimi."
                                         >
-                                            <img
-                                                srcset="https://img.icons8.com/?size=80&amp;id=gQ4rIzkU1Og3&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=gQ4rIzkU1Og3&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=gQ4rIzkU1Og3&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Terrace icon"
-                                                data-v-42ed8b2f=""
                                             />
                                         </BoxWithIcon>
 
@@ -140,12 +139,11 @@ export default function Lokalizacja() {
                                             title="Hala sportowa i Aquapark"
                                             description="Czas relaksu oraz rekreacji dostępne od ręki – aquapark, siłownia oraz nowoczesna hala sportowa w odległości kilku minut spacerem."
                                         >
-                                            <img
-                                                srcset="https://img.icons8.com/?size=80&amp;id=fk2FuaspJu3M&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=fk2FuaspJu3M&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=fk2FuaspJu3M&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Aquapark icon"
-                                                data-v-42ed8b2f=""
                                             />
                                         </BoxWithIcon>
 
@@ -154,13 +152,11 @@ export default function Lokalizacja() {
                                             title="Parking podziemny"
                                             description="Dla każdego budynku przewidziano wielostanowiskowy parking podziemny. Dzięki temu mieszkańcy i ich goście nie muszą się martwić o miejsce postojowe."
                                         >
-                                            <img
-                                                data-image-id="JfBZnogY095Z"
-                                                srcset="https://img.icons8.com/?size=80&amp;id=JfBZnogY095Z&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=JfBZnogY095Z&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=JfBZnogY095Z&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Parking icon"
-                                                class="loaded"
                                             />
                                         </BoxWithIcon>
 
@@ -169,13 +165,11 @@ export default function Lokalizacja() {
                                             title="Tereny zielone"
                                             description="Nasze osiedle położone jest w spokojnej okolicy, w otoczeniu domów jednorodzinnych. Bliskość Parku Miejskiego oraz otoczenie terenami zielonymi sprawiają, że to idealne miejsce dla osób ceniących ciszę i harmonię z naturą."
                                         >
-                                            <img
-                                                data-v-42ed8b2f=""
-                                                srcset="https://img.icons8.com/?size=50&amp;id=15803&amp;format=png 1x, https://img.icons8.com/?size=100&amp;id=15803&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=15803&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Leaf icon"
-                                                class="loaded"
                                             />
                                         </BoxWithIcon>
 
@@ -184,14 +178,11 @@ export default function Lokalizacja() {
                                             title="W pobliżu sklepów"
                                             description="Codzienne zakupy jeszcze nigdy nie były tak wygodne – sklepy oraz punkty usługowe w zasięgu krótkiego spaceru."
                                         >
-                                            <img
-                                                data-v-42ed8b2f=""
-                                                data-image-id="HCYlvAbwfEfd"
-                                                srcset="https://img.icons8.com/?size=80&amp;id=HCYlvAbwfEfd&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=HCYlvAbwfEfd&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=HCYlvAbwfEfd&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Shopping Bag icon"
-                                                class="loaded"
                                             />
                                         </BoxWithIcon>
 
@@ -200,14 +191,11 @@ export default function Lokalizacja() {
                                             title="Monitorowane osiedle"
                                             description="System monitoringu na osiedlu zwiększa bezpieczeństwo jego mieszkańców. Nowoczesne kamery obejmują kluczowe części osiedla, zapewniając spokój i komfort."
                                         >
-                                            <img
-                                                data-v-42ed8b2f=""
-                                                data-image-id="xBQkk9hOrt1r"
-                                                srcset="https://img.icons8.com/?size=80&amp;id=xBQkk9hOrt1r&amp;format=png 1x, https://img.icons8.com/?size=160&amp;id=xBQkk9hOrt1r&amp;format=png 2x"
-                                                width="80"
-                                                height="80"
+                                            <Image
+                                                src="https://img.icons8.com/?size=80&id=xBQkk9hOrt1r&format=png"
+                                                width={80}
+                                                height={80}
                                                 alt="Cctv icon"
-                                                class="loaded"
                                             />
                                         </BoxWithIcon>
                                     </div>

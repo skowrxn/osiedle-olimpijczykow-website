@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import { PARKING_PRICE, STORAGE_PRICE } from "../lib/apartments";
 import Lightbox from "./Lightbox";
 
@@ -359,9 +360,11 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                             e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
                         }}
                     >
-                        <img
+                        <Image
                             src={`/img/garaz${etap === "2" ? "2" : "3"}.png`}
                             alt={`Rzut garażu – etap ${etap}`}
+                            width={1200}
+                            height={900}
                             style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }}
                         />
                     </div>

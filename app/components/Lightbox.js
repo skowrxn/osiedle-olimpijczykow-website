@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
     const [activeIndex, setActiveIndex] = useState(currentIndex);
@@ -171,17 +172,12 @@ const Lightbox = ({ images, isOpen, onClose, currentIndex = 0 }) => {
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
             >
-                <img
+                <Image
                     src={images[activeIndex]}
                     alt={`Zdjęcie ${activeIndex + 1}`}
-                    style={{
-                        maxHeight: "calc(100vh - 40px)",
-                        maxWidth: "calc(100vw - 40px)",
-                        width: "auto",
-                        height: "auto",
-                        objectFit: "contain",
-                        display: "block",
-                    }}
+                    fill
+                    sizes="100vw"
+                    style={{ objectFit: "contain" }}
                 />
 
                 {/* Image counter */}

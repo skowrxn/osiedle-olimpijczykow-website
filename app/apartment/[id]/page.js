@@ -369,9 +369,11 @@ const ApartmentDetail = () => {
                                                                 e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
                                                             }}
                                                         >
-                                                            <img
+                                                            <Image
                                                                 src={apartment.karta}
                                                                 alt="Karta mieszkania"
+                                                                width={600}
+                                                                height={450}
                                                                 style={{ width: "100%", height: "auto", display: "block" }}
                                                             />
                                                         </div>

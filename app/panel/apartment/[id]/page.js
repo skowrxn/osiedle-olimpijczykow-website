@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const STATUS_LABEL = { DOSTEPNE: "Dostępne", REZERWACJA: "Rezerwacja", SPRZEDANE: "Sprzedane" };
 const STATUS_COLOR = { DOSTEPNE: "#16a34a", REZERWACJA: "#d97706", SPRZEDANE: "#dc2626" };
@@ -352,7 +353,13 @@ export default function ApartmentPhotos() {
           ) : karta ? (
             <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", flexWrap: "wrap" }}>
               <div style={{ borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", width: "220px", flexShrink: 0 }}>
-                <img src={karta.secure_url} alt="Karta" style={{ width: "100%", display: "block" }} />
+                <Image
+                    src={karta.secure_url}
+                    alt="Karta"
+                    width={400}
+                    height={300}
+                    style={{ width: "100%", height: "auto", display: "block" }}
+                />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <button
@@ -461,7 +468,12 @@ export default function ApartmentPhotos() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
               {gallery.map((photo) => (
                 <div key={photo.public_id} style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", aspectRatio: "4/3" }}>
-                  <img src={photo.secure_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  <Image
+                    src={photo.secure_url}
+                    alt=""
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
                   <button
                     onClick={() => handleDelete(photo.public_id)}
                     disabled={deleting === photo.public_id}
