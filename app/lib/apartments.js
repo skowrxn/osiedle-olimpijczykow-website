@@ -287,8 +287,14 @@ const etap3CardMap = Object.fromEntries(
   })
 );
 
-// Returns visualization image paths for a given etap3 apartment numer
-export const getVizImages = (numer) => VIZ[etap3VizKey[numer]] || [];
+const CLD = "https://res.cloudinary.com/dqsnagbpg/image/upload";
 
-// Returns apartment card path for a given etap3 apartment numer, or null
-export const getCardImage = (numer) => etap3CardMap[numer] || null;
+// Returns Cloudinary URLs for visualization images of a given etap3 apartment
+export const getVizImages = (numer) =>
+  (VIZ[etap3VizKey[numer]] || []).map((p) => encodeURI(CLD + p));
+
+// Returns Cloudinary URL for the apartment card (exactly 1 per etap3 apartment)
+export const getCardImage = (numer) => {
+  const p = etap3CardMap[numer];
+  return p ? encodeURI(CLD + p) : null;
+};
