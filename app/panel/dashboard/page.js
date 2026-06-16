@@ -14,6 +14,48 @@ const STATUS_LABEL = {
   SPRZEDANE: "Sprzedane",
 };
 
+function ApartmentRow({ apt }) {
+  const color = STATUS_COLOR[apt.dostepnosc] || "#888";
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "90px 80px 80px 60px 120px 1fr", alignItems: "center", gap: "16px", padding: "13px 20px", borderBottom: "1px solid #f0f0f0", backgroundColor: "white" }}>
+      <span style={{ fontWeight: "600", color: "#111", fontSize: "14px" }}>{apt.numer}</span>
+      <span style={{ fontSize: "13px", color: "#555" }}>{apt.powierzchnia ? `${apt.powierzchnia} m²` : "—"}</span>
+      <span style={{ fontSize: "13px", color: "#555" }}>{apt.liczba_pokoi ? `${apt.liczba_pokoi} pok.` : "—"}</span>
+      <span style={{ fontSize: "13px", color: "#555" }}>{apt.kondygnacja != null ? `K${apt.kondygnacja}` : "—"}</span>
+      <span style={{ fontSize: "12px", fontWeight: "600", padding: "3px 10px", borderRadius: "20px", backgroundColor: color + "18", color, display: "inline-block", textAlign: "center" }}>
+        {STATUS_LABEL[apt.dostepnosc] || apt.dostepnosc}
+      </span>
+      <Link
+        href={`/panel/apartment/${encodeURIComponent(apt.id)}`}
+        style={{ fontSize: "13px", color: "#007CBA", textDecoration: "none", fontWeight: "500", justifySelf: "end" }}
+      >
+        Zarządzaj zdjęciami →
+      </Link>
+    </div>
+  );
+}
+
+function EtapSection({ label, apartments }) {
+  if (!apartments.length) return null;
+  return (
+    <div style={{ marginBottom: "32px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+        <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "700", color: "#111" }}>{label}</h3>
+        <span style={{ fontSize: "13px", color: "#888" }}>{apartments.length} mieszkań</span>
+      </div>
+      <div style={{ borderRadius: "10px", overflow: "hidden", border: "1px solid #eee", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+        {/* Table header */}
+        <div style={{ display: "grid", gridTemplateColumns: "90px 80px 80px 60px 120px 1fr", gap: "16px", padding: "10px 20px", backgroundColor: "#f8f8f8", borderBottom: "1px solid #e8e8e8" }}>
+          {["Numer", "Powierzchnia", "Pokoje", "Pietro", "Status", ""].map((h) => (
+            <span key={h} style={{ fontSize: "11px", fontWeight: "600", color: "#888", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</span>
+          ))}
+        </div>
+        {apartments.map((apt) => <ApartmentRow key={apt.id} apt={apt} />)}
+      </div>
+    </div>
+  );
+}
+
 export default function PanelDashboard() {
   const [apartments, setApartments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,9 +79,11 @@ export default function PanelDashboard() {
   const filtered = apartments.filter(
     (a) =>
       !filter ||
-      a.numer?.toLowerCase().includes(filter.toLowerCase()) ||
-      a.etap?.includes(filter.toLowerCase())
+      a.numer?.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const etap2 = filtered.filter((a) => a.etap === "etap2");
+  const etap3 = filtered.filter((a) => a.etap === "etap3");
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f0f2f5", fontFamily: "Poppins, sans-serif" }}>
@@ -57,9 +101,9 @@ export default function PanelDashboard() {
         </button>
       </div>
 
-      <div style={{ padding: "32px", maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ padding: "32px", maxWidth: "1100px", margin: "0 auto" }}>
         {/* Page header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "28px" }}>
           <h2 style={{ fontSize: "20px", fontWeight: "600", color: "#111", margin: 0 }}>
             Mieszkania
             {!loading && (
@@ -70,7 +114,7 @@ export default function PanelDashboard() {
           </h2>
           <input
             type="text"
-            placeholder="Szukaj…"
+            placeholder="Szukaj numeru…"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             style={{ padding: "8px 14px", border: "1.5px solid #e0e0e0", borderRadius: "8px", fontSize: "13px", fontFamily: "inherit", outline: "none", width: "200px" }}
@@ -82,42 +126,15 @@ export default function PanelDashboard() {
             Ładowanie…
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "16px" }}>
-            {filtered.map((apt) => {
-              const color = STATUS_COLOR[apt.dostepnosc] || "#888";
-              return (
-                <div
-                  key={apt.id}
-                  style={{ backgroundColor: "white", borderRadius: "12px", padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)", border: "1px solid #eee", display: "flex", flexDirection: "column", gap: "12px" }}
-                >
-                  {/* Header row */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: "16px", fontWeight: "600", color: "#111" }}>
-                      {apt.numer}
-                    </span>
-                    <span style={{ fontSize: "11px", fontWeight: "600", padding: "3px 10px", borderRadius: "20px", backgroundColor: color + "18", color }}>
-                      {STATUS_LABEL[apt.dostepnosc] || apt.dostepnosc}
-                    </span>
-                  </div>
-
-                  {/* Info row */}
-                  <div style={{ fontSize: "13px", color: "#666", display: "flex", gap: "10px" }}>
-                    <span>{apt.etap === "etap2" ? "Etap 2" : "Etap 3"}</span>
-                    {apt.powierzchnia && <span>{apt.powierzchnia} m²</span>}
-                    {apt.liczba_pokoi && <span>{apt.liczba_pokoi} pok.</span>}
-                    {apt.kondygnacja !== undefined && <span>K{apt.kondygnacja}</span>}
-                  </div>
-
-                  <Link
-                    href={`/panel/apartment/${encodeURIComponent(apt.id)}`}
-                    style={{ display: "block", textAlign: "center", padding: "9px 0", backgroundColor: "#007CBA", color: "white", borderRadius: "8px", textDecoration: "none", fontSize: "13px", fontWeight: "500" }}
-                  >
-                    Zarządzaj zdjęciami
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
+          <>
+            <EtapSection label="Etap 2" apartments={etap2} />
+            <EtapSection label="Etap 3" apartments={etap3} />
+            {filtered.length === 0 && (
+              <div style={{ textAlign: "center", padding: "60px", color: "#aaa" }}>
+                Brak wyników dla &ldquo;{filter}&rdquo;
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

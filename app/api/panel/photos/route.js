@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import cloudinary from "../../../lib/cloudinary";
 
 const PANEL_TOKEN = process.env.PANEL_AUTH_TOKEN || "oo-panel-secret-2024";
@@ -57,6 +58,7 @@ export async function POST(request) {
       .end(buffer);
   });
 
+  revalidateTag("apartments-sheets");
   return NextResponse.json({ url: result.secure_url, publicId: result.public_id });
 }
 
@@ -69,5 +71,6 @@ export async function DELETE(request) {
     return NextResponse.json({ error: "Missing publicId" }, { status: 400 });
 
   await cloudinary.uploader.destroy(publicId);
+  revalidateTag("apartments-sheets");
   return NextResponse.json({ success: true });
 }
