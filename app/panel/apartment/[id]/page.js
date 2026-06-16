@@ -8,53 +8,59 @@ export default function ApartmentPhotos() {
   const aptId = decodeURIComponent(id);
 
   const [apartment, setApartment] = useState(null);
-  const [panelPhotos, setPanelPhotos] = useState([]);
+  const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadKarta, setUploadKarta] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
+  const kartaInputRef = useRef(null);
   const router = useRouter();
 
-  const fetchPanelPhotos = useCallback(async () => {
+  const fetchPhotos = useCallback(async () => {
     const res = await fetch(`/api/panel/photos?id=${encodeURIComponent(aptId)}`);
     const data = await res.json();
-    setPanelPhotos(Array.isArray(data) ? data : []);
+    setPhotos(Array.isArray(data) ? data : []);
   }, [aptId]);
 
   useEffect(() => {
     Promise.all([
       fetch(`/api/apartments?id=${encodeURIComponent(aptId)}`).then((r) => r.json()),
-      fetchPanelPhotos(),
+      fetchPhotos(),
     ]).then(([apt]) => {
       setApartment(apt);
       setLoading(false);
     });
-  }, [aptId, fetchPanelPhotos]);
+  }, [aptId, fetchPhotos]);
 
-  const uploadFiles = async (files) => {
+  const doUpload = async (files, isKarta = false) => {
     if (!files.length) return;
     setUploading(true);
+    setUploadKarta(isKarta);
     setUploadProgress(0);
     for (let i = 0; i < files.length; i++) {
       const fd = new FormData();
       fd.append("file", files[i]);
       fd.append("apartmentId", aptId);
+      if (isKarta) fd.append("isKarta", "true");
       await fetch("/api/panel/photos", { method: "POST", body: fd });
       setUploadProgress(Math.round(((i + 1) / files.length) * 100));
     }
-    await fetchPanelPhotos();
+    await fetchPhotos();
     setUploading(false);
+    setUploadKarta(false);
     setUploadProgress(0);
     if (fileInputRef.current) fileInputRef.current.value = "";
+    if (kartaInputRef.current) kartaInputRef.current.value = "";
   };
 
-  const handleFileChange = (e) => uploadFiles(Array.from(e.target.files));
   const handleDrop = (e) => {
     e.preventDefault();
     setDragOver(false);
-    uploadFiles(Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/")));
+    const files = Array.from(e.dataTransfer.files).filter((f) => f.type.startsWith("image/"));
+    doUpload(files, false);
   };
 
   const handleDelete = async (publicId) => {
@@ -65,7 +71,7 @@ export default function ApartmentPhotos() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ publicId }),
     });
-    setPanelPhotos((prev) => prev.filter((p) => p.public_id !== publicId));
+    setPhotos((prev) => prev.filter((p) => p.public_id !== publicId));
     setDeleting(null);
   };
 
@@ -74,13 +80,8 @@ export default function ApartmentPhotos() {
     router.push("/panel");
   };
 
-  // All static photos from apartments.js mapping (karta + zdjecia)
-  const staticPhotos = apartment
-    ? [
-        ...(apartment.karta ? [{ url: apartment.karta, label: "Karta mieszkania" }] : []),
-        ...(apartment.zdjecia || []).map((url, i) => ({ url, label: `Wizualizacja ${i + 1}` })),
-      ]
-    : [];
+  const karta = photos.find((p) => p.public_id.endsWith("/karta"));
+  const gallery = photos.filter((p) => !p.public_id.endsWith("/karta"));
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f0f2f5", fontFamily: "Poppins, sans-serif" }}>
@@ -111,47 +112,73 @@ export default function ApartmentPhotos() {
 
       <div style={{ padding: "32px", maxWidth: "1280px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }}>
 
-        {/* ── SEKCJA 1: Statyczne zdjęcia (wizualizacje + karta) ── */}
-        <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-            <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", margin: 0 }}>
-              Karta i wizualizacje
-              <span style={{ fontWeight: "400", color: "#888", marginLeft: "8px" }}>({staticPhotos.length})</span>
-            </h3>
-            <span style={{ fontSize: "12px", color: "#999", backgroundColor: "#f5f5f5", padding: "4px 10px", borderRadius: "20px" }}>
-              tylko podgląd — zarządzane przez kod
-            </span>
-          </div>
-
-          {loading ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#aaa" }}>Ładowanie…</div>
-          ) : staticPhotos.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "#aaa" }}>
-              Brak statycznych zdjęć dla tego mieszkania
-            </div>
-          ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
-              {staticPhotos.map((photo, i) => (
-                <div key={i} style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", aspectRatio: "4/3" }}>
-                  <img
-                    src={photo.url}
-                    alt={photo.label}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "6px 8px", background: "linear-gradient(transparent, rgba(0,0,0,0.55))", fontSize: "11px", color: "white", fontWeight: "500" }}>
-                    {photo.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ── SEKCJA 2: Dodatkowe zdjęcia z panelu (upload/delete) ── */}
+        {/* ── Karta mieszkania ─────────────────────────────────────────── */}
         <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
           <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", marginBottom: "16px" }}>
-            Dodatkowe zdjęcia (panel)
-            <span style={{ fontWeight: "400", color: "#888", marginLeft: "8px" }}>({panelPhotos.length})</span>
+            Karta mieszkania
+          </h3>
+
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "32px", color: "#aaa" }}>Ładowanie…</div>
+          ) : karta ? (
+            <div style={{ display: "flex", gap: "20px", alignItems: "flex-start", flexWrap: "wrap" }}>
+              <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", width: "220px", flexShrink: 0 }}>
+                <img src={karta.secure_url} alt="Karta" style={{ width: "100%", display: "block" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <button
+                  onClick={() => kartaInputRef.current?.click()}
+                  disabled={uploading}
+                  style={{ padding: "9px 20px", backgroundColor: "#007CBA", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+                >
+                  Zmień kartę
+                </button>
+                <button
+                  onClick={() => handleDelete(karta.public_id)}
+                  disabled={!!deleting}
+                  style={{ padding: "9px 20px", backgroundColor: "white", color: "#dc2626", border: "1px solid #dc2626", borderRadius: "8px", cursor: "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+                >
+                  Usuń kartę
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "12px" }}>
+              <p style={{ color: "#aaa", margin: 0, fontSize: "14px" }}>Brak karty mieszkania</p>
+              <button
+                onClick={() => kartaInputRef.current?.click()}
+                disabled={uploading}
+                style={{ padding: "9px 20px", backgroundColor: "#007CBA", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+              >
+                Dodaj kartę
+              </button>
+            </div>
+          )}
+
+          {/* Uploading karta indicator */}
+          {uploading && uploadKarta && (
+            <div style={{ marginTop: "12px", color: "#007CBA", fontSize: "13px" }}>
+              Przesyłanie karty… {uploadProgress}%
+            </div>
+          )}
+
+          <input
+            ref={kartaInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const files = Array.from(e.target.files);
+              if (files.length) doUpload([files[0]], true);
+            }}
+          />
+        </div>
+
+        {/* ── Galeria wizualizacji ─────────────────────────────────────── */}
+        <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+          <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", marginBottom: "16px" }}>
+            Galeria
+            <span style={{ fontWeight: "400", color: "#888", marginLeft: "8px" }}>({gallery.length})</span>
           </h3>
 
           {/* Upload zone */}
@@ -163,7 +190,7 @@ export default function ApartmentPhotos() {
             style={{
               border: `2px dashed ${dragOver ? "#007CBA" : "#d0d0d0"}`,
               borderRadius: "10px",
-              padding: "36px 24px",
+              padding: "32px 24px",
               textAlign: "center",
               cursor: uploading ? "default" : "pointer",
               backgroundColor: dragOver ? "#f0f8ff" : "#fafafa",
@@ -171,9 +198,8 @@ export default function ApartmentPhotos() {
               marginBottom: "20px",
             }}
           >
-            {uploading ? (
+            {uploading && !uploadKarta ? (
               <div>
-                <div style={{ fontSize: "22px", marginBottom: "10px" }}>⬆️</div>
                 <p style={{ color: "#007CBA", fontWeight: "500", marginBottom: "10px" }}>
                   Przesyłanie… {uploadProgress}%
                 </p>
@@ -183,7 +209,7 @@ export default function ApartmentPhotos() {
               </div>
             ) : (
               <div>
-                <div style={{ fontSize: "30px", marginBottom: "10px" }}>📷</div>
+                <div style={{ fontSize: "28px", marginBottom: "8px" }}>📷</div>
                 <p style={{ fontWeight: "500", color: "#333", marginBottom: "4px" }}>Kliknij lub przeciągnij zdjęcia</p>
                 <p style={{ fontSize: "12px", color: "#999" }}>JPG, PNG, WEBP — można wybrać wiele</p>
               </div>
@@ -194,18 +220,18 @@ export default function ApartmentPhotos() {
               multiple
               accept="image/*"
               style={{ display: "none" }}
-              onChange={handleFileChange}
+              onChange={(e) => doUpload(Array.from(e.target.files), false)}
             />
           </div>
 
-          {/* Panel photos grid */}
-          {panelPhotos.length === 0 ? (
+          {/* Gallery grid */}
+          {loading ? null : gallery.length === 0 ? (
             <div style={{ textAlign: "center", padding: "32px", color: "#aaa", backgroundColor: "#fafafa", borderRadius: "8px" }}>
-              Brak dodatkowych zdjęć — dodaj pierwsze zdjęcie powyżej
+              Brak zdjęć w galerii — dodaj pierwsze powyżej
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "14px" }}>
-              {panelPhotos.map((photo) => (
+              {gallery.map((photo) => (
                 <div
                   key={photo.public_id}
                   style={{ position: "relative", borderRadius: "8px", overflow: "hidden", backgroundColor: "#f0f0f0", aspectRatio: "4/3" }}

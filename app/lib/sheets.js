@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import { unstable_cache } from "next/cache";
-import { getVizImages, getCardImage } from "./apartments";
+import cloudinary from "./cloudinary";
 
 const parsePrice = (s) => {
   if (!s || !String(s).includes("zł")) return null;
@@ -24,7 +24,6 @@ const getCredentials = () => {
   if (b64) {
     return JSON.parse(Buffer.from(b64, "base64").toString("utf8"));
   }
-  // Fallback: separate env vars (legacy)
   let key = (process.env.GOOGLE_PRIVATE_KEY || "").trim();
   if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
     key = key.slice(1, -1);
@@ -44,7 +43,6 @@ const makeAuth = () =>
 const getSheetRows = async (spreadsheetId, gid) => {
   const sheets = google.sheets({ version: "v4", auth: makeAuth() });
 
-  // Resolve gid → sheet name (needed when data is not on the first tab)
   const meta = await sheets.spreadsheets.get({ spreadsheetId });
   const sheetMeta = gid != null
     ? meta.data.sheets.find((s) => s.properties.sheetId === gid)
@@ -59,13 +57,48 @@ const getSheetRows = async (spreadsheetId, gid) => {
   return res.data.values || [];
 };
 
-const parseRows = (rows, etap) =>
+// Fetches all photos from Cloudinary organised by apartment ID.
+// Returns { [aptId]: { zdjecia: string[], karta: string|null } }
+const getCloudinaryPhotos = async () => {
+  try {
+    const result = await cloudinary.api.resources({
+      type: "upload",
+      prefix: "apartments/",
+      max_results: 500,
+    });
+
+    const byApt = {};
+    for (const r of result.resources) {
+      const parts = r.public_id.split("/");
+      if (parts.length < 3) continue;
+      const aptId = parts[1];
+      const filename = parts.slice(2).join("/");
+
+      if (!byApt[aptId]) byApt[aptId] = { zdjecia: [], karta: null };
+
+      if (filename === "karta") {
+        byApt[aptId].karta = r.secure_url;
+      } else {
+        byApt[aptId].zdjecia.push(r.secure_url);
+      }
+    }
+    return byApt;
+  } catch (e) {
+    console.error("[sheets] Cloudinary fetch failed:", e.message);
+    return {};
+  }
+};
+
+const parseRows = (rows, etap, cldPhotos) =>
   rows.slice(3).reduce((acc, row) => {
     const numer = row[1]?.trim();
     if (!numer || numer === "Numer" || numer.startsWith("Ceny")) return acc;
 
+    const aptId = `${etap}-${numer}`;
+    const photos = cldPhotos[aptId] || { zdjecia: [], karta: null };
+
     acc.push({
-      id: `${etap}-${numer}`,
+      id: aptId,
       numer,
       powierzchnia: parseArea(row[2]),
       kondygnacja: parseInt(row[4], 10) || 0,
@@ -74,21 +107,22 @@ const parseRows = (rows, etap) =>
       cena: parsePrice(row[8]),
       dostepnosc: mapStatus(row[9]),
       etap,
-      zdjecia: etap === "etap3" ? getVizImages(numer) : [],
-      karta: etap === "etap3" ? getCardImage(numer) : null,
+      zdjecia: photos.zdjecia,
+      karta: photos.karta,
     });
     return acc;
   }, []);
 
 const fetchAllApartments = async () => {
-  const [etap2Rows, etap3Rows] = await Promise.all([
+  const [etap2Rows, etap3Rows, cldPhotos] = await Promise.all([
     getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP2, 1101068206),
     getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP3, 905977375),
+    getCloudinaryPhotos(),
   ]);
 
   return [
-    ...parseRows(etap2Rows, "etap2"),
-    ...parseRows(etap3Rows, "etap3"),
+    ...parseRows(etap2Rows, "etap2", cldPhotos),
+    ...parseRows(etap3Rows, "etap3", cldPhotos),
   ];
 };
 

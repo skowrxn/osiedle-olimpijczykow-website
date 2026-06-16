@@ -40,12 +40,17 @@ export async function POST(request) {
   if (!file || !apartmentId)
     return NextResponse.json({ error: "Missing file or apartmentId" }, { status: 400 });
 
+  const isKarta = formData.get("isKarta") === "true";
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
+  const uploadOptions = isKarta
+    ? { public_id: `apartments/${apartmentId}/karta`, overwrite: true }
+    : { folder: `apartments/${apartmentId}` };
+
   const result = await new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: `apartments/${apartmentId}` }, (error, result) => {
+      .upload_stream(uploadOptions, (error, result) => {
         if (error) reject(error);
         else resolve(result);
       })
