@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-const USERNAME = "admin";
-const PASSWORD = "admin";
+const USERNAME = "olimpijczykow_admin";
+const PASSWORD = "XMhOFYPVn8rKcjwz";
 const PANEL_TOKEN = process.env.PANEL_AUTH_TOKEN || "oo-panel-secret-2024";
 
 export async function POST(request) {

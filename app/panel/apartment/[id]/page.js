@@ -105,7 +105,15 @@ export default function ApartmentPhotos() {
         const err = await res.json();
         throw new Error(err.error || "Błąd zapisu");
       }
-      await fetchApartment();
+      setApartment((prev) => ({
+        ...prev,
+        dostepnosc: editData.dostepnosc,
+        cena: editData.cena ? Number(editData.cena) : null,
+        powierzchnia: editData.powierzchnia ? Number(editData.powierzchnia) : null,
+        liczba_pokoi: editData.liczba_pokoi ? Number(editData.liczba_pokoi) : null,
+        kondygnacja: editData.kondygnacja !== "" ? Number(editData.kondygnacja) : null,
+        elementy_dodatkowe: editData.elementy_dodatkowe,
+      }));
       setEditMode(false);
       setEditData(null);
     } catch (e) {

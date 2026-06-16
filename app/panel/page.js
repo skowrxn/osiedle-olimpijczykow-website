@@ -34,7 +34,7 @@ export default function PanelLogin() {
       <div style={{ backgroundColor: "white", padding: "48px", borderRadius: "16px", boxShadow: "0 8px 32px rgba(0,0,0,0.08)", width: "100%", maxWidth: "420px" }}>
         <div style={{ marginBottom: "32px" }}>
           <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#111", margin: 0 }}>
-            Panel CMS
+            Panel Zarządzania
           </h1>
           <p style={{ color: "#888", marginTop: "6px", fontSize: "14px" }}>
             Osiedle Olimpijczyków
