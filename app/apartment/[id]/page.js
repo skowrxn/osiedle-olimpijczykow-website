@@ -6,8 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Lightbox from "../../components/Lightbox";
 import ContactSection from "../../components/ContactSection";
-import { PARKING_PRICE, STORAGE_PRICE } from "../../lib/apartments";
-
 const ApartmentDetail = () => {
     const { id } = useParams();
     const [apartment, setApartment] = useState(null);
@@ -17,6 +15,8 @@ const ApartmentDetail = () => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [parkingPrice, setParkingPrice] = useState(50000);
+    const [storagePrice, setStoragePrice] = useState(20000);
 
     useEffect(() => {
         if (!id) return;
@@ -35,6 +35,16 @@ const ApartmentDetail = () => {
                 setLoading(false);
             });
     }, [id]);
+
+    useEffect(() => {
+        fetch("/api/prices")
+            .then((r) => r.json())
+            .then((d) => {
+                if (d.parkingPrice) setParkingPrice(d.parkingPrice);
+                if (d.storagePrice) setStoragePrice(d.storagePrice);
+            })
+            .catch(() => {});
+    }, []);
 
     const formatPrice = (price) =>
         new Intl.NumberFormat("pl-PL", {
@@ -398,7 +408,7 @@ const ApartmentDetail = () => {
                                                                 Miejsce postojowe w garażu podziemnym
                                                             </span>
                                                             <span style={{ fontSize: "20px", fontWeight: "600", color: "white", fontFamily: "Poppins, sans-serif" }}>
-                                                                {formatPrice(PARKING_PRICE)}
+                                                                {formatPrice(parkingPrice)}
                                                             </span>
                                                         </div>
                                                         <div
@@ -416,7 +426,7 @@ const ApartmentDetail = () => {
                                                                 Komórka lokatorska
                                                             </span>
                                                             <span style={{ fontSize: "20px", fontWeight: "600", color: "white", fontFamily: "Poppins, sans-serif" }}>
-                                                                {formatPrice(STORAGE_PRICE)}
+                                                                {formatPrice(storagePrice)}
                                                             </span>
                                                         </div>
                                                     </div>
