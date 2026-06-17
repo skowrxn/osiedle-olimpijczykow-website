@@ -17,6 +17,7 @@ const ApartmentDetail = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [parkingPrice, setParkingPrice] = useState(50000);
     const [storagePrice, setStoragePrice] = useState(20000);
+    const [priceHistory, setPriceHistory] = useState([]);
 
     useEffect(() => {
         if (!id) return;
@@ -45,6 +46,14 @@ const ApartmentDetail = () => {
             })
             .catch(() => {});
     }, []);
+
+    useEffect(() => {
+        if (!apartment?.numer) return;
+        fetch(`/api/price-history?numer=${encodeURIComponent(apartment.numer)}`)
+            .then((r) => r.json())
+            .then((d) => setPriceHistory(Array.isArray(d) ? d : []))
+            .catch(() => {});
+    }, [apartment?.numer]);
 
     const formatPrice = (price) =>
         new Intl.NumberFormat("pl-PL", {
@@ -432,6 +441,36 @@ const ApartmentDetail = () => {
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* Price history */}
+                                            {priceHistory.length > 0 && (
+                                                <div style={{ marginBottom: "30px" }}>
+                                                    <h3 style={{ fontSize: "16px", fontWeight: "600", color: "rgba(255,255,255,0.85)", fontFamily: "Poppins, sans-serif", marginBottom: "10px" }}>
+                                                        Historia cen
+                                                    </h3>
+                                                    <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", overflow: "hidden" }}>
+                                                        {priceHistory.map((entry, idx) => (
+                                                            <div
+                                                                key={entry.data}
+                                                                style={{
+                                                                    display: "flex",
+                                                                    justifyContent: "space-between",
+                                                                    alignItems: "center",
+                                                                    padding: "11px 16px",
+                                                                    borderBottom: idx < priceHistory.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                                                                }}
+                                                            >
+                                                                <span style={{ fontSize: "13px", color: "#9ca3af" }}>
+                                                                    {new Date(entry.data + "T12:00:00").toLocaleDateString("pl-PL", { day: "numeric", month: "short", year: "numeric" })}
+                                                                </span>
+                                                                <span style={{ fontSize: "14px", fontWeight: idx === 0 ? "700" : "500", color: idx === 0 ? "white" : "#d1d5db", fontFamily: "Poppins, sans-serif" }}>
+                                                                    {new Intl.NumberFormat("pl-PL").format(entry.cena)} zł
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
 
                                             {/* Right – gallery */}
                                             <div style={{ padding: "60px 40px", backgroundColor: "white" }}>

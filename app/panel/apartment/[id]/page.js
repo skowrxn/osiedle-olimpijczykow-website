@@ -41,6 +41,17 @@ export default function ApartmentPhotos() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+
+  // History state
+  const [addToHistory, setAddToHistory] = useState(true);
+  const [priceHistory, setPriceHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [addingEntry, setAddingEntry] = useState(false);
+  const [newEntry, setNewEntry] = useState({ data: "", cena: "" });
+  const [editingRow, setEditingRow] = useState(null);
+  const [editRowData, setEditRowData] = useState(null);
+  const [savingHistory, setSavingHistory] = useState(false);
+
   const fileInputRef = useRef(null);
   const kartaInputRef = useRef(null);
   const router = useRouter();
@@ -57,9 +68,29 @@ export default function ApartmentPhotos() {
     return apt;
   }, [aptId]);
 
+  const numer = apartment?.numer ?? aptId.split("-").slice(1).join("-");
+
+  const fetchHistory = useCallback(async () => {
+    if (!numer) return;
+    setHistoryLoading(true);
+    try {
+      const res = await fetch(`/api/panel/price-history?numer=${encodeURIComponent(numer)}`);
+      const data = await res.json();
+      setPriceHistory(Array.isArray(data) ? data : []);
+    } catch {
+      setPriceHistory([]);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [numer]);
+
   useEffect(() => {
     Promise.all([fetchApartment(), fetchPhotos()]).then(() => setLoading(false));
   }, [fetchApartment, fetchPhotos]);
+
+  useEffect(() => {
+    if (apartment) fetchHistory();
+  }, [apartment, fetchHistory]);
 
   // ── Edit handlers ─────────────────────────────────────────────────────────
 
@@ -105,10 +136,12 @@ export default function ApartmentPhotos() {
         const err = await res.json();
         throw new Error(err.error || "Błąd zapisu");
       }
+      const newCena = editData.cena ? Number(editData.cena) : null;
+      const priceChanged = apartment.cena != null && newCena != null && newCena !== apartment.cena;
       setApartment((prev) => ({
         ...prev,
         dostepnosc: editData.dostepnosc,
-        cena: editData.cena ? Number(editData.cena) : null,
+        cena: newCena,
         powierzchnia: editData.powierzchnia ? Number(editData.powierzchnia) : null,
         liczba_pokoi: editData.liczba_pokoi ? Number(editData.liczba_pokoi) : null,
         kondygnacja: editData.kondygnacja !== "" ? Number(editData.kondygnacja) : null,
@@ -116,6 +149,15 @@ export default function ApartmentPhotos() {
       }));
       setEditMode(false);
       setEditData(null);
+      if (addToHistory && priceChanged) {
+        const today = new Date().toISOString().slice(0, 10);
+        await fetch("/api/panel/price-history", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ numer, data: today, cena: newCena }),
+        }).catch(() => {});
+        await fetchHistory();
+      }
     } catch (e) {
       setSaveError(e.message);
     } finally {
@@ -124,6 +166,59 @@ export default function ApartmentPhotos() {
   };
 
   const setField = (key, value) => setEditData((prev) => ({ ...prev, [key]: value }));
+
+  const handleAddHistoryEntry = async () => {
+    if (!newEntry.data || !newEntry.cena) return;
+    setSavingHistory(true);
+    try {
+      await fetch("/api/panel/price-history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ numer, data: newEntry.data, cena: Number(newEntry.cena) }),
+      });
+      setAddingEntry(false);
+      await fetchHistory();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingHistory(false);
+    }
+  };
+
+  const handleUpdateHistoryEntry = async (rowIndex) => {
+    if (!editRowData?.data || !editRowData?.cena) return;
+    setSavingHistory(true);
+    try {
+      await fetch("/api/panel/price-history", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rowIndex, data: editRowData.data, cena: Number(editRowData.cena) }),
+      });
+      setEditingRow(null);
+      await fetchHistory();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingHistory(false);
+    }
+  };
+
+  const handleDeleteHistoryEntry = async (rowIndex) => {
+    if (!confirm("Usunąć ten wpis z historii cen?")) return;
+    setSavingHistory(true);
+    try {
+      await fetch("/api/panel/price-history", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rowIndex }),
+      });
+      await fetchHistory();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSavingHistory(false);
+    }
+  };
 
   // ── Photo handlers ────────────────────────────────────────────────────────
 
@@ -332,6 +427,23 @@ export default function ApartmentPhotos() {
                 </div>
               )}
 
+              {editData.cena !== "" && Number(editData.cena) !== apartment.cena && (
+                <div style={{ padding: "10px 14px", backgroundColor: "#f0f9ff", border: "1px solid #bae6fd", borderRadius: "8px", display: "flex", alignItems: "center", gap: "12px" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "7px", cursor: "pointer", userSelect: "none" }}>
+                    <input
+                      type="checkbox"
+                      checked={addToHistory}
+                      onChange={(e) => setAddToHistory(e.target.checked)}
+                      style={{ width: "14px", height: "14px", cursor: "pointer", accentColor: "#007CBA" }}
+                    />
+                    <span style={{ fontSize: "13px", color: "#0369a1", fontWeight: "500" }}>Dodaj wpis do historii cen</span>
+                  </label>
+                  <span style={{ fontSize: "12px", color: "#0284c7" }}>
+                    {formatPrice(apartment.cena) || "brak"} → {formatPrice(Number(editData.cena))}
+                  </span>
+                </div>
+              )}
+
               <div style={{ display: "flex", gap: "10px" }}>
                 <button
                   onClick={saveEdit}
@@ -500,6 +612,124 @@ export default function ApartmentPhotos() {
             </div>
           ))}
         </div>
+
+        {/* ── Historia cen ─────────────────────────────────────────────── */}
+        {apartment && (
+          <div style={{ backgroundColor: "white", borderRadius: "12px", padding: "24px", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <h3 style={{ fontSize: "15px", fontWeight: "600", color: "#111", margin: 0 }}>Historia cen</h3>
+              <button
+                onClick={() => { setAddingEntry(true); setNewEntry({ data: new Date().toISOString().slice(0, 10), cena: "" }); }}
+                disabled={addingEntry}
+                style={{ padding: "7px 16px", backgroundColor: "#007CBA", color: "white", border: "none", borderRadius: "7px", cursor: "pointer", fontSize: "12px", fontWeight: "600", fontFamily: "inherit", opacity: addingEntry ? 0.5 : 1 }}
+              >
+                + Dodaj wpis
+              </button>
+            </div>
+
+            {addingEntry && (
+              <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap", marginBottom: "16px", padding: "14px", backgroundColor: "#f0f8ff", borderRadius: "8px", border: "1px solid #bfdbfe" }}>
+                <input
+                  type="date"
+                  value={newEntry.data}
+                  onChange={(e) => setNewEntry((p) => ({ ...p, data: e.target.value }))}
+                  style={{ ...inputStyle, width: "160px" }}
+                />
+                <input
+                  type="number"
+                  placeholder="Cena (zł)"
+                  value={newEntry.cena}
+                  onChange={(e) => setNewEntry((p) => ({ ...p, cena: e.target.value }))}
+                  style={{ ...inputStyle, width: "150px" }}
+                />
+                <button
+                  onClick={handleAddHistoryEntry}
+                  disabled={savingHistory || !newEntry.data || !newEntry.cena}
+                  style={{ padding: "9px 16px", backgroundColor: !newEntry.data || !newEntry.cena ? "#9ca3af" : "#007CBA", color: "white", border: "none", borderRadius: "7px", cursor: "pointer", fontSize: "13px", fontWeight: "600", fontFamily: "inherit" }}
+                >
+                  {savingHistory ? "…" : "Zapisz"}
+                </button>
+                <button
+                  onClick={() => setAddingEntry(false)}
+                  style={{ padding: "9px 14px", border: "1px solid #e0e0e0", borderRadius: "7px", backgroundColor: "white", cursor: "pointer", fontSize: "13px", color: "#555", fontFamily: "inherit" }}
+                >
+                  Anuluj
+                </button>
+              </div>
+            )}
+
+            {historyLoading ? (
+              <div style={{ color: "#aaa", padding: "20px", textAlign: "center", fontSize: "14px" }}>Ładowanie…</div>
+            ) : priceHistory.length === 0 ? (
+              <div style={{ color: "#aaa", textAlign: "center", padding: "24px", fontSize: "14px" }}>Brak historii cen</div>
+            ) : (
+              <div style={{ border: "1px solid #f0f0f0", borderRadius: "8px", overflow: "hidden" }}>
+                {priceHistory.map((entry, idx) => (
+                  <div
+                    key={entry.rowIndex}
+                    style={{ display: "grid", gridTemplateColumns: "160px 1fr auto", alignItems: "center", gap: "12px", padding: "12px 16px", borderBottom: idx < priceHistory.length - 1 ? "1px solid #f0f0f0" : "none", backgroundColor: idx === 0 ? "#f9fafb" : "white" }}
+                  >
+                    {editingRow === entry.rowIndex ? (
+                      <>
+                        <input
+                          type="date"
+                          value={editRowData.data}
+                          onChange={(e) => setEditRowData((p) => ({ ...p, data: e.target.value }))}
+                          style={{ ...inputStyle, fontSize: "13px", padding: "6px 10px" }}
+                        />
+                        <input
+                          type="number"
+                          value={editRowData.cena}
+                          onChange={(e) => setEditRowData((p) => ({ ...p, cena: e.target.value }))}
+                          style={{ ...inputStyle, fontSize: "13px", padding: "6px 10px" }}
+                        />
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <button
+                            onClick={() => handleUpdateHistoryEntry(entry.rowIndex)}
+                            disabled={savingHistory}
+                            style={{ padding: "6px 14px", backgroundColor: "#007CBA", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "12px", fontWeight: "600", fontFamily: "inherit" }}
+                          >
+                            {savingHistory ? "…" : "Zapisz"}
+                          </button>
+                          <button
+                            onClick={() => setEditingRow(null)}
+                            style={{ padding: "6px 12px", border: "1px solid #e0e0e0", borderRadius: "6px", backgroundColor: "white", cursor: "pointer", fontSize: "12px", fontFamily: "inherit" }}
+                          >
+                            Anuluj
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <span style={{ fontSize: "13px", color: "#555" }}>
+                          {new Date(entry.data + "T12:00:00").toLocaleDateString("pl-PL", { day: "numeric", month: "short", year: "numeric" })}
+                        </span>
+                        <span style={{ fontSize: "14px", fontWeight: idx === 0 ? "700" : "500", color: "#111" }}>
+                          {entry.cena.toLocaleString("pl-PL")} zł
+                        </span>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          <button
+                            onClick={() => { setEditingRow(entry.rowIndex); setEditRowData({ data: entry.data, cena: String(entry.cena) }); }}
+                            style={{ padding: "5px 12px", border: "1px solid #e0e0e0", borderRadius: "6px", backgroundColor: "white", cursor: "pointer", fontSize: "12px", color: "#555", fontFamily: "inherit" }}
+                          >
+                            Edytuj
+                          </button>
+                          <button
+                            onClick={() => handleDeleteHistoryEntry(entry.rowIndex)}
+                            disabled={savingHistory}
+                            style={{ padding: "5px 12px", border: "1px solid #fca5a5", borderRadius: "6px", backgroundColor: "white", cursor: "pointer", fontSize: "12px", color: "#dc2626", fontFamily: "inherit" }}
+                          >
+                            Usuń
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
     </div>
