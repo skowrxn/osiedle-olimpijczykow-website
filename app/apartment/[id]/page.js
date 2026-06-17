@@ -440,37 +440,37 @@ const ApartmentDetail = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            {/* Price history */}
-                                            {priceHistory.length > 0 && (
-                                                <div style={{ marginBottom: "30px" }}>
-                                                    <h3 style={{ fontSize: "16px", fontWeight: "600", color: "rgba(255,255,255,0.85)", fontFamily: "Poppins, sans-serif", marginBottom: "10px" }}>
-                                                        Historia cen
-                                                    </h3>
-                                                    <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", overflow: "hidden" }}>
-                                                        {priceHistory.map((entry, idx) => (
-                                                            <div
-                                                                key={entry.data}
-                                                                style={{
-                                                                    display: "flex",
-                                                                    justifyContent: "space-between",
-                                                                    alignItems: "center",
-                                                                    padding: "11px 16px",
-                                                                    borderBottom: idx < priceHistory.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
-                                                                }}
-                                                            >
-                                                                <span style={{ fontSize: "13px", color: "#9ca3af" }}>
-                                                                    {new Date(entry.data + "T12:00:00").toLocaleDateString("pl-PL", { day: "numeric", month: "short", year: "numeric" })}
-                                                                </span>
-                                                                <span style={{ fontSize: "14px", fontWeight: idx === 0 ? "700" : "500", color: idx === 0 ? "white" : "#d1d5db", fontFamily: "Poppins, sans-serif" }}>
-                                                                    {new Intl.NumberFormat("pl-PL").format(entry.cena)} zł
-                                                                </span>
-                                                            </div>
-                                                        ))}
+                                                {/* Price history */}
+                                                {priceHistory.length > 0 && (
+                                                    <div style={{ marginBottom: "30px" }}>
+                                                        <h3 style={{ fontSize: "16px", fontWeight: "600", color: "rgba(255,255,255,0.85)", fontFamily: "Poppins, sans-serif", marginBottom: "10px" }}>
+                                                            Historia cen
+                                                        </h3>
+                                                        <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: "8px", overflow: "hidden" }}>
+                                                            {priceHistory.map((entry, idx) => (
+                                                                <div
+                                                                    key={entry.data}
+                                                                    style={{
+                                                                        display: "flex",
+                                                                        justifyContent: "space-between",
+                                                                        alignItems: "center",
+                                                                        padding: "11px 16px",
+                                                                        borderBottom: idx < priceHistory.length - 1 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                                                                    }}
+                                                                >
+                                                                    <span style={{ fontSize: "13px", color: "#9ca3af" }}>
+                                                                        {new Date(entry.data + "T12:00:00").toLocaleDateString("pl-PL", { day: "numeric", month: "short", year: "numeric" })}
+                                                                    </span>
+                                                                    <span style={{ fontSize: "14px", fontWeight: idx === 0 ? "700" : "500", color: idx === 0 ? "white" : "#d1d5db", fontFamily: "Poppins, sans-serif" }}>
+                                                                        {new Intl.NumberFormat("pl-PL").format(entry.cena)} zł
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )}
+                                            </div>
 
                                             {/* Right – gallery */}
                                             <div style={{ padding: "60px 40px", backgroundColor: "white" }}>
