@@ -1,11 +1,10 @@
 "use client";
 
 import React, { Suspense, useState, useEffect } from "react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import ApartmentListCompact from "../components/ApartmentListCompact";
-import ApartmentSearch from "../components/ApartmentSearch";
 import PropertySearch from "../components/PropertySearch";
+import StageCard from "../components/StageCard";
 
 function ListaLokaliContent() {
     const router = useRouter();
@@ -55,55 +54,6 @@ function ListaLokaliContent() {
         router.push(newUrl, { scroll: false });
     };
 
-    // Konfigurowalne obszary dla każdego budynku
-
-    const FloorPlan = ({
-        imageSrc,
-        desc,
-        targetRoute,
-        title,
-        stage,
-        isGrayedOut = false,
-    }) => (
-        <div
-            className={`relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-103 ${
-                targetRoute !== "" ? "cursor-pointer" : ""
-            }`}
-            style={{ height: "400px" }}
-        >
-            <a href={targetRoute == "" ? null : targetRoute}>
-                <Image
-                    src={imageSrc}
-                    alt={title}
-                    fill
-                    style={{
-                        objectFit: "cover",
-                        filter: isGrayedOut ? "grayscale(100%)" : "none",
-                        opacity: isGrayedOut ? "0.6" : "1",
-                    }}
-                />
-
-                {/* Tytuł na dole bez overlay */}
-                <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
-                    <div className="w-full p-4 bg-gradient-to-t from-black via-black/50 to-transparent">
-                        <span className="text-white text-2xl font-bold mb-2">
-                            {title}
-                        </span>
-                        <p
-                            className={
-                                isGrayedOut
-                                    ? "text-gray-400 text-md"
-                                    : "text-neutral-200 text-md"
-                            }
-                        >
-                            {desc}
-                        </p>
-                    </div>
-                </div>
-            </a>
-        </div>
-    );
-
     return (
         <div className="home wp-singular page-template elementor-default elementor-page">
             <main id="main" className="site-main">
@@ -136,28 +86,24 @@ function ListaLokaliContent() {
                                             margin: "0 auto",
                                         }}
                                     >
-                                        <FloorPlan
+                                        <StageCard
                                             imageSrc="/img/etap-2.jpg"
-                                            targetRoute="/etap2"
-                                            desc="Etap zakończony - mieszkania gotowe do odbioru"
                                             title="Mieszkania - Etap 2"
-                                            stage="etap2"
+                                            soldOut
                                         />
 
-                                        <FloorPlan
+                                        <StageCard
                                             imageSrc="/img/etap-3.jpg"
-                                            targetRoute="/etap3"
+                                            href="/etap3"
                                             desc="Mieszkania w budowie"
                                             title="Mieszkania - Etap 3"
-                                            stage="etap3"
-                                            isGrayedOut={false} // Zmieniono na false aby odblokować
                                         />
                                     </div>
                                 </div>
                                 <div className="mt-12 py-4 results-search">
                                     <PropertySearch
                                         stayOnPage={true}
-                                        showStage={true}
+                                        showStage={false}
                                     ></PropertySearch>
                                 </div>
                                 <div className="mt-6 bg-white mb-24 results-wrapper">

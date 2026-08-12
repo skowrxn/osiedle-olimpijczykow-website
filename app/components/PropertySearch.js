@@ -146,7 +146,6 @@ export default function PropertySearch({
                                 }}
                             >
                                 <option value="">Wszystkie</option>
-                                <option value="etap2">Etap 2</option>
                                 <option value="etap3">Etap 3</option>
                             </select>
                         </div>

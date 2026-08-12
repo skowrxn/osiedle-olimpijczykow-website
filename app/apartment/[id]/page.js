@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Lightbox from "../../components/Lightbox";
 import ContactSection from "../../components/ContactSection";
 const ApartmentDetail = () => {
     const { id } = useParams();
+    const router = useRouter();
     const [apartment, setApartment] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,6 +28,11 @@ const ApartmentDetail = () => {
                 return res.json();
             })
             .then((data) => {
+                // Etap 2 - sprzedaż zakończona, mieszkania nie są prezentowane
+                if (data?.etap === "etap2") {
+                    router.replace("/etap2");
+                    return;
+                }
                 setApartment(data || null);
                 setLoading(false);
             })
@@ -35,7 +41,7 @@ const ApartmentDetail = () => {
                 setError("Nie udało się pobrać danych mieszkania.");
                 setLoading(false);
             });
-    }, [id]);
+    }, [id, router]);
 
     useEffect(() => {
         fetch("/api/prices")
