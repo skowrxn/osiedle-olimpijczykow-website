@@ -63,7 +63,8 @@ export default function PanelDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/apartments")
+    // includeHidden=1 - panel pokazuje również etapy wycofane ze sprzedaży (Etap 2)
+    fetch("/api/apartments?includeHidden=1")
       .then((r) => r.json())
       .then((data) => {
         setApartments(Array.isArray(data) ? data : []);
