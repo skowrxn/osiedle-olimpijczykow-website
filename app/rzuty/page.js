@@ -29,7 +29,7 @@ export default function RzutyPage() {
                 <StageCard
                     imageSrc="/img/etap-2.jpg"
                     title="Rzuty kondygnacji - Etap 2"
-                    soldOut
+                    status="sold"
                 />
 
                 <StageCard
