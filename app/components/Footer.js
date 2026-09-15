@@ -8,7 +8,6 @@ const navLinks = [
     { href: "/lista-lokali", label: "Lista lokali" },
     { href: "/galeria", label: "Galeria" },
     { href: "/kontakt", label: "Kontakt" },
-    { href: "/prospekt", label: "Prospekt - Etap II" },
     { href: "/prospekt-etap3", label: "Prospekt - Etap III" },
     { href: "/polityka-prywatnosci", label: "Polityka Prywatności" },
     {
