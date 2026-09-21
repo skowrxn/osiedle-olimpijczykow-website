@@ -80,7 +80,7 @@ function ListaLokaliContent() {
                                         style={{
                                             display: "grid",
                                             gridTemplateColumns:
-                                                "repeat(auto-fit, minmax(500px, 1fr))",
+                                                "repeat(auto-fit, minmax(320px, 1fr))",
                                             gap: "40px",
                                             maxWidth: "1200px",
                                             margin: "0 auto",
@@ -89,7 +89,7 @@ function ListaLokaliContent() {
                                         <StageCard
                                             imageSrc="/img/etap-2.jpg"
                                             title="Mieszkania - Etap 2"
-                                            soldOut
+                                            status="sold"
                                         />
 
                                         <StageCard
@@ -97,6 +97,12 @@ function ListaLokaliContent() {
                                             href="/etap3"
                                             desc="Mieszkania w budowie"
                                             title="Mieszkania - Etap 3"
+                                        />
+
+                                        <StageCard
+                                            imageSrc="/img/etap-4.jpg"
+                                            title="Mieszkania - Etap 4"
+                                            status="soon"
                                         />
                                     </div>
                                 </div>

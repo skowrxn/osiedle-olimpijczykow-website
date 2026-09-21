@@ -3,11 +3,18 @@
 import React from "react";
 import Image from "next/image";
 
+// Etapy, ktore nie sa aktualnie w sprzedazy - kafelek jest wyszarzony,
+// nieklikalny i zamiast opisu pokazuje komunikat o statusie sprzedazy.
+const STATUS_LABELS = {
+    sold: "Sprzedaż zakończona",
+    soon: "Sprzedaż wkrótce",
+};
+
 /**
  * Kafelek etapu używany na stronach "Lista lokali" oraz "Rzuty".
  *
- * Gdy soldOut = true, kafelek jest wyszarzony, nieklikalny i zamiast
- * standardowego opisu pokazuje napis "Sprzedaż zakończona".
+ * status = "sold" / "soon" wyłącza kafelek i wyświetla na nim komunikat,
+ * brak statusu oznacza etap aktywny (klikalny, z tytułem i opisem na dole).
  */
 const StageCard = ({
     imageSrc,
@@ -15,9 +22,10 @@ const StageCard = ({
     desc,
     href = null,
     onClick = null,
-    soldOut = false,
+    status = null,
 }) => {
-    const isClickable = !soldOut && (href || onClick);
+    const statusLabel = STATUS_LABELS[status] || null;
+    const isClickable = !statusLabel && (href || onClick);
 
     const content = (
         <div className="relative w-full" style={{ height: "400px" }}>
@@ -28,22 +36,22 @@ const StageCard = ({
                 sizes="(max-width: 768px) 100vw, 600px"
                 style={{
                     objectFit: "cover",
-                    filter: soldOut ? "grayscale(100%)" : "none",
+                    filter: statusLabel ? "grayscale(100%)" : "none",
                 }}
             />
 
-            {soldOut ? (
+            {statusLabel ? (
                 <>
                     {/* Przyciemnienie całego kafelka */}
                     <div className="absolute inset-0 bg-black/50" />
 
-                    {/* Informacja o zakończonej sprzedaży */}
+                    {/* Informacja o statusie sprzedaży */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 pointer-events-none">
                         <span
                             className="text-white text-3xl md:text-4xl font-bold uppercase leading-tight"
                             style={{ maxWidth: "320px" }}
                         >
-                            Sprzedaż zakończona
+                            {statusLabel}
                         </span>
                         <p className="text-gray-300 text-lg mt-3">{title}</p>
                     </div>
@@ -68,7 +76,7 @@ const StageCard = ({
             : "cursor-default"
     }`;
 
-    if (soldOut) {
+    if (statusLabel) {
         return (
             <div className={wrapperClass} aria-disabled="true">
                 {content}
