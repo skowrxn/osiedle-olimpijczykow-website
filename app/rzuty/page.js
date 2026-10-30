@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Etap3Component from "./components/Etap3Component";
+import Etap4Component from "./components/Etap4Component";
 import StageCard from "../components/StageCard";
 
 export default function RzutyPage() {
@@ -20,23 +21,24 @@ export default function RzutyPage() {
                 className="etapy-grid"
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(420px, 1fr))",
                     gap: "40px",
                     maxWidth: "1200px",
                     margin: "0 auto",
                 }}
             >
                 <StageCard
-                    imageSrc="/img/etap-2.jpg"
-                    title="Rzuty kondygnacji - Etap 2"
-                    status="sold"
+                    imageSrc="/img/etap-3.jpg"
+                    onClick={() => setSelectedStage("etap3")}
+                    desc="Mieszkania do odbioru jesienią 2027"
+                    title="Rzuty kondygnacji - Etap 3"
                 />
 
                 <StageCard
-                    imageSrc="/img/etap-3.jpg"
-                    onClick={() => setSelectedStage("etap3")}
-                    desc="Mieszkania w budowie"
-                    title="Rzuty kondygnacji - Etap 3"
+                    imageSrc="/img/etap-4.jpg"
+                    onClick={() => setSelectedStage("etap4")}
+                    desc="Mieszkania do odbioru wiosną 2029"
+                    title="Rzuty kondygnacji - Etap 4"
                 />
             </div>
 
@@ -44,6 +46,12 @@ export default function RzutyPage() {
             {selectedStage === "etap3" && (
                 <div style={{ marginTop: "60px" }}>
                     <Etap3Component />
+                </div>
+            )}
+
+            {selectedStage === "etap4" && (
+                <div style={{ marginTop: "60px" }}>
+                    <Etap4Component />
                 </div>
             )}
         </div>

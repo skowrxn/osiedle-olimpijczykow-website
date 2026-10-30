@@ -1,6 +1,25 @@
 import { google } from "googleapis";
 import { unstable_cache } from "next/cache";
 import cloudinary from "./cloudinary";
+import cennikEtap4 from "./cennik-etap4.json";
+import kartyEtap4 from "./karty-etap4.json";
+
+// Karty mieszkan wgrane do repozytorium. Karta wrzucona przez panel
+// (Cloudinary) ma pierwszenstwo.
+const STATIC_KARTY = { etap4: new Set(kartyEtap4) };
+
+const staticKarta = (etap, numer) =>
+  STATIC_KARTY[etap]?.has(numer) ? `/karty_mieszkan/${etap}/${numer}.png` : null;
+
+// Zrodla danych o mieszkaniach. Kazdy etap to osobny arkusz Google.
+// Etap 4 do czasu zalozenia arkusza korzysta z cennika wgranego do repozytorium
+// (ten sam uklad kolumn co arkusz), wiec po ustawieniu GOOGLE_SPREADSHEET_ID_ETAP4
+// dane automatycznie zaczynaja isc z arkusza.
+const ETAP_SOURCES = [
+  { etap: "etap2", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP2", gid: 1101068206 },
+  { etap: "etap3", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP3", gid: 905977375 },
+  { etap: "etap4", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP4", gid: null, fallbackRows: cennikEtap4 },
+];
 
 const parsePrice = (s) => {
   if (!s || !String(s).includes("zł")) return null;
@@ -108,22 +127,44 @@ const parseRows = (rows, etap, cldPhotos) =>
       dostepnosc: mapStatus(row[9]),
       etap,
       zdjecia: photos.zdjecia,
-      karta: photos.karta,
+      karta: photos.karta || staticKarta(etap, numer),
     });
     return acc;
   }, []);
 
+const getRowsForEtap = async ({ etap, spreadsheetIdEnv, gid, fallbackRows }) => {
+  const spreadsheetId = process.env[spreadsheetIdEnv];
+
+  if (!spreadsheetId) {
+    if (fallbackRows) {
+      console.warn(`[sheets] brak ${spreadsheetIdEnv} - ${etap} z cennika w repozytorium`);
+      return fallbackRows;
+    }
+    throw new Error(`[sheets] brak ${spreadsheetIdEnv} dla ${etap}`);
+  }
+
+  try {
+    return await getSheetRows(spreadsheetId, gid);
+  } catch (e) {
+    // Etap z cennikiem w repozytorium przezywa awarie arkusza; dla pozostalych
+    // wolimy blad niz ciche pokazanie niepelnej listy mieszkan.
+    if (fallbackRows) {
+      console.error(`[sheets] ${etap} - blad arkusza, uzywam cennika z repozytorium:`, e.message);
+      return fallbackRows;
+    }
+    throw e;
+  }
+};
+
 const fetchAllApartments = async () => {
-  const [etap2Rows, etap3Rows, cldPhotos] = await Promise.all([
-    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP2, 1101068206),
-    getSheetRows(process.env.GOOGLE_SPREADSHEET_ID_ETAP3, 905977375),
+  const [cldPhotos, ...rowsPerEtap] = await Promise.all([
     getCloudinaryPhotos(),
+    ...ETAP_SOURCES.map(getRowsForEtap),
   ]);
 
-  return [
-    ...parseRows(etap2Rows, "etap2", cldPhotos),
-    ...parseRows(etap3Rows, "etap3", cldPhotos),
-  ];
+  return ETAP_SOURCES.flatMap((source, i) =>
+    parseRows(rowsPerEtap[i], source.etap, cldPhotos)
+  );
 };
 
 export const getCachedApartments = unstable_cache(

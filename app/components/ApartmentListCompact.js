@@ -87,7 +87,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
     };
 
     const openGarageLightbox = () => {
-        setLightboxImages([`/img/garaz${etap === "2" ? "2" : "3"}.png`]);
+        setLightboxImages([`/img/garaz${etap}.png`]);
         setCurrentImageIndex(0);
         setLightboxOpen(true);
     };
@@ -372,7 +372,7 @@ const ApartmentListCompact = ({ etap = null, showSearch = true, limit = null }) 
                         }}
                     >
                         <Image
-                            src={`/img/garaz${etap === "2" ? "2" : "3"}.png`}
+                            src={`/img/garaz${etap}.png`}
                             alt={`Rzut garażu – etap ${etap}`}
                             width={1200}
                             height={900}

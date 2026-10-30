@@ -7,6 +7,7 @@ const PANEL_TOKEN = process.env.PANEL_AUTH_TOKEN || "oo-panel-secret-2024";
 const ETAP_CONFIG = {
   etap2: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP2, gid: 1101068206 },
   etap3: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP3, gid: 905977375 },
+  etap4: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP4, gid: null },
 };
 
 // Columns (A=1, B=2, …) in the sheet:
@@ -52,8 +53,8 @@ export async function PUT(request) {
   const { id, data } = await request.json();
   if (!id || !data) return NextResponse.json({ error: "Missing id or data" }, { status: 400 });
 
-  const etap = id.startsWith("etap2") ? "etap2" : "etap3";
-  const numer = id.replace(/^etap[23]-/, "");
+  const etap = id.split("-")[0];
+  const numer = id.slice(etap.length + 1);
   const { spreadsheetId, gid } = ETAP_CONFIG[etap] || {};
   if (!spreadsheetId) return NextResponse.json({ error: "Unknown etap" }, { status: 400 });
 

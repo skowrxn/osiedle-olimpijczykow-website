@@ -16,14 +16,21 @@ export default function Galeria() {
         "wizualizacja_04_rev01.jpg",
     ];
 
-    // Zdjęcia z folderu realizacja-2
-    const realizacja2Images = [
-        "budynek.jpg",
-        "budynek2.jpg",
-        "budynek3.jpg",
-        "budynek4.jpg",
-        "budynek5.jpg",
-        "budynek6.jpg",
+    // Wizualizacje budynku - etap IV
+    const realizacja4Images = [
+        "wizualizacja_01.jpg",
+        "wizualizacja_02.jpg",
+        "wizualizacja_03.jpg",
+    ];
+
+    // Zdjęcia zrealizowanego osiedla
+    const realizacjaOsiedlaImages = [
+        "realizacja-1.jpg",
+        "realizacja-2.jpg",
+        "realizacja-3.jpg",
+        "realizacja-4.jpg",
+        "realizacja-5.jpg",
+        "realizacja-6.jpg",
     ];
 
     // Zdjęcia z folderu wizualizacje
@@ -88,15 +95,21 @@ export default function Galeria() {
         <div className="container mx-auto px-4 py-12">
             <div className="max-w-6xl mx-auto">
                 <GallerySection
+                    title="Realizacja Osiedla"
+                    images={realizacjaOsiedlaImages}
+                    folder="realizacja-osiedla"
+                />
+
+                <GallerySection
                     title="Wizualizacja budynku - etap III"
                     images={realizacja3Images}
                     folder="realizacja-3"
                 />
 
                 <GallerySection
-                    title="Realizacja budynku - etap II"
-                    images={realizacja2Images}
-                    folder="realizacja-2"
+                    title="Wizualizacja Budynku - Etap IV"
+                    images={realizacja4Images}
+                    folder="realizacja-4"
                 />
 
                 <GallerySection

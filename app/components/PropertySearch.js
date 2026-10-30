@@ -41,9 +41,6 @@ export default function PropertySearch({
 
         if (searchFilters.stage) {
             params.set("stage", searchFilters.stage);
-        } else if (!showStage) {
-            // Gdy nie ma wyboru etapu (strona główna), domyślnie ustaw etap3
-            params.set("stage", "etap3");
         }
 
         if (searchFilters.availability) {
@@ -60,8 +57,10 @@ export default function PropertySearch({
                 : currentPath;
             router.push(newUrl);
         } else {
-            // Domyślne zachowanie - przekieruj na etap3
-            const newUrl = queryString ? `/etap3?${queryString}` : "/etap3";
+            // Domyślne zachowanie - przekieruj na listę lokali (wszystkie etapy w sprzedaży)
+            const newUrl = queryString
+                ? `/lista-lokali?${queryString}`
+                : "/lista-lokali";
             router.push(newUrl);
         }
     };
@@ -147,6 +146,7 @@ export default function PropertySearch({
                             >
                                 <option value="">Wszystkie</option>
                                 <option value="etap3">Etap 3</option>
+                                <option value="etap4">Etap 4</option>
                             </select>
                         </div>
                     )}

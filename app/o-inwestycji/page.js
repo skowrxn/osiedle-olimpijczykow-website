@@ -3,6 +3,123 @@ import BoxWithIcon from "../components/BoxWithIcon";
 import Image from "next/image";
 import { getCachedProgress } from "../lib/config";
 
+// Etap IV jest na starcie prac; po postepach aktualizujemy tu numer kroku
+// (0 = "Rozpoczęcie prac", patrz BUILD_STEPS).
+const ETAP4_PROGRESS = 0;
+
+const BUILD_STEPS = [
+    "Rozpoczęcie prac",
+    "Stan surowy otwarty",
+    "Stan surowy zamknięty",
+    "Stan deweloperski",
+    "Zamknięcie prac na budowie",
+    "Pozwolenie na użytkowanie",
+    "Przekazywanie kluczy",
+];
+
+// Oś postępu prac dla pojedynczego etapu.
+const BuildingTimeline = ({ label, progressStage }) => (
+    <div className="flex flex-col">
+        <div className="mb-15 items-center flex flex-col">
+            <div
+                style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    padding: "4px 18px",
+                    borderRadius: "20px",
+                    backgroundColor: "rgba(108, 117, 125, 0.1)",
+                    border: "1px solid rgba(108, 117, 125, 0.2)",
+                }}
+            >
+                <div
+                    style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        backgroundColor: "#6c757d",
+                    }}
+                ></div>
+                <span
+                    style={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        fontFamily: "Poppins, sans-serif",
+                        color: "#6c757d",
+                    }}
+                >
+                    {label}
+                </span>
+            </div>
+        </div>
+
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "relative",
+                maxWidth: "1000px",
+                margin: "0 auto",
+                padding: "0 20px",
+            }}
+        >
+            {/* Timeline line */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: "-20%",
+                    left: "40px",
+                    right: "40px",
+                    height: "2px",
+                    backgroundColor: "#DAA520",
+                    zIndex: 1,
+                }}
+            ></div>
+
+            {BUILD_STEPS.map((step, index) => (
+                <div
+                    key={index}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        position: "relative",
+                        zIndex: 2,
+                        flex: 1,
+                    }}
+                >
+                    <div
+                        style={{
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            backgroundColor:
+                                index <= progressStage ? "#333" : "#e0e0e0",
+                            marginBottom: "15px",
+                            border: "3px solid white",
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                        }}
+                    ></div>
+                    <div
+                        style={{
+                            textAlign: "center",
+                            fontSize: "14px",
+                            fontFamily: "Poppins, sans-serif",
+                            color: index <= progressStage ? "#333" : "#7e7e7e",
+                            fontWeight: index <= progressStage ? "600" : "400",
+                            maxWidth: "110px",
+                            lineHeight: "1.3",
+                        }}
+                    >
+                        {step}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
+
 export default async function OInwestycji() {
     const progressStage = await getCachedProgress();
     return (
@@ -343,138 +460,29 @@ export default async function OInwestycji() {
                     >
                         <div className="elementor-container">
                             <div className="elementor-column elementor-col-100">
-                                <div className="flex flex-col">
-                                    <div className="mb-15 items-center flex flex-col">
-                                        <h3
-                                            style={{
-                                                fontSize: "36px",
-                                                fontWeight: "600",
-                                                fontFamily:
-                                                    "Poppins, sans-serif",
-                                                textAlign: "center",
-                                                marginBottom: "20px",
-                                                color: "#333",
-                                            }}
-                                        >
-                                            Sprawdź postępy w budowie
-                                        </h3>
+                                <h3
+                                    style={{
+                                        fontSize: "36px",
+                                        fontWeight: "600",
+                                        fontFamily: "Poppins, sans-serif",
+                                        textAlign: "center",
+                                        marginBottom: "40px",
+                                        color: "#333",
+                                    }}
+                                >
+                                    Sprawdź postępy w budowie
+                                </h3>
 
-                                        <div
-                                            style={{
-                                                display: "inline-flex",
-                                                alignItems: "center",
-                                                gap: "4px",
-                                                padding: "4px 18px",
-                                                borderRadius: "20px",
-                                                backgroundColor:
-                                                    "rgba(108, 117, 125, 0.1)",
-                                                border: "1px solid rgba(108, 117, 125, 0.2)",
-                                            }}
-                                        >
-                                            <div
-                                                style={{
-                                                    width: "8px",
-                                                    height: "8px",
-                                                    borderRadius: "50%",
-                                                    backgroundColor: "#6c757d",
-                                                }}
-                                            ></div>
-                                            <span
-                                                style={{
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                    fontFamily:
-                                                        "Poppins, sans-serif",
-                                                    color: "#6c757d",
-                                                }}
-                                            >
-                                                ETAP III
-                                            </span>
-                                        </div>
-                                    </div>
+                                <BuildingTimeline
+                                    label="ETAP III"
+                                    progressStage={progressStage}
+                                />
 
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
-                                            alignItems: "center",
-                                            position: "relative",
-                                            maxWidth: "1000px",
-                                            margin: "0 auto",
-                                            padding: "0 20px",
-                                        }}
-                                    >
-                                        {/* Timeline line */}
-                                        <div
-                                            style={{
-                                                position: "absolute",
-                                                top: "-20%",
-                                                left: "40px",
-                                                right: "40px",
-                                                height: "2px",
-                                                backgroundColor: "#DAA520",
-                                                zIndex: 1,
-                                            }}
-                                        ></div>
-
-                                        {[
-                                            "Rozpoczęcie prac",
-                                            "Stan surowy otwarty",
-                                            "Stan surowy zamknięty",
-                                            "Stan deweloperski",
-                                            "Zamknięcie prac na budowie",
-                                            "Pozwolenie na użytkowanie",
-                                            "Przekazywanie kluczy",
-                                        ].map((step, index) => (
-                                            <div
-                                                key={index}
-                                                style={{
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    alignItems: "center",
-                                                    position: "relative",
-                                                    zIndex: 2,
-                                                    flex: 1,
-                                                }}
-                                            >
-                                                <div
-                                                    style={{
-                                                        width: "20px",
-                                                        height: "20px",
-                                                        borderRadius: "50%",
-                                                        backgroundColor:
-                                                            index <= progressStage
-                                                                ? "#333"
-                                                                : "#e0e0e0",
-                                                        marginBottom: "15px",
-                                                        border: "3px solid white",
-                                                        boxShadow:
-                                                            "0 2px 8px rgba(0,0,0,0.1)",
-                                                    }}
-                                                ></div>
-                                                <div
-                                                    style={{
-                                                        textAlign: "center",
-                                                        fontSize: "14px",
-                                                        fontFamily:
-                                                            "Poppins, sans-serif",
-                                                        color:
-                                                            index <= progressStage
-                                                                ? "#333"
-                                                                : "#7e7e7e",
-                                                        fontWeight:
-                                                            index <= progressStage
-                                                                ? "600"
-                                                                : "400",
-                                                        maxWidth: "110px",
-                                                        lineHeight: "1.3",
-                                                    }}
-                                                >
-                                                    {step}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                <div style={{ marginTop: "70px" }}>
+                                    <BuildingTimeline
+                                        label="ETAP IV"
+                                        progressStage={ETAP4_PROGRESS}
+                                    />
                                 </div>
                             </div>
                         </div>
