@@ -80,36 +80,31 @@ function ListaLokaliContent() {
                                         style={{
                                             display: "grid",
                                             gridTemplateColumns:
-                                                "repeat(auto-fit, minmax(320px, 1fr))",
+                                                "repeat(auto-fit, minmax(420px, 1fr))",
                                             gap: "40px",
                                             maxWidth: "1200px",
                                             margin: "0 auto",
                                         }}
                                     >
                                         <StageCard
-                                            imageSrc="/img/etap-2.jpg"
-                                            title="Mieszkania - Etap 2"
-                                            status="sold"
-                                        />
-
-                                        <StageCard
                                             imageSrc="/img/etap-3.jpg"
                                             href="/etap3"
-                                            desc="Mieszkania w budowie"
+                                            desc="Mieszkania do odbioru jesienią 2027"
                                             title="Mieszkania - Etap 3"
                                         />
 
                                         <StageCard
                                             imageSrc="/img/etap-4.jpg"
+                                            href="/etap4"
+                                            desc="Mieszkania do odbioru wiosną 2029"
                                             title="Mieszkania - Etap 4"
-                                            status="soon"
                                         />
                                     </div>
                                 </div>
                                 <div className="mt-12 py-4 results-search">
                                     <PropertySearch
                                         stayOnPage={true}
-                                        showStage={false}
+                                        showStage={true}
                                     ></PropertySearch>
                                 </div>
                                 <div className="mt-6 bg-white mb-24 results-wrapper">
