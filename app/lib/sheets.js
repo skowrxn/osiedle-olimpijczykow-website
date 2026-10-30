@@ -2,6 +2,14 @@ import { google } from "googleapis";
 import { unstable_cache } from "next/cache";
 import cloudinary from "./cloudinary";
 import cennikEtap4 from "./cennik-etap4.json";
+import kartyEtap4 from "./karty-etap4.json";
+
+// Karty mieszkan wgrane do repozytorium. Karta wrzucona przez panel
+// (Cloudinary) ma pierwszenstwo.
+const STATIC_KARTY = { etap4: new Set(kartyEtap4) };
+
+const staticKarta = (etap, numer) =>
+  STATIC_KARTY[etap]?.has(numer) ? `/karty_mieszkan/${etap}/${numer}.png` : null;
 
 // Zrodla danych o mieszkaniach. Kazdy etap to osobny arkusz Google.
 // Etap 4 do czasu zalozenia arkusza korzysta z cennika wgranego do repozytorium
@@ -119,7 +127,7 @@ const parseRows = (rows, etap, cldPhotos) =>
       dostepnosc: mapStatus(row[9]),
       etap,
       zdjecia: photos.zdjecia,
-      karta: photos.karta,
+      karta: photos.karta || staticKarta(etap, numer),
     });
     return acc;
   }, []);

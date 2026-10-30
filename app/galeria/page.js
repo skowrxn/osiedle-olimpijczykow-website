@@ -16,7 +16,10 @@ export default function Galeria() {
         "wizualizacja_04_rev01.jpg",
     ];
 
-    // Zdjęcia z folderu realizacja-2
+    // Wizualizacje budynku - etap IV
+    const realizacja4Images = ["wizualizacja_01.jpg"];
+
+    // Zdjęcia z folderu realizacja-2 (realizacja osiedla)
     const realizacja2Images = [
         "budynek.jpg",
         "budynek2.jpg",
@@ -88,15 +91,21 @@ export default function Galeria() {
         <div className="container mx-auto px-4 py-12">
             <div className="max-w-6xl mx-auto">
                 <GallerySection
+                    title="Realizacja Osiedla"
+                    images={realizacja2Images}
+                    folder="realizacja-2"
+                />
+
+                <GallerySection
                     title="Wizualizacja budynku - etap III"
                     images={realizacja3Images}
                     folder="realizacja-3"
                 />
 
                 <GallerySection
-                    title="Realizacja budynku - etap II"
-                    images={realizacja2Images}
-                    folder="realizacja-2"
+                    title="Wizualizacja Budynku - Etap IV"
+                    images={realizacja4Images}
+                    folder="realizacja-4"
                 />
 
                 <GallerySection
