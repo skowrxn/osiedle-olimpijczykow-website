@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
 import { google } from "googleapis";
+import { ETAP_SHEETS } from "../../../lib/etapy";
 
 const PANEL_TOKEN = process.env.PANEL_AUTH_TOKEN || "oo-panel-secret-2024";
 
-const ETAP_CONFIG = {
-  etap2: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP2, gid: 1101068206 },
-  etap3: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP3, gid: 905977375 },
-  etap4: { spreadsheetId: process.env.GOOGLE_SPREADSHEET_ID_ETAP4, gid: null },
-};
+const ETAP_CONFIG = ETAP_SHEETS;
 
 // Columns (A=1, B=2, …) in the sheet:
 // B=numer, C=powierzchnia, E=kondygnacja, F=elementy_dodatkowe, G=liczba_pokoi, I=cena, J=dostepnosc
@@ -61,6 +58,28 @@ export async function PUT(request) {
   const auth = makeAuth();
   const sheets = google.sheets({ version: "v4", auth });
 
+  try {
+    return await zapiszWArkuszu(sheets, { spreadsheetId, gid, numer, data });
+  } catch (e) {
+    const status = e?.code || e?.response?.status;
+    console.error("[panel] zapis mieszkania nie powiodl sie:", status, e?.message);
+    if (status === 403 || status === 404) {
+      return NextResponse.json(
+        {
+          error:
+            "Brak dostępu do arkusza z cennikiem tego etapu. Udostępnij arkusz koncie serwisowemu (rola Edytor).",
+        },
+        { status: 502 }
+      );
+    }
+    return NextResponse.json(
+      { error: e?.message || "Nie udało się zapisać zmian w arkuszu" },
+      { status: 500 }
+    );
+  }
+}
+
+async function zapiszWArkuszu(sheets, { spreadsheetId, gid, numer, data }) {
   // Resolve sheet name from gid
   const meta = await sheets.spreadsheets.get({ spreadsheetId });
   const sheetMeta = meta.data.sheets.find((s) => s.properties.sheetId === gid) || meta.data.sheets[0];
