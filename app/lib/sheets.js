@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 import cloudinary from "./cloudinary";
 import cennikEtap4 from "./cennik-etap4.json";
 import kartyEtap4 from "./karty-etap4.json";
+import { ETAP_SHEETS } from "./etapy";
 
 // Karty mieszkan wgrane do repozytorium. Karta wrzucona przez panel
 // (Cloudinary) ma pierwszenstwo.
@@ -11,14 +12,14 @@ const STATIC_KARTY = { etap4: new Set(kartyEtap4) };
 const staticKarta = (etap, numer) =>
   STATIC_KARTY[etap]?.has(numer) ? `/karty_mieszkan/${etap}/${numer}.png` : null;
 
-// Zrodla danych o mieszkaniach. Kazdy etap to osobny arkusz Google.
-// Etap 4 do czasu zalozenia arkusza korzysta z cennika wgranego do repozytorium
-// (ten sam uklad kolumn co arkusz), wiec po ustawieniu GOOGLE_SPREADSHEET_ID_ETAP4
-// dane automatycznie zaczynaja isc z arkusza.
+// Zrodla danych o mieszkaniach - arkusz Google na kazdy etap.
+// Etap 4 ma dodatkowo cennik w repozytorium: uzywamy go tylko wtedy, gdy
+// arkusza nie da sie odczytac (np. zanim konto serwisowe dostanie do niego
+// dostep), zeby lista mieszkan nie znikla ze strony.
 const ETAP_SOURCES = [
-  { etap: "etap2", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP2", gid: 1101068206 },
-  { etap: "etap3", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP3", gid: 905977375 },
-  { etap: "etap4", spreadsheetIdEnv: "GOOGLE_SPREADSHEET_ID_ETAP4", gid: null, fallbackRows: cennikEtap4 },
+  { etap: "etap2", ...ETAP_SHEETS.etap2 },
+  { etap: "etap3", ...ETAP_SHEETS.etap3 },
+  { etap: "etap4", ...ETAP_SHEETS.etap4, fallbackRows: cennikEtap4 },
 ];
 
 const parsePrice = (s) => {
@@ -132,15 +133,13 @@ const parseRows = (rows, etap, cldPhotos) =>
     return acc;
   }, []);
 
-const getRowsForEtap = async ({ etap, spreadsheetIdEnv, gid, fallbackRows }) => {
-  const spreadsheetId = process.env[spreadsheetIdEnv];
-
+const getRowsForEtap = async ({ etap, spreadsheetId, gid, fallbackRows }) => {
   if (!spreadsheetId) {
     if (fallbackRows) {
-      console.warn(`[sheets] brak ${spreadsheetIdEnv} - ${etap} z cennika w repozytorium`);
+      console.warn(`[sheets] brak arkusza dla ${etap} - cennik z repozytorium`);
       return fallbackRows;
     }
-    throw new Error(`[sheets] brak ${spreadsheetIdEnv} dla ${etap}`);
+    throw new Error(`[sheets] brak identyfikatora arkusza dla ${etap}`);
   }
 
   try {
@@ -170,5 +169,6 @@ const fetchAllApartments = async () => {
 export const getCachedApartments = unstable_cache(
   fetchAllApartments,
   ["apartments-sheets"],
-  { revalidate: 60 }
+  // tag pozwala panelowi odswiezyc liste od razu po zapisie (revalidateTag)
+  { revalidate: 60, tags: ["apartments-sheets"] }
 );

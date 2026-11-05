@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { etapLabel } from "../../../lib/etapy";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -295,7 +296,7 @@ export default function ApartmentPhotos() {
           </span>
           {apartment && (
             <span style={{ fontSize: "12px", color: "#888" }}>
-              {apartment.etap === "etap2" ? "Etap 2" : "Etap 3"}
+              {etapLabel(apartment.etap)}
               {apartment.powierzchnia && ` · ${apartment.powierzchnia} m²`}
             </span>
           )}

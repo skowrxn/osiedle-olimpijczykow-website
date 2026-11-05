@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ETAPY, etapLabel } from "../../lib/etapy";
 
 const STATUS_COLOR = {
   DOSTEPNE: "#16a34a",
@@ -83,8 +84,13 @@ export default function PanelDashboard() {
       a.numer?.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const etap2 = filtered.filter((a) => a.etap === "etap2");
-  const etap3 = filtered.filter((a) => a.etap === "etap3");
+  // Sekcje etapow budujemy z danych - nowy etap pojawia sie w panelu sam,
+  // a etapy spoza listy ETAPY ladują na koncu.
+  const etapyWDanych = [...new Set(apartments.map((a) => a.etap))];
+  const kolejnosc = [
+    ...ETAPY.filter((e) => etapyWDanych.includes(e)),
+    ...etapyWDanych.filter((e) => !ETAPY.includes(e)).sort().reverse(),
+  ];
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#f0f2f5", fontFamily: "Poppins, sans-serif" }}>
@@ -144,8 +150,13 @@ export default function PanelDashboard() {
           </div>
         ) : (
           <>
-            <EtapSection label="Etap 3" apartments={etap3} />
-            <EtapSection label="Etap 2" apartments={etap2} />
+            {kolejnosc.map((etap) => (
+              <EtapSection
+                key={etap}
+                label={etapLabel(etap)}
+                apartments={filtered.filter((a) => a.etap === etap)}
+              />
+            ))}
             {filtered.length === 0 && (
               <div style={{ textAlign: "center", padding: "60px", color: "#aaa" }}>
                 Brak wyników dla &ldquo;{filter}&rdquo;
