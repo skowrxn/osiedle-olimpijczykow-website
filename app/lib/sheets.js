@@ -1,13 +1,14 @@
 import { google } from "googleapis";
 import { unstable_cache } from "next/cache";
-import cloudinary from "./cloudinary";
+import { zdjeciaMieszkan, r2Skonfigurowane } from "./r2";
 import cennikEtap4 from "./cennik-etap4.json";
+import kartyEtap3 from "./karty-etap3.json";
 import kartyEtap4 from "./karty-etap4.json";
 import { ETAP_SHEETS } from "./etapy";
 
 // Karty mieszkan wgrane do repozytorium. Karta wrzucona przez panel
-// (Cloudinary) ma pierwszenstwo.
-const STATIC_KARTY = { etap4: new Set(kartyEtap4) };
+// (wgrana przez panel do R2) ma pierwszenstwo.
+const STATIC_KARTY = { etap3: new Set(kartyEtap3), etap4: new Set(kartyEtap4) };
 
 const staticKarta = (etap, numer) =>
   STATIC_KARTY[etap]?.has(numer) ? `/karty_mieszkan/${etap}/${numer}.png` : null;
@@ -77,45 +78,27 @@ const getSheetRows = async (spreadsheetId, gid) => {
   return res.data.values || [];
 };
 
-// Fetches all photos from Cloudinary organised by apartment ID.
-// Returns { [aptId]: { zdjecia: string[], karta: string|null } }
-const getCloudinaryPhotos = async () => {
+// Zdjęcia i karty mieszkań z R2, pogrupowane po id mieszkania.
+const pobierzZdjecia = async () => {
+  if (!r2Skonfigurowane()) {
+    console.warn("[sheets] brak konfiguracji R2 - mieszkania bez zdjec");
+    return {};
+  }
   try {
-    const result = await cloudinary.api.resources({
-      type: "upload",
-      prefix: "apartments/",
-      max_results: 500,
-    });
-
-    const byApt = {};
-    for (const r of result.resources) {
-      const parts = r.public_id.split("/");
-      if (parts.length < 3) continue;
-      const aptId = parts[1];
-      const filename = parts.slice(2).join("/");
-
-      if (!byApt[aptId]) byApt[aptId] = { zdjecia: [], karta: null };
-
-      if (filename === "karta") {
-        byApt[aptId].karta = r.secure_url;
-      } else {
-        byApt[aptId].zdjecia.push(r.secure_url);
-      }
-    }
-    return byApt;
+    return await zdjeciaMieszkan();
   } catch (e) {
-    console.error("[sheets] Cloudinary fetch failed:", e.message);
+    console.error("[sheets] R2 - blad pobierania zdjec:", e.message);
     return {};
   }
 };
 
-const parseRows = (rows, etap, cldPhotos) =>
+const parseRows = (rows, etap, zdjecia) =>
   rows.slice(3).reduce((acc, row) => {
     const numer = row[1]?.trim();
     if (!numer || numer === "Numer" || numer.startsWith("Ceny")) return acc;
 
     const aptId = `${etap}-${numer}`;
-    const photos = cldPhotos[aptId] || { zdjecia: [], karta: null };
+    const photos = zdjecia[aptId] || { zdjecia: [], karta: null };
 
     acc.push({
       id: aptId,
@@ -156,13 +139,13 @@ const getRowsForEtap = async ({ etap, spreadsheetId, gid, fallbackRows }) => {
 };
 
 const fetchAllApartments = async () => {
-  const [cldPhotos, ...rowsPerEtap] = await Promise.all([
-    getCloudinaryPhotos(),
+  const [zdjecia, ...rowsPerEtap] = await Promise.all([
+    pobierzZdjecia(),
     ...ETAP_SOURCES.map(getRowsForEtap),
   ]);
 
   return ETAP_SOURCES.flatMap((source, i) =>
-    parseRows(rowsPerEtap[i], source.etap, cldPhotos)
+    parseRows(rowsPerEtap[i], source.etap, zdjecia)
   );
 };
 
