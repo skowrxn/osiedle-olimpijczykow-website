@@ -109,6 +109,12 @@ export default function PanelDashboard() {
               Ceny miejsc
             </Link>
             <Link
+              href="/panel/migracja"
+              style={{ fontSize: "13px", color: "#007CBA", textDecoration: "none", fontWeight: "500", padding: "7px 16px", border: "1px solid #007CBA", borderRadius: "7px" }}
+            >
+              Wizualizacje z Dysku
+            </Link>
+            <Link
               href="/panel/postepy"
               style={{ fontSize: "13px", color: "#007CBA", textDecoration: "none", fontWeight: "500", padding: "7px 16px", border: "1px solid #007CBA", borderRadius: "7px" }}
             >
