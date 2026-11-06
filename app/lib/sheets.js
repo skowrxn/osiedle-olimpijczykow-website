@@ -2,12 +2,13 @@ import { google } from "googleapis";
 import { unstable_cache } from "next/cache";
 import cloudinary from "./cloudinary";
 import cennikEtap4 from "./cennik-etap4.json";
+import kartyEtap3 from "./karty-etap3.json";
 import kartyEtap4 from "./karty-etap4.json";
 import { ETAP_SHEETS } from "./etapy";
 
 // Karty mieszkan wgrane do repozytorium. Karta wrzucona przez panel
 // (Cloudinary) ma pierwszenstwo.
-const STATIC_KARTY = { etap4: new Set(kartyEtap4) };
+const STATIC_KARTY = { etap3: new Set(kartyEtap3), etap4: new Set(kartyEtap4) };
 
 const staticKarta = (etap, numer) =>
   STATIC_KARTY[etap]?.has(numer) ? `/karty_mieszkan/${etap}/${numer}.png` : null;
