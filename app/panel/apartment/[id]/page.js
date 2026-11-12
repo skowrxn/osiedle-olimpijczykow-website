@@ -29,6 +29,7 @@ export default function ApartmentPhotos() {
   const [apartment, setApartment] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   // Edit state
   const [editMode, setEditMode] = useState(false);
@@ -57,16 +58,30 @@ export default function ApartmentPhotos() {
   const kartaInputRef = useRef(null);
   const router = useRouter();
 
+  // Zdjęcia są dodatkiem - ich awaria nie może blokować edycji mieszkania.
   const fetchPhotos = useCallback(async () => {
-    const res = await fetch(`/api/panel/photos?id=${encodeURIComponent(aptId)}`);
-    const data = await res.json();
-    setPhotos(Array.isArray(data) ? data : []);
+    try {
+      const res = await fetch(`/api/panel/photos?id=${encodeURIComponent(aptId)}`);
+      const data = res.ok ? await res.json() : [];
+      setPhotos(Array.isArray(data) ? data : []);
+    } catch (e) {
+      console.error("Nie udało się pobrać zdjęć:", e);
+      setPhotos([]);
+    }
   }, [aptId]);
 
   const fetchApartment = useCallback(async () => {
-    const apt = await fetch(`/api/apartments?id=${encodeURIComponent(aptId)}`).then((r) => r.json());
-    setApartment(apt);
-    return apt;
+    try {
+      const res = await fetch(`/api/apartments?id=${encodeURIComponent(aptId)}`);
+      if (!res.ok) throw new Error(`Serwer odpowiedział ${res.status}`);
+      const apt = await res.json();
+      setApartment(apt);
+      setLoadError(apt ? null : "Nie znaleziono tego mieszkania.");
+      return apt;
+    } catch (e) {
+      setLoadError(`Nie udało się pobrać danych mieszkania: ${e.message}`);
+      return null;
+    }
   }, [aptId]);
 
   const numer = apartment?.numer ?? aptId.split("-").slice(1).join("-");
@@ -86,7 +101,8 @@ export default function ApartmentPhotos() {
   }, [numer]);
 
   useEffect(() => {
-    Promise.all([fetchApartment(), fetchPhotos()]).then(() => setLoading(false));
+    // finally, żeby żaden błąd pobierania nie zostawił strony na "Ładowanie…"
+    Promise.all([fetchApartment(), fetchPhotos()]).finally(() => setLoading(false));
   }, [fetchApartment, fetchPhotos]);
 
   useEffect(() => {
@@ -325,7 +341,11 @@ export default function ApartmentPhotos() {
             )}
           </div>
 
-          {loading ? (
+          {loadError ? (
+            <div style={{ padding: "12px 14px", borderRadius: "8px", backgroundColor: "#fdecec", color: "#b3261e", fontSize: "13px" }}>
+              {loadError}
+            </div>
+          ) : loading ? (
             <div style={{ color: "#aaa", fontSize: "14px" }}>Ładowanie…</div>
           ) : !editMode ? (
             /* ── View mode ── */
