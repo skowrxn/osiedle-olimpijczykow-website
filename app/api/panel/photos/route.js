@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import sharp from "sharp";
 import {
   PREFIX_MIESZKANIA,
   listaObiektow,
@@ -67,6 +66,9 @@ export async function POST(request) {
   const isKarta = formData.get("isKarta") === "true";
 
   try {
+    // sharp ladowany dopiero przy wgrywaniu - gdyby biblioteki zabraklo,
+    // listowanie i kasowanie zdjec ma dzialac dalej
+    const { default: sharp } = await import("sharp");
     const zrodlo = Buffer.from(await file.arrayBuffer());
     const jpeg = await sharp(zrodlo)
       .rotate()

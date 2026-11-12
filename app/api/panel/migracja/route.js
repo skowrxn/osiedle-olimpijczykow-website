@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { revalidateTag } from "next/cache";
-import sharp from "sharp";
 import wizualizacje from "../../../lib/wizualizacje-dysk.json";
 import { PREFIX_MIESZKANIA, listaObiektow, r2Skonfigurowane, zapiszObiekt } from "../../../lib/r2";
 
@@ -51,6 +50,8 @@ export async function POST(request) {
   const wgrane = [];
 
   try {
+    const { default: sharp } = await import("sharp");
+
     for (const plik of partia) {
       const res = await fetch(`https://drive.google.com/uc?export=download&id=${plik.id}`);
       if (!res.ok) throw new Error(`Dysk odpowiedział ${res.status} dla ${plik.nazwa}`);
