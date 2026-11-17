@@ -50,19 +50,28 @@ export async function POST(request) {
   const wgrane = [];
 
   try {
-    const { default: sharp } = await import("sharp");
+    // Gdy sharp nie da sie zaladowac na serwerze, wgrywamy oryginaly z Dysku.
+    let sharp = null;
+    try {
+      ({ default: sharp } = await import("sharp"));
+    } catch (e) {
+      console.warn("[panel] sharp niedostepny - migruje bez zmniejszania:", e.message);
+    }
 
     for (const plik of partia) {
       const res = await fetch(`https://drive.google.com/uc?export=download&id=${plik.id}`);
       if (!res.ok) throw new Error(`Dysk odpowiedział ${res.status} dla ${plik.nazwa}`);
 
-      const jpeg = await sharp(Buffer.from(await res.arrayBuffer()))
-        .rotate()
-        .resize({ width: MAKS_SZEROKOSC, withoutEnlargement: true })
-        .jpeg({ quality: 82, mozjpeg: true })
-        .toBuffer();
+      const zrodlo = Buffer.from(await res.arrayBuffer());
+      const dane = sharp
+        ? await sharp(zrodlo)
+            .rotate()
+            .resize({ width: MAKS_SZEROKOSC, withoutEnlargement: true })
+            .jpeg({ quality: 82, mozjpeg: true })
+            .toBuffer()
+        : zrodlo;
 
-      await zapiszObiekt(kluczDocelowy(numer, plik.nazwa), jpeg, "image/jpeg");
+      await zapiszObiekt(kluczDocelowy(numer, plik.nazwa), dane, "image/jpeg");
       wgrane.push(plik.nazwa);
     }
   } catch (e) {

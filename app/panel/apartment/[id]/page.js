@@ -6,6 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 
 const STATUS_LABEL = { DOSTEPNE: "Dostępne", REZERWACJA: "Rezerwacja", SPRZEDANE: "Sprzedane" };
+
+// Dłuższy bok zdjęcia po zmniejszeniu oraz limit wielkości żądania (Vercel ~4,5 MB).
+const MAKS_PX = 1920;
+const MAKS_WYSYLKI_MB = 4;
 const STATUS_COLOR = { DOSTEPNE: "#16a34a", REZERWACJA: "#d97706", SPRZEDANE: "#dc2626" };
 
 function Field({ label, value, children }) {
@@ -43,6 +47,7 @@ export default function ApartmentPhotos() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [deleting, setDeleting] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
   // History state
   const [addToHistory, setAddToHistory] = useState(true);
@@ -239,23 +244,70 @@ export default function ApartmentPhotos() {
 
   // ── Photo handlers ────────────────────────────────────────────────────────
 
+  // Zdjęcia zmniejszamy w przeglądarce: serwer dostaje gotowy, lekki plik,
+  // dzięki czemu mieści się w limicie wielkości żądania i nie zajmuje
+  // niepotrzebnie miejsca w magazynie.
+  const zmniejszZdjecie = async (plik) => {
+    if (!plik.type?.startsWith("image/")) return plik;
+    try {
+      const bitmapa = await createImageBitmap(plik, { imageOrientation: "from-image" });
+      const skala = Math.min(1, MAKS_PX / Math.max(bitmapa.width, bitmapa.height));
+      const szer = Math.round(bitmapa.width * skala);
+      const wys = Math.round(bitmapa.height * skala);
+
+      const plotno = document.createElement("canvas");
+      plotno.width = szer;
+      plotno.height = wys;
+      plotno.getContext("2d").drawImage(bitmapa, 0, 0, szer, wys);
+      bitmapa.close?.();
+
+      const blob = await new Promise((res) => plotno.toBlob(res, "image/jpeg", 0.82));
+      if (!blob) return plik;
+      return new File([blob], `${plik.name.replace(/\.[^.]+$/, "")}.jpg`, { type: "image/jpeg" });
+    } catch (e) {
+      // np. HEIC z iPhone'a, którego przeglądarka nie rozpakuje - niech spróbuje serwer
+      console.warn("Nie udało się zmniejszyć zdjęcia w przeglądarce:", e);
+      return plik;
+    }
+  };
+
   const doUpload = async (files, isKarta = false) => {
     if (!files.length) return;
     setUploading(true);
     setUploadKarta(isKarta);
     setUploadProgress(0);
+    setUploadError(null);
+
+    const bledy = [];
     for (let i = 0; i < files.length; i++) {
-      const fd = new FormData();
-      fd.append("file", files[i]);
-      fd.append("apartmentId", aptId);
-      if (isKarta) fd.append("isKarta", "true");
-      await fetch("/api/panel/photos", { method: "POST", body: fd });
+      try {
+        const plik = await zmniejszZdjecie(files[i]);
+        if (plik.size > MAKS_WYSYLKI_MB * 1024 * 1024)
+          throw new Error(
+            `plik ma ${(plik.size / 1024 / 1024).toFixed(1)} MB, a limit wysyłki to ${MAKS_WYSYLKI_MB} MB`
+          );
+
+        const fd = new FormData();
+        fd.append("file", plik);
+        fd.append("apartmentId", aptId);
+        if (isKarta) fd.append("isKarta", "true");
+
+        const res = await fetch("/api/panel/photos", { method: "POST", body: fd });
+        if (!res.ok) {
+          const dane = await res.json().catch(() => ({}));
+          throw new Error(dane.error || `serwer odpowiedział ${res.status}`);
+        }
+      } catch (e) {
+        bledy.push(`${files[i].name}: ${e.message}`);
+      }
       setUploadProgress(Math.round(((i + 1) / files.length) * 100));
     }
+
     await fetchPhotos();
     setUploading(false);
     setUploadKarta(false);
     setUploadProgress(0);
+    setUploadError(bledy.length ? bledy.join("\n") : null);
     if (fileInputRef.current) fileInputRef.current.value = "";
     if (kartaInputRef.current) kartaInputRef.current.value = "";
   };
@@ -601,6 +653,12 @@ export default function ApartmentPhotos() {
           </div>
 
           {/* Gallery grid */}
+          {uploadError && (
+            <div style={{ marginBottom: "14px", padding: "12px 14px", borderRadius: "8px", backgroundColor: "#fdecec", color: "#b3261e", fontSize: "13px", whiteSpace: "pre-line" }}>
+              {uploadError}
+            </div>
+          )}
+
           {!loading && (gallery.length === 0 ? (
             <div style={{ textAlign: "center", padding: "32px", color: "#aaa", backgroundColor: "#fafafa", borderRadius: "8px" }}>
               Brak zdjęć w galerii — dodaj pierwsze powyżej

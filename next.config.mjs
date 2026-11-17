@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    // sharp jest biblioteka natywna - Next ma ja traktowac jako zewnetrzna
+    // i dolaczyc binarke do funkcji serwerowej, a nie pakowac przez bundler.
+    serverExternalPackages: ["sharp"],
     images: {
         unoptimized: false,
         formats: ["image/avif", "image/webp"],
