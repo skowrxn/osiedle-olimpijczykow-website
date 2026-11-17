@@ -247,19 +247,51 @@ export default function ApartmentPhotos() {
   // Zdjęcia zmniejszamy w przeglądarce: serwer dostaje gotowy, lekki plik,
   // dzięki czemu mieści się w limicie wielkości żądania i nie zajmuje
   // niepotrzebnie miejsca w magazynie.
+  // Dekodowanie zdjęcia: nie każda przeglądarka obsługuje createImageBitmap
+  // z opcjami (Safari), więc po kolei próbujemy wariantów, a na końcu zwykłego
+  // <img>, który działa wszędzie.
+  const wczytajObraz = async (plik) => {
+    if (typeof createImageBitmap === "function") {
+      for (const opcje of [{ imageOrientation: "from-image" }, undefined]) {
+        try {
+          return await createImageBitmap(plik, opcje);
+        } catch {
+          /* próbujemy dalej */
+        }
+      }
+    }
+
+    const adres = URL.createObjectURL(plik);
+    try {
+      const obraz = new Image();
+      await new Promise((ok, blad) => {
+        obraz.onload = ok;
+        obraz.onerror = () => blad(new Error("przeglądarka nie potrafi otworzyć tego pliku"));
+        obraz.src = adres;
+      });
+      return obraz;
+    } finally {
+      URL.revokeObjectURL(adres);
+    }
+  };
+
   const zmniejszZdjecie = async (plik) => {
     if (!plik.type?.startsWith("image/")) return plik;
     try {
-      const bitmapa = await createImageBitmap(plik, { imageOrientation: "from-image" });
-      const skala = Math.min(1, MAKS_PX / Math.max(bitmapa.width, bitmapa.height));
-      const szer = Math.round(bitmapa.width * skala);
-      const wys = Math.round(bitmapa.height * skala);
+      const obraz = await wczytajObraz(plik);
+      const zrodloSzer = obraz.width || obraz.naturalWidth;
+      const zrodloWys = obraz.height || obraz.naturalHeight;
+      if (!zrodloSzer || !zrodloWys) return plik;
+
+      const skala = Math.min(1, MAKS_PX / Math.max(zrodloSzer, zrodloWys));
+      const szer = Math.round(zrodloSzer * skala);
+      const wys = Math.round(zrodloWys * skala);
 
       const plotno = document.createElement("canvas");
       plotno.width = szer;
       plotno.height = wys;
-      plotno.getContext("2d").drawImage(bitmapa, 0, 0, szer, wys);
-      bitmapa.close?.();
+      plotno.getContext("2d").drawImage(obraz, 0, 0, szer, wys);
+      obraz.close?.();
 
       const blob = await new Promise((res) => plotno.toBlob(res, "image/jpeg", 0.82));
       if (!blob) return plik;

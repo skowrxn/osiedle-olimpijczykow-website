@@ -73,12 +73,28 @@ export async function listaObiektow(prefix) {
   return klucze;
 }
 
+// R2 nie przyjmuje zapisu bez znanej dlugosci ciala (411 MissingContentLength),
+// a srodowisko serwerowe potrafi wyslac wiekszy bufor strumieniowo - wtedy
+// naglowek znika. Dlatego podajemy dlugosc jawnie.
+const dlugosc = (body) => {
+  if (typeof body === "string") return Buffer.byteLength(body);
+  if (body?.byteLength != null) return body.byteLength;
+  if (body?.size != null) return body.size;
+  return null;
+};
+
 export async function zapiszObiekt(key, body, contentType) {
   if (!r2Skonfigurowane()) throw new Error("R2 nie jest skonfigurowane");
+  const rozmiar = dlugosc(body);
+  if (rozmiar == null) throw new Error("R2 put: nieznana wielkosc pliku");
+
   const res = await klient().fetch(`${bazowyUrl()}/${key.split("/").map(encodeURIComponent).join("/")}`, {
     method: "PUT",
     body,
-    headers: { "Content-Type": contentType || "application/octet-stream" },
+    headers: {
+      "Content-Type": contentType || "application/octet-stream",
+      "Content-Length": String(rozmiar),
+    },
   });
   if (!res.ok) throw new Error(`R2 put ${res.status}: ${await res.text()}`);
   return publicznyUrl(key);
