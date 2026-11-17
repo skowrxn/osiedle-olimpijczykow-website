@@ -16,6 +16,17 @@ const PANEL_TOKEN = process.env.PANEL_AUTH_TOKEN || "oo-panel-secret-2024";
 export const MAKS_SZEROKOSC = 1920;
 export const MAKS_WEJSCIE_MB = 25;
 
+// Rozszerzenie pliku dobieramy do typu, gdy zapisujemy go bez przetwarzania.
+const ROZSZERZENIA = {
+  "image/jpeg": "jpg",
+  "image/jpg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/avif": "avif",
+  "image/heic": "heic",
+  "image/heif": "heif",
+};
+
 function checkAuth(request) {
   return request.cookies.get("panel-auth")?.value === PANEL_TOKEN;
 }
@@ -66,25 +77,36 @@ export async function POST(request) {
   const isKarta = formData.get("isKarta") === "true";
 
   try {
-    // sharp ladowany dopiero przy wgrywaniu - gdyby biblioteki zabraklo,
-    // listowanie i kasowanie zdjec ma dzialac dalej
-    const { default: sharp } = await import("sharp");
     const zrodlo = Buffer.from(await file.arrayBuffer());
-    const jpeg = await sharp(zrodlo)
-      .rotate()
-      .resize({ width: MAKS_SZEROKOSC, withoutEnlargement: true })
-      .jpeg({ quality: 82, mozjpeg: true })
-      .toBuffer();
+    let dane = zrodlo;
+    let typ = file.type || "image/jpeg";
+    let rozszerzenie = ROZSZERZENIA[typ] || "jpg";
+
+    // Panel zmniejsza zdjęcia już w przeglądarce. Tutaj próbujemy jeszcze raz
+    // przez sharp (dla plików wysłanych inną drogą), ale gdy biblioteki nie da
+    // się załadować w środowisku serwerowym - zapisujemy to, co przyszło.
+    try {
+      const { default: sharp } = await import("sharp");
+      dane = await sharp(zrodlo)
+        .rotate()
+        .resize({ width: MAKS_SZEROKOSC, withoutEnlargement: true })
+        .jpeg({ quality: 82, mozjpeg: true })
+        .toBuffer();
+      typ = "image/jpeg";
+      rozszerzenie = "jpg";
+    } catch (e) {
+      console.warn("[panel] sharp niedostepny - zapisuje plik bez obrobki:", e.message);
+    }
 
     const nazwa = isKarta
-      ? "karta.jpg"
+      ? `karta.${rozszerzenie}`
       : `${Date.now()}-${(file.name || "zdjecie")
           .replace(/\.[^.]+$/, "")
           .replace(/[^\p{L}\p{N}._-]+/gu, "-")
-          .slice(0, 60)}.jpg`;
+          .slice(0, 60)}.${rozszerzenie}`;
 
     const key = `${PREFIX_MIESZKANIA}/${apartmentId}/${nazwa}`;
-    const url = await zapiszObiekt(key, jpeg, "image/jpeg");
+    const url = await zapiszObiekt(key, dane, typ);
 
     revalidateTag("apartments-sheets");
     return NextResponse.json({ url, secure_url: url, publicId: key, public_id: key });
